@@ -3,21 +3,32 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.Infrastructure", "Lunatic.Infrastructure\Lunatic.Infrastructure.csproj", "{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lunatic.Infrastructure", "Lunatic.Infrastructure\Lunatic.Infrastructure.csproj", "{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.Application", "Lunatic.Application\Lunatic.Application.csproj", "{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lunatic.Application", "Lunatic.Application\Lunatic.Application.csproj", "{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.API", "Lunatic.API\Lunatic.API.csproj", "{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lunatic.API", "Lunatic.API\Lunatic.API.csproj", "{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.Domain", "Lunatic.Domain\Lunatic.Domain.csproj", "{E950F0CC-4039-4EA9-9C04-0F274671A1C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lunatic.Domain", "Lunatic.Domain\Lunatic.Domain.csproj", "{E950F0CC-4039-4EA9-9C04-0F274671A1C5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{BFDB4B2F-C30E-4C11-963E-04B235514877}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{B583FB42-142B-4BEF-96C2-32C8052EB2CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{150743E4-E48D-4AF4-A101-80E3A9DB772E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{9428FEAD-B57A-4D3C-946D-CD77EF85E972}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{D74BD422-8607-4D77-B06C-DEB9BD9A315C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{632C273E-7A43-4117-B8B3-CDA2C980DA4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1ADECDB1-1E0F-47B1-8983-B90F91AEECD5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,5 +47,22 @@ Global
 		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F69DCE35-E1F4-4724-A43E-B1DBA726EC02} = {9428FEAD-B57A-4D3C-946D-CD77EF85E972}
+		{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F} = {D74BD422-8607-4D77-B06C-DEB9BD9A315C}
+		{B2C37F04-281B-4EEA-9C29-58CA0EBEE914} = {B583FB42-142B-4BEF-96C2-32C8052EB2CD}
+		{E950F0CC-4039-4EA9-9C04-0F274671A1C5} = {632C273E-7A43-4117-B8B3-CDA2C980DA4F}
+		{B583FB42-142B-4BEF-96C2-32C8052EB2CD} = {BFDB4B2F-C30E-4C11-963E-04B235514877}
+		{150743E4-E48D-4AF4-A101-80E3A9DB772E} = {BFDB4B2F-C30E-4C11-963E-04B235514877}
+		{9428FEAD-B57A-4D3C-946D-CD77EF85E972} = {BFDB4B2F-C30E-4C11-963E-04B235514877}
+		{D74BD422-8607-4D77-B06C-DEB9BD9A315C} = {150743E4-E48D-4AF4-A101-80E3A9DB772E}
+		{632C273E-7A43-4117-B8B3-CDA2C980DA4F} = {150743E4-E48D-4AF4-A101-80E3A9DB772E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3C5A2139-7707-493A-A869-833CCF8BE73F}
 	EndGlobalSection
 EndGlobal
