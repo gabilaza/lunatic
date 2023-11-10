@@ -1,6 +1,5 @@
 
 using Lunatic.Domain.Utils;
-using Task = Lunatic.Domain.Entities.Task;
 
 namespace Lunatic.Domain.Entities {
     public class Comment : AuditableEntity {

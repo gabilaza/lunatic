@@ -26,7 +26,7 @@ namespace Lunatic.Domain.Entities {
             return Result<Project>.Success(new Project(title, description));
         }
 
-        public void AddIssue(Task task) {
+        public void AddTask(Task task) {
             if(Tasks == null) {
                 Tasks = new List<Task>();
             }

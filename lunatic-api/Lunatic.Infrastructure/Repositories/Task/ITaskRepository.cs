@@ -1,5 +1,4 @@
 
-using Lunatic.Domain.Entities;
 using Task = Lunatic.Domain.Entities.Task;
 
 
