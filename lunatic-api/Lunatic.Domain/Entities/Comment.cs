@@ -1,35 +1,36 @@
 
 using Lunatic.Domain.Utils;
+using Task = Lunatic.Domain.Entities.Task;
 
 namespace Lunatic.Domain.Entities {
     public class Comment : AuditableEntity {
-        private Comment(User addedBy, Task task, string content) {
+        private Comment(Guid userId, Guid taskId, string content) {
             Id = Guid.NewGuid();
-            AddedBy = addedBy;
-            Task = task;
+            UserId = userId;
+            TaskId = taskId;
             Content = content;
             // emotes
         }
 
         public Guid Id { get; private set; }
-        public User AddedBy { get; private set; }
-        public Task Task { get; private set; }
+        public Guid UserId { get; private set; }
+        public Guid TaskId { get; private set; }
         public string Content { get; private set; }
 
-        public static Result<Comment> Create(User addedBy, Task task, string content) {
-            if(addedBy == null) {
-                return Result<Comment>.Failure("AddedByUser is required.");
+        public static Result<Comment> Create(Guid userId, Guid taskId, string content) {
+            if(userId == default) {
+                return Result<Comment>.Failure("User id should not be default.");
             }
 
-            if(task == null) {
-                return Result<Comment>.Failure("Task is required.");
+            if(taskId == default) {
+                return Result<Comment>.Failure("Task id should not be default.");
             }
 
             if(string.IsNullOrWhiteSpace(content)) {
                 return Result<Comment>.Failure("Content is required.");
             }
 
-            return Result<Comment>.Success(new Comment(addedBy, task, content));
+            return Result<Comment>.Success(new Comment(userId, taskId, content));
         }
     }
 }
