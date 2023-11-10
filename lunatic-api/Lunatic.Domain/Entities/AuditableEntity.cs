@@ -1,5 +1,5 @@
 
-namespace GlobalBuyTicket.Domain.Common {
+namespace Lunatic.Domain.Entities {
     public class AuditableEntity {
         public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }

@@ -10,10 +10,10 @@ namespace Lunatic.Domain.Entities {
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
-        public List<User>? Users { get; private set; }
+        public List<Tuple<User, TeamRole>>? Users { get; private set; }
         public List<Project>? Projects { get; private set; }
 
-        public static Result<Team> New(string name) {
+        public static Result<Team> Create(string name) {
             if(string.IsNullOrWhiteSpace(name)) {
                 return Result<Team>.Failure("Name is required.");
             }
@@ -21,12 +21,12 @@ namespace Lunatic.Domain.Entities {
             return Result<Team>.Success(new Team(name));
         }
 
-        public void AddUser(User user) {
+        public void AddUser(User user, TeamRole teamRole) {
             if(Users == null) {
-                Users = new List<User>();
+                Users = new List<Tuple<User, TeamRole>>();
             }
 
-            Users.Add(user);
+            Users.Add(Tuple.Create(user, teamRole));
         }
 
         public void AddProject(Project project) {
