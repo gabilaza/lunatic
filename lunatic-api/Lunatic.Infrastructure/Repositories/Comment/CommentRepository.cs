@@ -3,8 +3,8 @@ using Lunatic.Domain.Entities;
 
 
 namespace Lunatic.Infrastructure.Repositories {
-    public class TaskRepository : AsyncRepository<Task> {
-        public TaskRepository(LunaticContext context) : base(context) {
+    public class CommentRepository : AsyncRepository<Comment> {
+        public CommentRepository(LunaticContext context) : base(context) {
         }
     }
 }
