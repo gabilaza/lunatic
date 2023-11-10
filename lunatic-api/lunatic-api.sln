@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.Infrastructure", "Lunatic.Infrastructure\Lunatic.Infrastructure.csproj", "{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.Application", "Lunatic.Application\Lunatic.Application.csproj", "{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.API", "Lunatic.API\Lunatic.API.csproj", "{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.Domain", "Lunatic.Domain\Lunatic.Domain.csproj", "{E950F0CC-4039-4EA9-9C04-0F274671A1C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F69DCE35-E1F4-4724-A43E-B1DBA726EC02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DF5BE23-3B6F-4A19-B5F8-4D1A407C3A5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2C37F04-281B-4EEA-9C29-58CA0EBEE914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E950F0CC-4039-4EA9-9C04-0F274671A1C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
