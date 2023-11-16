@@ -3,22 +3,20 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Comment : AuditableEntity {
-        private Comment(Guid userId, Guid taskId, string content) {
+        private Comment(Guid createdByUserId, Guid taskId, string content) : base(createdByUserId) {
             Id = Guid.NewGuid();
-            UserId = userId;
             TaskId = taskId;
             Content = content;
         }
 
         public Guid Id { get; private set; }
-        public Guid UserId { get; private set; }
         public Guid TaskId { get; private set; }
         public string Content { get; private set; }
         public List<CommentEmote>? Emotes { get; private set; }
 
-        public static Result<Comment> Create(Guid userId, Guid taskId, string content) {
-            if(userId == default) {
-                return Result<Comment>.Failure("User id should not be default.");
+        public static Result<Comment> Create(Guid createdByUserId, Guid taskId, string content) {
+            if(createdByUserId == default) {
+                return Result<Comment>.Failure("Created User id should not be default.");
             }
 
             if(taskId == default) {
@@ -29,7 +27,7 @@ namespace Lunatic.Domain.Entities {
                 return Result<Comment>.Failure("Content is required.");
             }
 
-            return Result<Comment>.Success(new Comment(userId, taskId, content));
+            return Result<Comment>.Success(new Comment(createdByUserId, taskId, content));
         }
     }
 }

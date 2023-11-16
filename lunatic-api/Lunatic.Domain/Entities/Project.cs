@@ -3,7 +3,7 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Project : AuditableEntity {
-        private Project(string title, string description) {
+        private Project(Guid createdByUserId, string title, string description) : base(createdByUserId) {
             Id = Guid.NewGuid();
             Title = title;
             Description = description;
@@ -14,7 +14,11 @@ namespace Lunatic.Domain.Entities {
         public string Description { get; private set; }
         public List<Task>? Tasks { get; private set; }
 
-        public static Result<Project> Create(string title, string description) {
+        public static Result<Project> Create(Guid createdByUserId, string title, string description) {
+            if(createdByUserId == default) {
+                return Result<Project>.Failure("Created User id should not be default.");
+            }
+
             if(string.IsNullOrWhiteSpace(title)) {
                 return Result<Project>.Failure("Title is required.");
             }
@@ -23,7 +27,7 @@ namespace Lunatic.Domain.Entities {
                 return Result<Project>.Failure("Description is required.");
             }
 
-            return Result<Project>.Success(new Project(title, description));
+            return Result<Project>.Success(new Project(createdByUserId, title, description));
         }
 
         public void AddTask(Task task) {

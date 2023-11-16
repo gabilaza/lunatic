@@ -3,7 +3,7 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Team : AuditableEntity {
-        private Team(string name) {
+        private Team(Guid createdByUserId, string name) : base(createdByUserId) {
             Id = Guid.NewGuid();
             Name = name;
         }
@@ -13,12 +13,16 @@ namespace Lunatic.Domain.Entities {
         public List<User>? Members { get; private set; }
         public List<Project>? Projects { get; private set; }
 
-        public static Result<Team> Create(string name) {
+        public static Result<Team> Create(Guid createdByUserId, string name) {
+            if(createdByUserId == default) {
+                return Result<Team>.Failure("Created User id should not be default.");
+            }
+
             if(string.IsNullOrWhiteSpace(name)) {
                 return Result<Team>.Failure("Name is required.");
             }
 
-            return Result<Team>.Success(new Team(name));
+            return Result<Team>.Success(new Team(createdByUserId, name));
         }
 
         public void AddMember(User user) {

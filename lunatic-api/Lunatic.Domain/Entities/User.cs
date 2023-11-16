@@ -2,14 +2,16 @@
 using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
-    public class User : AuditableEntity {
+    public class User {
         private User(string username, string password, Role role) {
+            CreatedDate = DateTime.Now;
             Id = Guid.NewGuid();
             Username = username;
             Password = password;
             Role = role;
         }
 
+        public DateTime CreatedDate { get; private set; }
         public Guid Id { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
