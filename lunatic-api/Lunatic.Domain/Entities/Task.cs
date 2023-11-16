@@ -20,6 +20,7 @@ namespace Lunatic.Domain.Entities {
         public TaskStatus  Status { get; private set; }
         public List<Tag>? Tags { get; private set; }
         public List<Comment>? Comments { get; private set; }
+        public List<Guid>? Assignees { get; private set; }
 
         public static Result<Task> Create(Guid userId, string title, string description, TaskPriority priority) {
             if(userId == default) {
@@ -56,6 +57,14 @@ namespace Lunatic.Domain.Entities {
         // hm..
         public void SetStatus(TaskStatus status) {
             Status = status;
+        }
+
+        public void AddAssignee(User user) {
+            if(Assignees == null) {
+                Assignees = new List<Guid>();
+            }
+
+            Assignees.Add(user.Id);
         }
     }
 }
