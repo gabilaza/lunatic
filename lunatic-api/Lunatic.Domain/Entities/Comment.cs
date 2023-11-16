@@ -8,13 +8,13 @@ namespace Lunatic.Domain.Entities {
             UserId = userId;
             TaskId = taskId;
             Content = content;
-            // emotes
         }
 
         public Guid Id { get; private set; }
         public Guid UserId { get; private set; }
         public Guid TaskId { get; private set; }
         public string Content { get; private set; }
+        public List<CommentEmote>? Emotes { get; private set; }
 
         public static Result<Comment> Create(Guid userId, Guid taskId, string content) {
             if(userId == default) {
