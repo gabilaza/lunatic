@@ -22,6 +22,9 @@ namespace Lunatic.Domain.Entities {
         public List<Comment>? Comments { get; private set; }
         public List<Guid>? Assignees { get; private set; }
 
+        public DateTime? StartedDate { get; private set; }
+        public DateTime? EndedDate { get; private set; }
+
         public static Result<Task> Create(Guid userId, string title, string description, TaskPriority priority) {
             if(userId == default) {
                 return Result<Task>.Failure("User id should not be default.");
@@ -56,7 +59,32 @@ namespace Lunatic.Domain.Entities {
 
         // hm..
         public void SetStatus(TaskStatus status) {
-            Status = status;
+            switch(Status) {
+                case TaskStatus.CREATED:
+                    if(status == TaskStatus.IN_PROGRESS) {
+                        Status = status;
+                        StartedDate = DateTime.Now;
+                    } else {
+                        // throw
+                    }
+                    break;
+                case TaskStatus.IN_PROGRESS:
+                    if(status == TaskStatus.DONE) {
+                        Status = status;
+                        EndedDate = DateTime.Now;
+                    } else {
+                        // throw
+                    }
+                    break;
+                case TaskStatus.DONE:
+                    if(status == TaskStatus.IN_PROGRESS) {
+                        Status = status;
+                        EndedDate = DateTime.Now;
+                    } else {
+                        // throw
+                    }
+                    break;
+            }
         }
 
         public void AddAssignee(User user) {
