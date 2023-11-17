@@ -8,8 +8,8 @@ namespace Lunatic.Application.Responses {
             Message = message;
         }
 
-        public bool Success { get; set; }
-        public string Message { get; set; }
+        public bool Success { get; set; } = default!;
+        public string Message { get; set; } = default!;
 
         public List<string>? ValidationsErrors { get; set; }
     }
