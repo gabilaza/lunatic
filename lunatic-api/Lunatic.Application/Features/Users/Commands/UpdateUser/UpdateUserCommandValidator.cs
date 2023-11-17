@@ -24,20 +24,20 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(320).WithMessage("{PropertyName} must not exceed 100 characters.")
-                .EmailAddress().WithMessage("{PropertyName} is not a valid email address.")
-                .MustAsync(async (email, cancellation) => {
-                    var user = await userRepository.FindByEmailAsync(email);
-                    return user.IsSuccess;
-                }).WithMessage("{PropertyName} already exists.");
+                .EmailAddress().WithMessage("{PropertyName} is not a valid email address.");
+                // .MustAsync(async (email, cancellation) => {
+                //     var user = await userRepository.FindByEmailAsync(email);
+                //     return user.IsSuccess;
+                // }).WithMessage("{PropertyName} already exists.");
 
             RuleFor(u => u.Username)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.")
-                .MustAsync(async (username, cancellation) => {
-                    var user = await userRepository.FindByUsernameAsync(username);
-                    return user.IsSuccess;
-                }).WithMessage("{PropertyName} already exists.");
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+                // .MustAsync(async (username, cancellation) => {
+                //     var user = await userRepository.FindByUsernameAsync(username);
+                //     return user.IsSuccess;
+                // }).WithMessage("{PropertyName} already exists.");
 
             RuleFor(u => u.Password)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
