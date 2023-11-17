@@ -4,7 +4,7 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class User {
         private User(string firstName, string lastName, string email, string username, string password, Role role) {
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
             Id = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
