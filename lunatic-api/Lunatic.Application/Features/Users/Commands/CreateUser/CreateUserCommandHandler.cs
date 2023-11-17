@@ -24,7 +24,7 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                 };
             }
 
-            var user = User.Create(request.Username, request.Password, request.Role);
+            var user = User.Create(request.FirstName, request.LastName, request.Username, request.Password, request.Role);
             if(!user.IsSuccess) {
                 return new CreateUserCommandResponse {
                     Success = false,
@@ -37,6 +37,8 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
             return new CreateUserCommandResponse {
                 Success = true,
                 User = new CreateUserDto {
+                    FirstName = user.Value.FirstName,
+                    LastName = user.Value.LastName,
                     Username = user.Value.Username,
                     Password = user.Value.Password
                     // Role = user.Value.Role

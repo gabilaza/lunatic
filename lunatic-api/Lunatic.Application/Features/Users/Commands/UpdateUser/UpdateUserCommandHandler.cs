@@ -46,6 +46,8 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 Success = false,
                 User = new UpdateUserDto {
                     Id = dbUser.Value.Id,
+                    FirstName = dbUser.Value.FirstName,
+                    LastName = dbUser.Value.LastName,
                     Username = dbUser.Value.Username,
                     Password = dbUser.Value.Password,
                     Role = dbUser.Value.Role

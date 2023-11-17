@@ -13,6 +13,16 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
 
             RuleFor(p => p.Role).NotNull();
 
+            RuleFor(p => p.FirstName)
+                .NotEmpty().WithMessage("First name is required")
+                .NotNull()
+                .MaximumLength(20).WithMessage("Username must not exceed 50 characters");
+
+            RuleFor(p => p.LastName)
+                .NotEmpty().WithMessage("LastName name is required")
+                .NotNull()
+                .MaximumLength(20).WithMessage("Username must not exceed 50 characters");
+
             RuleFor(p => p.Username)
                 .NotEmpty().WithMessage("Username is required")
                 .NotNull()
