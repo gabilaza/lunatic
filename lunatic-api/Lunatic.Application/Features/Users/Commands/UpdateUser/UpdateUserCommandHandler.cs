@@ -12,10 +12,10 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
         }
 
         public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken) {
-            var response = new UpdateUserCommandResponse();
-            var validator = new UpdateUserCommandValidator(userRepository);
 
+            var validator = new UpdateUserCommandValidator(userRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
+
             if(!validatorResult.IsValid) {
                 return new UpdateUserCommandResponse {
                     Success = false,

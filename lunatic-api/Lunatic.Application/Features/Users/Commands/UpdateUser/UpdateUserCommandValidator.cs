@@ -26,7 +26,7 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 .MaximumLength(320).WithMessage("{PropertyName} must not exceed 100 characters.")
                 .EmailAddress().WithMessage("{PropertyName} is not a valid email address.");
                 // .MustAsync(async (email, cancellation) => {
-                //     var user = await userRepository.FindByEmailAsync(email);
+                //     var user = await userRepository.FindByEmailAsync(email); //extensie!
                 //     return user.IsSuccess;
                 // }).WithMessage("{PropertyName} already exists.");
 
