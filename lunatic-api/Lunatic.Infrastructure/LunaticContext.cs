@@ -5,7 +5,7 @@ using Task = Lunatic.Domain.Entities.Task;
 
 namespace Lunatic.Infrastructure {
     public class LunaticContext : DbContext {
-        // public LunaticContext(DbContextOptions<LunaticContext> options) : base(options) {}
+        public LunaticContext(DbContextOptions<LunaticContext> options) : base(options) {}
 
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Task> Tasks { get; set; }
@@ -13,9 +13,9 @@ namespace Lunatic.Infrastructure {
         public DbSet<Team> Teams { get; set; }
         public DbSet<User> Users { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=LunaticDB;User Id=lunatic;Password=lunatic");
-        }
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+        //     optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=LunaticDB;User Id=lunatic;Password=lunatic");
+        // }
     }
 }
 
