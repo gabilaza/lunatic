@@ -21,6 +21,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetById {
                     Id = user.Value.Id,
                     FirstName = user.Value.FirstName,
                     LastName = user.Value.LastName,
+                    Email = user.Value.Email,
                     Username = user.Value.Username,
                     Password = user.Value.Password,
                     Role = user.Value.Role,

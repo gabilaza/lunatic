@@ -3,11 +3,12 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class User {
-        private User(string firstName, string lastName, string username, string password, Role role) {
+        private User(string firstName, string lastName, string email, string username, string password, Role role) {
             CreatedDate = DateTime.Now;
             Id = Guid.NewGuid();
             FirstName = firstName;
             LastName = lastName;
+            Email = email;
             Username = username;
             Password = password;
             Role = role;
@@ -17,18 +18,23 @@ namespace Lunatic.Domain.Entities {
         public Guid Id { get; private set; }
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
+        public string Email { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
         public Role Role { get; private set; }
         public List<Team>? Teams { get; private set; }
 
-        public static Result<User> Create(string firstName, string lastName, string username, string password, Role role) {
+        public static Result<User> Create(string firstName, string lastName, string email, string username, string password, Role role) {
             if(string.IsNullOrWhiteSpace(firstName)) {
                 return Result<User>.Failure("First name is required.");
             }
 
             if(string.IsNullOrWhiteSpace(lastName)) {
                 return Result<User>.Failure("Last name is required.");
+            }
+
+            if(string.IsNullOrWhiteSpace(email)) {
+                return Result<User>.Failure("Email is required.");
             }
 
             if(string.IsNullOrWhiteSpace(username)) {
@@ -39,7 +45,7 @@ namespace Lunatic.Domain.Entities {
                 return Result<User>.Failure("Password is required.");
             }
 
-            return Result<User>.Success(new User(firstName, lastName, username, password, role));
+            return Result<User>.Success(new User(firstName, lastName, email, username, password, role));
         }
 
         public void AddTeam(Team team) {

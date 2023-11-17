@@ -20,6 +20,11 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
+            RuleFor(u => u.Email)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+
             RuleFor(u => u.Username)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")

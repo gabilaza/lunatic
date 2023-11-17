@@ -20,6 +20,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetAll {
                     Id = u.Id,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
+                    Email = u.Email,
                     Username = u.Username,
                     Password = u.Password,
                     Role = u.Role,
