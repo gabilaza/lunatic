@@ -37,6 +37,7 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
             return new CreateUserCommandResponse {
                 Success = true,
                 User = new CreateUserDto {
+                    Id = user.Value.Id,
                     FirstName = user.Value.FirstName,
                     LastName = user.Value.LastName,
                     Email = user.Value.Email,

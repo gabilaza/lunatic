@@ -11,40 +11,41 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
         public CreateUserCommandValidator(IUserRepository userRepository) {
             this.userRepository = userRepository;
 
+            RuleFor(u => u.FirstName)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+
+            RuleFor(u => u.LastName)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+
+            RuleFor(u => u.Email)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MaximumLength(320).WithMessage("{PropertyName} must not exceed 100 characters.")
+                .EmailAddress().WithMessage("{PropertyName} is not a valid email address.")
+                .MustAsync(async (email, cancellation) => {
+                    var user = await userRepository.FindByEmailAsync(email);
+                    return user.IsSuccess;
+                }).WithMessage("{PropertyName} already exists.");
+
+            RuleFor(u => u.Username)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.")
+                .MustAsync(async (username, cancellation) => {
+                    var user = await userRepository.FindByUsernameAsync(username);
+                    return user.IsSuccess;
+                }).WithMessage("{PropertyName} already exists.");
+
+            RuleFor(u => u.Password)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+
             RuleFor(p => p.Role).NotNull();
-
-            RuleFor(p => p.FirstName)
-                .NotEmpty().WithMessage("First name is required")
-                .NotNull()
-                .MaximumLength(20).WithMessage("First name must not exceed 50 characters");
-
-            RuleFor(p => p.LastName)
-                .NotEmpty().WithMessage("LastName name is required")
-                .NotNull()
-                .MaximumLength(20).WithMessage("Last name must not exceed 50 characters");
-
-            RuleFor(p => p.Email)
-                .NotEmpty().WithMessage("Email is required")
-                .NotNull()
-                .MaximumLength(20).WithMessage("Username must not exceed 50 characters");
-
-            RuleFor(p => p.Username)
-                .NotEmpty().WithMessage("Username is required")
-                .NotNull()
-                .MaximumLength(50).WithMessage("Username must not exceed 50 characters")
-                .Must(UniqueUsername).WithMessage("This username is already taken");
-
-            RuleFor(p => p.Password)
-                .NotEmpty().WithMessage("Password is required")
-                .NotNull()
-                .MaximumLength(30).WithMessage("Password must not exceed 30 characters");
-        }
-
-        private bool UniqueUsername(string username) {
-            var task = this.userRepository.FindByUsernameAsync(username);
-            task.Wait();
-            var result = task.Result;
-            return result.IsSuccess;
         }
     }
 }

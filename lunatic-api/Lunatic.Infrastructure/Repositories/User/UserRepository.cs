@@ -16,6 +16,14 @@ namespace Lunatic.Infrastructure.Repositories {
             }
             return Result<User>.Success(result);
         }
+
+        public async Task<Result<User>> FindByEmailAsync(string email) {
+            var result = await context.Set<User>().FindAsync(email);
+            if(result == null) {
+                return Result<User>.Failure($"Entity with username {email} not found");
+            }
+            return Result<User>.Success(result);
+        }
     }
 }
 
