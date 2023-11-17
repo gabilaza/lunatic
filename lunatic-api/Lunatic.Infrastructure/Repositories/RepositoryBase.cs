@@ -6,7 +6,7 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Infrastructure.Repositories {
     public class RepositoryBase<T> : IAsyncRepository<T> where T : class {
-        private readonly LunaticContext context;
+        protected readonly LunaticContext context;
 
         public RepositoryBase(LunaticContext context) {
             this.context = context;
