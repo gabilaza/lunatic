@@ -27,8 +27,8 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(DeleteUserComand command) {
             var result = await Mediator.Send(command);
             if (!result.Success) {
