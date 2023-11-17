@@ -19,8 +19,12 @@ namespace Lunatic.Application.Features.Users.Queries.GetById {
             if (user.IsSuccess) {
                 return new UserDto {
                     Id = user.Value.Id,
+                    FirstName = user.Value.FirstName,
+                    LastName = user.Value.LastName,
                     Username = user.Value.Username,
-                    Password = user.Value.Password
+                    Password = user.Value.Password,
+                    Role = user.Value.Role,
+                    Teams = user.Value.Teams
                 };
             }
             return new UserDto();

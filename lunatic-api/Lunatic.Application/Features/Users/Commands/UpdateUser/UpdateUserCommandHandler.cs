@@ -50,7 +50,8 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                     LastName = dbUser.Value.LastName,
                     Username = dbUser.Value.Username,
                     Password = dbUser.Value.Password,
-                    Role = dbUser.Value.Role
+                    Role = dbUser.Value.Role,
+                    Teams = dbUser.Value.Teams
                 }
             };
 

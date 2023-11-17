@@ -12,8 +12,6 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
         // public DateTime CreatedAt { get; set; }
 
         public Role Role { get; set; }
-
-        // public List<Team>? Teams { get; set; }
-
+        public List<Team>? Teams { get; set; }
     }
 }

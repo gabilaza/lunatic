@@ -18,8 +18,12 @@ namespace Lunatic.Application.Features.Users.Queries.GetAll {
             if(users.IsSuccess) {
                 response.Users = users.Value.Select(u => new UserDto {
                     Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
                     Username = u.Username,
                     Password = u.Password,
+                    Role = u.Role,
+                    Teams = u.Teams
                 }).ToList();
             }
             return response;

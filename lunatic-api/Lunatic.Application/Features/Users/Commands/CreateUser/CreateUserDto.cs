@@ -1,4 +1,6 @@
-﻿// using Lunatic.Domain.Entities;
+﻿
+using Lunatic.Domain.Entities;
+
 
 namespace Lunatic.Application.Features.Users.Commands.CreateUser {
     public class CreateUserDto {
@@ -8,9 +10,8 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
         public string? Username { get; set; }
         public string? Password { get; set; }
         // public DateTime CreatedAt { get; set; }
-        //
-        // public Role Role { get; set; }
-        //
-        // public List<Team>? Teams { get; set; }
+
+        public Role Role { get; set; }
+        public List<Team>? Teams { get; set; }
     }
 }

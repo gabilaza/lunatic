@@ -40,8 +40,9 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                     FirstName = user.Value.FirstName,
                     LastName = user.Value.LastName,
                     Username = user.Value.Username,
-                    Password = user.Value.Password
-                    // Role = user.Value.Role
+                    Password = user.Value.Password,
+                    Role = user.Value.Role,
+                    Teams = user.Value.Teams
                 }
             };
         }
