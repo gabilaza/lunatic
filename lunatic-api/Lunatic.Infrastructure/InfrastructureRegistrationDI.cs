@@ -26,6 +26,12 @@ namespace Lunatic.Infrastructure {
                 typeof(RepositoryBase<>));
             services.AddScoped
                 <IUserRepository, UserRepository>();
+            services.AddScoped
+                <ICommentRepository, CommentRepository>();
+            services.AddScoped
+                <IProjectRepository, ProjectRepository>();
+            services.AddScoped
+                <ITaskRepository, TaskRepository>();
             return services;
         }
     }
