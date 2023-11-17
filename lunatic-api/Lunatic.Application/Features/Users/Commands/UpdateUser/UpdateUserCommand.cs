@@ -13,5 +13,6 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
         public string Password { get; set; } = default!;
         public Role Role { get; set; }
 
+        public List<Team>? Teams { get; set;}
     }
 }

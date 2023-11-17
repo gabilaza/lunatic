@@ -23,24 +23,17 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 };
             }
 
-            var user = await userRepository.FindByIdAsync(request.Id);
-            if (!user.IsSuccess) {
+            var userResult = await userRepository.FindByIdAsync(request.Id);
+            if(!userResult.IsSuccess) {
                 return new UpdateUserCommandResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "User not found" }
                 };
             }
 
-            //trebuie schimbat constructorul sa ia id si creationdate
-            //trebuie schimbat si guid.new din constructor in create sau nici atat.
-            //sau folosim inca un constructor
+            userResult.Value.Update(request.FirstName, request.LastName, request.Email, request.Username, request.Password, request.Role, request.Teams);
 
-            // user.Value.Username = request.Username;
-            // user.Value.Password = request.Password;
-            // user.Value.Role = request.Role;
-
-
-            var dbUser = await userRepository.UpdateAsync(user.Value);
+            var dbUser = await userRepository.UpdateAsync(userResult.Value);
 
             return new UpdateUserCommandResponse {
                 Success = false,

@@ -48,6 +48,17 @@ namespace Lunatic.Domain.Entities {
             return Result<User>.Success(new User(firstName, lastName, email, username, password, role));
         }
 
+        // hm...
+        public void Update(string firstName, string lastName, string email, string username, string password, Role role, List<Team> teams) {
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            Username = username;
+            Password = password;
+            Role = role;
+            Teams = teams;
+        }
+
         public void AddTeam(Team team) {
             if(Teams == null) {
                 Teams = new List<Team>();
