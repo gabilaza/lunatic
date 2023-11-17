@@ -7,14 +7,14 @@ using MediatR;
 namespace Lunatic.Application.Features.Users.Commands.CreateUser {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserComand, CreateUserCommandResponse> {
 
-        private readonly IUserRepository repository;
+        private readonly IUserRepository userRepository;
 
-        public CreateUserCommandHandler(IUserRepository repository) {
-            this.repository = repository;
+        public CreateUserCommandHandler(IUserRepository userRepository) {
+            this.userRepository = userRepository;
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserComand request, CancellationToken cancellationToken) {
-            var validator = new CreateUserCommandValidator();
+            var validator = new CreateUserCommandValidator(userRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -32,7 +32,7 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                 };
             }
 
-            await repository.AddAsync(user.Value);
+            await userRepository.AddAsync(user.Value);
 
             return new CreateUserCommandResponse {
                 Success = true,
