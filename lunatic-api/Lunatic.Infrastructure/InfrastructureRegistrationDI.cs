@@ -25,13 +25,15 @@ namespace Lunatic.Infrastructure {
                 (typeof(IAsyncRepository<>),
                 typeof(RepositoryBase<>));
             services.AddScoped
-                <IUserRepository, UserRepository>();
-            services.AddScoped
                 <ICommentRepository, CommentRepository>();
             services.AddScoped
                 <IProjectRepository, ProjectRepository>();
             services.AddScoped
                 <ITaskRepository, TaskRepository>();
+            services.AddScoped
+                <ITeamRepository, TeamRepository>();
+            services.AddScoped
+                <IUserRepository, UserRepository>();
             return services;
         }
     }
