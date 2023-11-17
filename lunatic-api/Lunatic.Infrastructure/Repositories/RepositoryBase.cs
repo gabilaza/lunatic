@@ -1,17 +1,18 @@
 
+using Lunatic.Application.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Lunatic.Domain.Utils;
 
 
 namespace Lunatic.Infrastructure.Repositories {
-    public class AsyncRepository<T> : Repository<T> where T : class {
+    public class RepositoryBase<T> : IAsyncRepository<T> where T : class {
         private readonly LunaticContext context;
 
-        public AsyncRepository(LunaticContext context) {
+        public RepositoryBase(LunaticContext context) {
             this.context = context;
         }
 
-        public async Task<Result<T>> FindById(Guid id) {
+        public virtual async Task<Result<T>> FindByIdAsync(Guid id) {
             var result = await context.Set<T>().FindAsync(id);
             if (result == null) {
                 return Result<T>.Failure($"Entity with id {id} not found");
@@ -19,20 +20,20 @@ namespace Lunatic.Infrastructure.Repositories {
             return Result<T>.Success(result);
         }
 
-        public async Task<Result<T>> Add(T entity) {
+        public virtual async Task<Result<T>> AddAsync(T entity) {
             await context.Set<T>().AddAsync(entity);
             await context.SaveChangesAsync();
             return Result<T>.Success(entity);
         }
 
-        public async Task<Result<T>> Update(T entity) {
+        public virtual async Task<Result<T>> UpdateAsync(T entity) {
             context.Entry(entity).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return Result<T>.Success(entity);
         }
 
-        public async Task<Result<T>> Delete(Guid id) {
-            var result = await FindById(id);
+        public virtual async Task<Result<T>> DeleteAsync(Guid id) {
+            var result = await FindByIdAsync(id);
             if (result != null) {
                 context.Set<T>().Remove(result.Value);
                 await context.SaveChangesAsync();
@@ -41,8 +42,13 @@ namespace Lunatic.Infrastructure.Repositories {
             return Result<T>.Failure($"Entity with id {id} not found");
         }
 
-        public async Task<Result<IReadOnlyList<T>>> GetPagedReponse(int page, int size) {
+        public virtual async Task<Result<IReadOnlyList<T>>> GetPagedReponseAsync(int page, int size) {
             var result = await context.Set<T>().Skip(page).Take(size).AsNoTracking().ToListAsync();
+            return Result<IReadOnlyList<T>>.Success(result);
+        }
+
+        public virtual async Task<Result<IReadOnlyList<T>>> GetAllAsync() {
+            var result = await context.Set<T>().AsNoTracking().ToListAsync();
             return Result<IReadOnlyList<T>>.Success(result);
         }
     }
