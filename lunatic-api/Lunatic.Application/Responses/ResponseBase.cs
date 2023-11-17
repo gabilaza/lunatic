@@ -11,6 +11,6 @@ namespace Lunatic.Application.Responses {
         public bool Success { get; set; } = default!;
         public string Message { get; set; } = default!;
 
-        public List<string>? ValidationsErrors { get; set; }
+        public List<string>? ValidationErrors { get; set; } = default!;
     }
 }
