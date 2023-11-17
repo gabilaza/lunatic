@@ -36,7 +36,7 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
             var dbUser = await userRepository.UpdateAsync(userResult.Value);
 
             return new UpdateUserCommandResponse {
-                Success = false,
+                Success = true,
                 User = new UpdateUserDto {
                     Id = dbUser.Value.Id,
                     FirstName = dbUser.Value.FirstName,
