@@ -44,12 +44,12 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
 
 		private bool IsUniqueUsername(string username) {
 			var user = userRepository.FindByUsernameAsync(username);
-			return user.Result.IsSuccess;
+			return !user.Result.IsSuccess;
 		}
 
 		private bool IsUniqueEmail(string email) {
 			var user = userRepository.FindByEmailAsync(email);
-			return user.Result.IsSuccess;
+			return !user.Result.IsSuccess;
 		}
 	}
 }
