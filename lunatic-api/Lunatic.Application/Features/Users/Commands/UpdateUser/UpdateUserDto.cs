@@ -1,8 +1,10 @@
 ﻿
 using Lunatic.Domain.Entities;
+using Lunatic.Domain.Models;
 
 
-namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
+namespace Lunatic.Application.Features.Users.Commands.UpdateUser
+{
     public class UpdateUserDto {
         public Guid Id { get; set; }
         public string? FirstName { get; set; }

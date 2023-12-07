@@ -1,9 +1,11 @@
 ﻿
 using Lunatic.Domain.Entities;
+using Lunatic.Domain.Models;
 using MediatR;
 
 
-namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
+namespace Lunatic.Application.Features.Users.Commands.UpdateUser
+{
     public class UpdateUserCommand : IRequest<UpdateUserCommandResponse> {
         public Guid Id { get; set; }
         public string FirstName { get; set; } = default!;

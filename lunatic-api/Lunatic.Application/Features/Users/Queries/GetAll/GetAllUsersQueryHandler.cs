@@ -15,14 +15,14 @@ namespace Lunatic.Application.Features.Users.Queries.GetAll {
             GetAllUsersQueryResponse response = new GetAllUsersQueryResponse();
             var users = await userRepository.GetAllAsync();
 
-            if(users.IsSuccess) {
+            if (users.IsSuccess) {
                 response.Users = users.Value.Select(u => new UserDto {
-                    Id = u.Id,
+                    Id = new Guid(u.Id),
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Email = u.Email,
-                    Username = u.Username,
-                    Password = u.Password,
+                    Username = u.UserName,
+                    Password = u.PasswordHash,
                     Role = u.Role,
                     Teams = u.Teams
                 }).ToList();

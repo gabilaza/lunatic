@@ -1,5 +1,6 @@
 ﻿using Lunatic.Application.Contracts.Identity;
 using Lunatic.Application.Models.Identity;
+using Lunatic.Domain.Models;
 using Lunatic.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -10,10 +11,10 @@ using System.Text;
 
 namespace Lunatic.Identity.Services {
     public class AuthService : IAuthService {
-        private readonly UserManager<ApplicationUser> userManager;
+        private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) {
+        public AuthService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
@@ -27,13 +28,12 @@ namespace Lunatic.Identity.Services {
             if (emailExists != null)
                 return (0, "Email already exists");
 
-            ApplicationUser user = new ApplicationUser() {
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username,
-                Name = model.Name
-            };
-            var createUserResult = await userManager.CreateAsync(user, model.Password);
+            var user = User.Create(model.FirstName, model.LastName, model.Email, model.Username, model.Password, role);
+
+            if (!user.IsSuccess)
+                return (0, user.Error);
+
+            var createUserResult = await userManager.CreateAsync(user.Value, model.Password);
             if (!createUserResult.Succeeded)
                 return (0, "User creation failed! Please check user details and try again.");
 
@@ -41,7 +41,7 @@ namespace Lunatic.Identity.Services {
                 await roleManager.CreateAsync(new IdentityRole(role));
 
             if (await roleManager.RoleExistsAsync(UserRoles.User))
-                await userManager.AddToRoleAsync(user, role);
+                await userManager.AddToRoleAsync(user.Value, role);
 
             return (1, "User created successfully!");
         }

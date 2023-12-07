@@ -1,5 +1,4 @@
-
-namespace Lunatic.Domain.Entities {
+namespace Lunatic.Domain.Models {
     public enum Role {
         ADMIN,
         USER

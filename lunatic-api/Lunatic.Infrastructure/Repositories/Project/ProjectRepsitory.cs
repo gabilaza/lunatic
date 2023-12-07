@@ -4,7 +4,7 @@ using Lunatic.Domain.Entities;
 
 
 namespace Lunatic.Infrastructure.Repositories {
-    public class ProjectRepository : RepositoryBase<Project>, IProjectRepository {
+    public class ProjectRepository : BaseRepository<Project>, IProjectRepository {
         public ProjectRepository(LunaticContext context) : base(context) {
         }
     }

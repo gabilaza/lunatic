@@ -18,7 +18,7 @@ namespace Lunatic.Infrastructure {
                     )
                 );
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
             services.AddScoped<ICommentRepository, CommentRepository>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<ITaskRepository, TaskRepository>();

@@ -5,10 +5,10 @@ using Lunatic.Domain.Utils;
 
 
 namespace Lunatic.Infrastructure.Repositories {
-    public class RepositoryBase<T> : IAsyncRepository<T> where T : class {
+    public class BaseRepository<T> : IAsyncRepository<T> where T : class {
         protected readonly LunaticContext context;
 
-        public RepositoryBase(LunaticContext context) {
+        public BaseRepository(LunaticContext context) {
             this.context = context;
         }
 

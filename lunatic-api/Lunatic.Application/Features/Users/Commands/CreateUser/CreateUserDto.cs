@@ -1,8 +1,10 @@
 ﻿
 using Lunatic.Domain.Entities;
+using Lunatic.Domain.Models;
 
 
-namespace Lunatic.Application.Features.Users.Commands.CreateUser {
+namespace Lunatic.Application.Features.Users.Commands.CreateUser
+{
     public class CreateUserDto {
         public Guid Id { get; set; }
         public string? FirstName { get; set; }

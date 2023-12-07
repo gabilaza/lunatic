@@ -1,8 +1,10 @@
 ﻿
 using Lunatic.Domain.Entities;
+using Lunatic.Domain.Models;
 
 
-namespace Lunatic.Application.Features.Users.Queries {
+namespace Lunatic.Application.Features.Users.Queries
+{
     public class UserDto {
         public Guid Id { get; set; }
         public string FirstName { get; set; } = default!;
