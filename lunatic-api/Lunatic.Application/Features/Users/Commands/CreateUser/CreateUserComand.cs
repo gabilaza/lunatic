@@ -1,9 +1,9 @@
-﻿
-using Lunatic.Domain.Entities;
+﻿using Lunatic.Domain.Models;
 using MediatR;
 
 
-namespace Lunatic.Application.Features.Users.Commands.CreateUser {
+namespace Lunatic.Application.Features.Users.Commands.CreateUser
+{
     public class CreateUserComand : IRequest<CreateUserCommandResponse> {
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;

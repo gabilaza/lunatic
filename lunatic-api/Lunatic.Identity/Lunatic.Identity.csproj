@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lunatic.Application\Lunatic.Application.csproj" />
+    <ProjectReference Include="..\Lunatic.Domain\Lunatic.Domain.csproj" />
   </ItemGroup>
 
 </Project>

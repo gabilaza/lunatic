@@ -1,4 +1,5 @@
 
+using Lunatic.Domain.Models;
 using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
@@ -16,7 +17,7 @@ namespace Lunatic.Domain.Entities {
         public string Title { get; private set; }
         public string Description { get; private set; }
         public TaskPriority Priority { get; private set; }
-        public TaskStatus  Status { get; private set; }
+        public TaskStatus Status { get; private set; }
         public List<Tag>? Tags { get; private set; }
         public List<Guid>? CommentIds { get; private set; }
         public List<Guid>? UserAssignIds { get; private set; }
@@ -25,15 +26,15 @@ namespace Lunatic.Domain.Entities {
         public DateTime? EndedDate { get; private set; }
 
         public static Result<Task> Create(Guid createdByUserId, string title, string description, TaskPriority priority) {
-            if(createdByUserId == default) {
+            if (createdByUserId == default) {
                 return Result<Task>.Failure("Created User id should not be default.");
             }
 
-            if(string.IsNullOrWhiteSpace(title)) {
+            if (string.IsNullOrWhiteSpace(title)) {
                 return Result<Task>.Failure("Title is required.");
             }
 
-            if(string.IsNullOrWhiteSpace(description)) {
+            if (string.IsNullOrWhiteSpace(description)) {
                 return Result<Task>.Failure("Description is required.");
             }
 
@@ -53,7 +54,7 @@ namespace Lunatic.Domain.Entities {
         }
 
         public void AddTag(Tag tag) {
-            if(Tags == null) {
+            if (Tags == null) {
                 Tags = new List<Tag>();
             }
 
@@ -70,9 +71,9 @@ namespace Lunatic.Domain.Entities {
 
         // hm..
         public void SetStatus(TaskStatus status) {
-            switch(Status) {
+            switch (Status) {
                 case TaskStatus.CREATED:
-                    if(status == TaskStatus.IN_PROGRESS) {
+                    if (status == TaskStatus.IN_PROGRESS) {
                         Status = status;
                         StartedDate = DateTime.UtcNow;
                     } else {
@@ -80,7 +81,7 @@ namespace Lunatic.Domain.Entities {
                     }
                     break;
                 case TaskStatus.IN_PROGRESS:
-                    if(status == TaskStatus.DONE) {
+                    if (status == TaskStatus.DONE) {
                         Status = status;
                         EndedDate = DateTime.UtcNow;
                     } else {
@@ -88,7 +89,7 @@ namespace Lunatic.Domain.Entities {
                     }
                     break;
                 case TaskStatus.DONE:
-                    if(status == TaskStatus.IN_PROGRESS) {
+                    if (status == TaskStatus.IN_PROGRESS) {
                         Status = status;
                         EndedDate = DateTime.UtcNow;
                     } else {

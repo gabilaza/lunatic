@@ -1,7 +1,9 @@
 
+using Lunatic.Domain.Models;
 using Lunatic.Domain.Utils;
 
-namespace Lunatic.Domain.Entities {
+namespace Lunatic.Domain.Entities
+{
     public class Team : AuditableEntity {
         private Team(Guid createdByUserId, string name) : base(createdByUserId) {
             Id = Guid.NewGuid();

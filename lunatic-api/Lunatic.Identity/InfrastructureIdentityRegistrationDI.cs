@@ -1,4 +1,5 @@
 ﻿using Lunatic.Application.Contracts.Identity;
+using Lunatic.Domain.Models;
 using Lunatic.Identity.Models;
 using Lunatic.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,7 +10,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace Lunatic.Identity {
+namespace Lunatic.Identity
+{
     public static class InfrastructureIdentityRegistrationDI {
         public static IServiceCollection AddInfrastructureIdentityToDI(
             this IServiceCollection services,
@@ -17,13 +19,13 @@ namespace Lunatic.Identity {
 
             services.AddDbContext<ApplicationDbContext>(
                options => options.UseNpgsql(
-                   configuration.GetConnectionString("LunaticUserConnection"),
+                   configuration.GetConnectionString("LunaticConnection"),
                    builder => builder.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                    )
                );
 
             // For Identity  
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>()
                             .AddEntityFrameworkStores<ApplicationDbContext>()
                             .AddDefaultTokenProviders();
             // Adding Authentication  
