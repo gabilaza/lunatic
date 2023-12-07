@@ -1,5 +1,6 @@
 ﻿using Lunatic.Application.Contracts.Interfaces;
 using System.Security.Claims;
+using Microsoft.Identity.Web;
 
 namespace Lunatic.API.Services {
     public class CurrentUserService : ICurrentUserService {
