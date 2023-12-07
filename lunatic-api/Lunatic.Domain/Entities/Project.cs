@@ -30,6 +30,13 @@ namespace Lunatic.Domain.Entities {
             return Result<Project>.Success(new Project(createdByUserId, title, description));
         }
 
+        public void Update(string title,  string description, List<Task> tasks)
+        {
+            Title = title;
+            Description = description;
+            Tasks = tasks;
+        }
+
         public void AddTask(Task task) {
             if(Tasks == null) {
                 Tasks = new List<Task>();
