@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace Lunatic.Infrastructure.Repositories {
-    public class UserRepository : BaseRepository<User>, IUserRepository {
+    public class UserRepository : BaseSRepository<User>, IUserRepository {
         public UserRepository(LunaticContext context) : base(context) {
         }
 

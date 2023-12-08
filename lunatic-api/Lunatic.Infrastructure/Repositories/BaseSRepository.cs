@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 
 namespace Lunatic.Infrastructure.Repositories {
-    public class BaseRepository<T> : IAsyncRepository<T> where T : class {
+    public class BaseSRepository<T> : IAsyncSRepository<T> where T : class {
         protected readonly LunaticContext context;
 
-        public BaseRepository(LunaticContext context) {
+        public BaseSRepository(LunaticContext context) {
             this.context = context;
         }
 
-        public virtual async Task<Result<T>> FindByIdAsync(Guid id) {
+        public virtual async Task<Result<T>> FindByIdAsync(string id) {
             var result = await context.Set<T>().FindAsync(id);
             if (result == null) {
                 return Result<T>.Failure($"Entity with id {id} not found");
@@ -32,7 +32,7 @@ namespace Lunatic.Infrastructure.Repositories {
             return Result<T>.Success(entity);
         }
 
-        public virtual async Task<Result<T>> DeleteAsync(Guid id) {
+        public virtual async Task<Result<T>> DeleteAsync(string id) {
             var result = await FindByIdAsync(id);
             if (result.Value != null) {
                 context.Set<T>().Remove(result.Value);
