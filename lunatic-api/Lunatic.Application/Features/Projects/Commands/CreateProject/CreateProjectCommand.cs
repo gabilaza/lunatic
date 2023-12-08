@@ -7,6 +7,5 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
         public Guid CreatedByUserId { get; set; } = default!;
         public string Title { get; set; } = default!;
         public string Description { get; set; } = default!;
-        //public List<Domain.Entities.Task>? Tasks { get; set; }
     }
 }

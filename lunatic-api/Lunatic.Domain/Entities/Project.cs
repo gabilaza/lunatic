@@ -12,7 +12,7 @@ namespace Lunatic.Domain.Entities {
         public Guid Id { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public List<Task>? Tasks { get; private set; }
+        public List<Guid>? TaskIds { get; private set; }
 
         public static Result<Project> Create(Guid createdByUserId, string title, string description) {
             if(createdByUserId == default) {
@@ -30,19 +30,19 @@ namespace Lunatic.Domain.Entities {
             return Result<Project>.Success(new Project(createdByUserId, title, description));
         }
 
-        public void Update(string title,  string description, List<Task> tasks)
+        public void Update(string title,  string description, List<Guid> taskIds)
         {
             Title = title;
             Description = description;
-            Tasks = tasks;
+            TaskIds = taskIds;
         }
 
         public void AddTask(Task task) {
-            if(Tasks == null) {
-                Tasks = new List<Task>();
+            if(TaskIds == null) {
+                TaskIds = new List<Guid>();
             }
 
-            Tasks.Add(task);
+            TaskIds.Add(task.Id);
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
         }
 
         public async Task<UpdateProjectCommandResponse> Handle(UpdateProjectCommand request, CancellationToken cancellationToken) {
-
             var validator = new UpdateProjectCommandValidator(projectRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
@@ -31,7 +30,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
                 };
             }
 
-            projectResult.Value.Update(request.Title, request.Description, request.Tasks);
+            projectResult.Value.Update(request.Title, request.Description, request.TaskIds);
 
             var dbProject = await projectRepository.UpdateAsync(projectResult.Value);
 
@@ -41,7 +40,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
                     Id = dbProject.Value.Id,
                     Title = dbProject.Value.Title,
                     Description = dbProject.Value.Description,
-                    Tasks = dbProject.Value.Tasks
+                    TaskIds = dbProject.Value.TaskIds
                 }
             };
         }

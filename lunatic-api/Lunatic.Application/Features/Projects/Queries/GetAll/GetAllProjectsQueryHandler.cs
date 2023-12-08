@@ -21,7 +21,7 @@ namespace Lunatic.Application.Features.Projects.Queries.GetAll {
                     CreatedByUserId = u.CreatedByUserId,
                     Title = u.Title,
                     Description = u.Description,
-                    Tasks = u.Tasks
+                    TaskIds = u.TaskIds
                 }).ToList();
             }
             return response;

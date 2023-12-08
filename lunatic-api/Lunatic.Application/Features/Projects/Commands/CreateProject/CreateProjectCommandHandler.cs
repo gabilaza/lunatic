@@ -41,7 +41,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
                     CreatedByUserId = project.Value.CreatedByUserId,
                     Title = project.Value.Title,
                     Description = project.Value.Description,
-                    Tasks = project.Value.Tasks
+                    TaskIds = project.Value.TaskIds
                 }
             };
         }
