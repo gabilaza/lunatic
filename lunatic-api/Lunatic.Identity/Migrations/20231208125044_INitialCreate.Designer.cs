@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lunatic.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231207225636_InitialUser")]
-    partial class InitialUser
+    [Migration("20231208125044_INitialCreate")]
+    partial class INitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,60 +25,6 @@ namespace Lunatic.Identity.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Lunatic.Domain.Entities.Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("CreatedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("LastModifiedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("Comment");
-                });
-
-            modelBuilder.Entity("Lunatic.Domain.Entities.CommentEmote", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CommentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Emote")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("CommentEmote");
-                });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Project", b =>
                 {
@@ -122,7 +68,7 @@ namespace Lunatic.Identity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<List<Guid>>("Assignees")
+                    b.Property<List<Guid>>("CommentIds")
                         .HasColumnType("uuid[]");
 
                     b.Property<Guid>("CreatedByUserId")
@@ -162,6 +108,9 @@ namespace Lunatic.Identity.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<List<Guid>>("UserAssignIds")
+                        .HasColumnType("uuid[]");
 
                     b.HasKey("Id");
 
@@ -421,22 +370,6 @@ namespace Lunatic.Identity.Migrations
                     b.ToTable("TeamUser");
                 });
 
-            modelBuilder.Entity("Lunatic.Domain.Entities.Comment", b =>
-                {
-                    b.HasOne("Lunatic.Domain.Entities.Task", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Lunatic.Domain.Entities.CommentEmote", b =>
-                {
-                    b.HasOne("Lunatic.Domain.Entities.Comment", null)
-                        .WithMany("Emotes")
-                        .HasForeignKey("CommentId");
-                });
-
             modelBuilder.Entity("Lunatic.Domain.Entities.Project", b =>
                 {
                     b.HasOne("Lunatic.Domain.Entities.Team", null)
@@ -517,19 +450,9 @@ namespace Lunatic.Identity.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Lunatic.Domain.Entities.Comment", b =>
-                {
-                    b.Navigation("Emotes");
-                });
-
             modelBuilder.Entity("Lunatic.Domain.Entities.Project", b =>
                 {
                     b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Lunatic.Domain.Entities.Task", b =>
-                {
-                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Team", b =>

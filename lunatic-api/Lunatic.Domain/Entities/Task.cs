@@ -104,7 +104,7 @@ namespace Lunatic.Domain.Entities {
                 UserAssignIds = new List<Guid>();
             }
 
-            UserAssignIds.Add(user.Id);
+            UserAssignIds.Add(new Guid(user.Id));
         }
     }
 }

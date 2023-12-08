@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lunatic.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialUser : Migration
+    public partial class INitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -235,7 +235,8 @@ namespace Lunatic.Identity.Migrations
                     Priority = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     Tags = table.Column<int[]>(type: "integer[]", nullable: true),
-                    Assignees = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
+                    CommentIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
+                    UserAssignIds = table.Column<List<Guid>>(type: "uuid[]", nullable: true),
                     StartedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     EndedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: true),
@@ -251,48 +252,6 @@ namespace Lunatic.Identity.Migrations
                         name: "FK_Task_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Comment",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TaskId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Content = table.Column<string>(type: "text", nullable: false),
-                    CreatedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModifiedByUserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comment", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Comment_Task_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "Task",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CommentEmote",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Emote = table.Column<int>(type: "integer", nullable: false),
-                    CommentId = table.Column<Guid>(type: "uuid", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CommentEmote", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CommentEmote_Comment_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "Comment",
                         principalColumn: "Id");
                 });
 
@@ -334,16 +293,6 @@ namespace Lunatic.Identity.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_TaskId",
-                table: "Comment",
-                column: "TaskId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommentEmote_CommentId",
-                table: "CommentEmote",
-                column: "CommentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Project_TeamId",
                 table: "Project",
                 column: "TeamId");
@@ -378,7 +327,7 @@ namespace Lunatic.Identity.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CommentEmote");
+                name: "Task");
 
             migrationBuilder.DropTable(
                 name: "TeamUser");
@@ -387,16 +336,10 @@ namespace Lunatic.Identity.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Comment");
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Task");
-
-            migrationBuilder.DropTable(
-                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "Team");
