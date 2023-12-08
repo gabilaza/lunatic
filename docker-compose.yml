@@ -16,16 +16,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-  migrations:
-    build:
-      context: ./lunatic-api
-      dockerfile: ./Lunatic.Migrator.Dockerfile
-    container_name: lunatic-migrations
-    networks:
-      - db_conn
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # migrations:
+  #   build:
+  #     context: ./lunatic-api
+  #     dockerfile: ./Lunatic.Migrator.Dockerfile
+  #   container_name: lunatic-migrations
+  #   networks:
+  #     - db_conn
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
   api:
     build:
       context: ./lunatic-api
@@ -38,8 +38,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      migrations:
-        condition: service_completed_successfully
+      # migrations:
+      #   condition: service_completed_successfully
 
 networks:
   db_conn:
