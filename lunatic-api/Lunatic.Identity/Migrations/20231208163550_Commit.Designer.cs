@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lunatic.Identity.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231208125547_INitialCreate")]
-    partial class INitialCreate
+    [Migration("20231208163550_Commit")]
+    partial class Commit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -48,6 +48,9 @@ namespace Lunatic.Identity.Migrations
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<List<Guid>>("TaskIds")
+                        .HasColumnType("uuid[]");
+
                     b.Property<Guid?>("TeamId")
                         .HasColumnType("uuid");
 
@@ -60,63 +63,6 @@ namespace Lunatic.Identity.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("Project");
-                });
-
-            modelBuilder.Entity("Lunatic.Domain.Entities.Task", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<List<Guid>>("CommentIds")
-                        .HasColumnType("uuid[]");
-
-                    b.Property<Guid>("CreatedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("EndedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("LastModifiedByUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ProjectId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("StartedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int[]>("Tags")
-                        .HasColumnType("integer[]");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<List<Guid>>("UserAssignIds")
-                        .HasColumnType("uuid[]");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProjectId");
-
-                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Team", b =>
@@ -170,6 +116,9 @@ namespace Lunatic.Identity.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -377,13 +326,6 @@ namespace Lunatic.Identity.Migrations
                         .HasForeignKey("TeamId");
                 });
 
-            modelBuilder.Entity("Lunatic.Domain.Entities.Task", b =>
-                {
-                    b.HasOne("Lunatic.Domain.Entities.Project", null)
-                        .WithMany("Tasks")
-                        .HasForeignKey("ProjectId");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -448,11 +390,6 @@ namespace Lunatic.Identity.Migrations
                         .HasForeignKey("TeamsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Lunatic.Domain.Entities.Project", b =>
-                {
-                    b.Navigation("Tasks");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Team", b =>

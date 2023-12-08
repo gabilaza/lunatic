@@ -6,6 +6,7 @@ using TaskStatus = Lunatic.Domain.Entities.TaskStatus;
 namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
     public class CreateTaskDto {
         public Guid Id { get; set; }
+        public Guid ProjectId { get; set; } = default!;
         public string Title { get; set; } = default!;
         public string Description { get; set; } = default!;
         public TaskPriority Priority { get; set; } = default!;

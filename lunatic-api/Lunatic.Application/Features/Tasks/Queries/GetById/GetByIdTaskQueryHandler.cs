@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
 
         public async Task<GetByIdTaskResponse> Handle(GetByIdTaskQuery request, CancellationToken cancellationToken) {
             var task = await taskRepository.FindByIdAsync(request.Id);
-            if(!task.IsSuccess) {
+            if (!task.IsSuccess) {
                 return new GetByIdTaskResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Task not found" }
@@ -24,6 +24,7 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
                 Success = true,
                 Task = new TaskDto {
                     Id = task.Value.Id,
+                    ProjectId = task.Value.ProjectId,
                     Title = task.Value.Title,
                     Description = task.Value.Description,
                     Priority = task.Value.Priority,

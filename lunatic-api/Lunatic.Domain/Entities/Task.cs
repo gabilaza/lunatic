@@ -4,8 +4,9 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Task : AuditableEntity {
-        private Task(Guid createdByUserId, string title, string description, TaskPriority priority) : base(createdByUserId) {
+        private Task(Guid createdByUserId, Guid projectId, string title, string description, TaskPriority priority) : base(createdByUserId) {
             Id = Guid.NewGuid();
+            ProjectId = projectId;
             Title = title;
             Description = description;
             Status = TaskStatus.CREATED;
@@ -14,6 +15,7 @@ namespace Lunatic.Domain.Entities {
         }
 
         public Guid Id { get; private set; }
+        public Guid ProjectId { get; private set; }
         public string Title { get; private set; }
         public string Description { get; private set; }
         public TaskPriority Priority { get; private set; }
@@ -25,9 +27,12 @@ namespace Lunatic.Domain.Entities {
         public DateTime? StartedDate { get; private set; }
         public DateTime? EndedDate { get; private set; }
 
-        public static Result<Task> Create(Guid createdByUserId, string title, string description, TaskPriority priority) {
+        public static Result<Task> Create(Guid createdByUserId, Guid projectId, string title, string description, TaskPriority priority) {
             if (createdByUserId == default) {
                 return Result<Task>.Failure("Created User id should not be default.");
+            }
+            if(projectId == default) {
+                return Result<Task>.Failure("Project id should not be default.");
             }
 
             if (string.IsNullOrWhiteSpace(title)) {
@@ -38,7 +43,7 @@ namespace Lunatic.Domain.Entities {
                 return Result<Task>.Failure("Description is required.");
             }
 
-            return Result<Task>.Success(new Task(createdByUserId, title, description, priority));
+            return Result<Task>.Success(new Task(createdByUserId, projectId, title, description, priority));
         }
 
         public void Update(string title, string description, TaskPriority priority, TaskStatus status, List<Tag>? tags, List<Guid>? commentIds, List<Guid>? userAssignIds, DateTime? startedDate, DateTime? endedDate) {
@@ -69,7 +74,7 @@ namespace Lunatic.Domain.Entities {
             CommentIds.Add(comment.Id);
         }
 
-        // hm..
+
         public void SetStatus(TaskStatus status) {
             switch (Status) {
                 case TaskStatus.CREATED:

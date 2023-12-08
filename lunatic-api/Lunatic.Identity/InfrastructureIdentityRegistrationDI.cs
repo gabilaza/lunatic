@@ -1,6 +1,6 @@
 ﻿using Lunatic.Application.Contracts.Identity;
 using Lunatic.Domain.Models;
-using Lunatic.Identity.Models;
+
 using Lunatic.Identity.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;

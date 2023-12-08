@@ -15,9 +15,10 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetAll {
             GetAllTasksQueryResponse response = new GetAllTasksQueryResponse();
             var tasks = await taskRepository.GetAllAsync();
 
-            if(tasks.IsSuccess) {
+            if (tasks.IsSuccess) {
                 response.Tasks = tasks.Value.Select(t => new TaskDto {
                     Id = t.Id,
+                    ProjectId = t.ProjectId,
                     Title = t.Title,
                     Description = t.Description,
                     Priority = t.Priority,

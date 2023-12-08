@@ -15,7 +15,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
             var validator = new UpdateTaskCommandValidator(taskRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
-            if(!validatorResult.IsValid) {
+            if (!validatorResult.IsValid) {
                 return new UpdateTaskCommandResponse {
                     Success = false,
                     ValidationErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToList()
@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
             }
 
             var taskResult = await taskRepository.FindByIdAsync(request.Id);
-            if(!taskResult.IsSuccess) {
+            if (!taskResult.IsSuccess) {
                 return new UpdateTaskCommandResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Task not found" }
@@ -38,6 +38,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 Success = true,
                 Task = new UpdateTaskDto {
                     Id = dbTask.Value.Id,
+                    ProjectId = dbTask.Value.ProjectId,
                     Title = dbTask.Value.Title,
                     Description = dbTask.Value.Description,
                     Priority = dbTask.Value.Priority,

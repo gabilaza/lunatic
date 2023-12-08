@@ -12,15 +12,14 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "User")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
             var existsResult = await Mediator.Send(new GetByIdUserQuery(id));
-            if(!existsResult.Success) {
+            if (!existsResult.Success) {
                 return NotFound(existsResult);
             }
 
             var result = await Mediator.Send(command);
-            if(!result.Success) {
+            if (!result.Success) {
                 return BadRequest(result);
             }
             return Ok(result);
@@ -31,7 +30,6 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = "User")]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id) {
             var deleteUserCommand = new DeleteUserCommand() { Id = id.ToString() };
             var result = await Mediator.Send(deleteUserCommand);
@@ -55,7 +53,7 @@ namespace Lunatic.API.Controllers {
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Get(Guid id) {
             var result = await Mediator.Send(new GetByIdUserQuery(id));
-            if(!result.Success) {
+            if (!result.Success) {
                 return NotFound(result);
             }
             return Ok(result);

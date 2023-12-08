@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                 };
             }
 
-            var task = Task.Create(request.UserId, request.Title, request.Description, request.Priority);
+            var task = Task.Create(request.UserId, request.ProjectId, request.Title, request.Description, request.Priority);
             if(!task.IsSuccess) {
                 return new CreateTaskCommandResponse {
                     Success = false,
@@ -37,6 +37,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                 Success = true,
                 Task = new CreateTaskDto {
                     Id = task.Value.Id,
+                    ProjectId = task.Value.ProjectId,
                     Title = task.Value.Title,
                     Description = task.Value.Description,
                     Priority = task.Value.Priority,
