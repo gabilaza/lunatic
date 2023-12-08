@@ -22,6 +22,7 @@ namespace Lunatic.API.Controllers {
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
+        [Authorize(Roles = "User")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, UpdateTaskCommand command) {
             var existsResult = await Mediator.Send(new GetByIdTaskQuery(id));
@@ -40,6 +41,7 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = "User")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id) {
             var deleteTaskCommand = new DeleteTaskCommand() { Id = id };
