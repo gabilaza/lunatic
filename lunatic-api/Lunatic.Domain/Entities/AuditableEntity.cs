@@ -8,7 +8,7 @@ namespace Lunatic.Domain.Entities {
 
         protected AuditableEntity(Guid createdByUserId) {
             CreatedByUserId = createdByUserId;
-            CreatedDate = DateTime.Now;
+            CreatedDate = DateTime.UtcNow;
             LastModifiedByUserId = CreatedByUserId;
             LastModifiedDate = CreatedDate;
         }
