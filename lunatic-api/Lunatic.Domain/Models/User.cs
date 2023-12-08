@@ -22,10 +22,12 @@ namespace Lunatic.Domain.Models {
             PasswordHash = new PasswordHasher<User>().HashPassword(this, password);
             //Password = password;
             Role = role;
+            IsDeleted = false;
         }
 
         public DateTime CreatedDate { get; private set; }
         //public Guid Guid { get; private set; }
+        public bool IsDeleted { get; private set; }
         public string? FirstName { get; private set; }
         public string LastName { get; private set; }
         //public string Email { get; private set; }
@@ -80,6 +82,18 @@ namespace Lunatic.Domain.Models {
             }
 
             Teams.Add(team);
+        }
+
+        public void RemoveTeam(Team team) {
+               if (Teams == null) {
+                return;
+            }
+
+            Teams.Remove(team);
+        }
+
+        public void MarkAsDeleted() {
+            IsDeleted = true;
         }
     }
 }

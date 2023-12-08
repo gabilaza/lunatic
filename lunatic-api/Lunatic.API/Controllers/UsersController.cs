@@ -2,8 +2,8 @@ using Lunatic.Application.Features.Users.Commands.DeleteUser;
 using Lunatic.Application.Features.Users.Commands.UpdateUser;
 using Lunatic.Application.Features.Users.Queries.GetAll;
 using Lunatic.Application.Features.Users.Queries.GetById;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
     public class UsersController : ApiControllerBase {
@@ -33,7 +33,7 @@ namespace Lunatic.API.Controllers {
         [Authorize(Roles = "User")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id) {
-            var deleteUserCommand = new DeleteUserCommand() { Id = id};
+            var deleteUserCommand = new DeleteUserCommand() { Id = id.ToString() };
             var result = await Mediator.Send(deleteUserCommand);
             if (!result.Success) {
                 return BadRequest(result);
