@@ -9,6 +9,7 @@ namespace Lunatic.Domain.Entities {
             Title = title;
             Description = description;
             Status = TaskStatus.CREATED;
+            StartedDate = DateTime.UtcNow;
             Priority = priority;
         }
 
@@ -18,8 +19,8 @@ namespace Lunatic.Domain.Entities {
         public TaskPriority Priority { get; private set; }
         public TaskStatus Status { get; private set; }
         public List<Tag>? Tags { get; private set; }
-        public List<Comment>? Comments { get; private set; }
-        public List<Guid>? Assignees { get; private set; }
+        public List<Guid>? CommentIds { get; private set; }
+        public List<Guid>? UserAssignIds { get; private set; }
 
         public DateTime? StartedDate { get; private set; }
         public DateTime? EndedDate { get; private set; }
@@ -40,6 +41,18 @@ namespace Lunatic.Domain.Entities {
             return Result<Task>.Success(new Task(createdByUserId, title, description, priority));
         }
 
+        public void Update(string title, string description, TaskPriority priority, TaskStatus status, List<Tag>? tags, List<Guid>? commentIds, List<Guid>? userAssignIds, DateTime? startedDate, DateTime? endedDate) {
+            Title = title;
+            Description = description;
+            Priority = priority;
+            Status = status;
+            Tags = tags;
+            CommentIds = commentIds;
+            UserAssignIds = userAssignIds;
+            StartedDate = startedDate;
+            EndedDate = endedDate;
+        }
+
         public void AddTag(Tag tag) {
             if (Tags == null) {
                 Tags = new List<Tag>();
@@ -49,11 +62,11 @@ namespace Lunatic.Domain.Entities {
         }
 
         public void AddComment(Comment comment) {
-            if (Comments == null) {
-                Comments = new List<Comment>();
+            if(CommentIds == null) {
+                CommentIds = new List<Guid>();
             }
 
-            Comments.Add(comment);
+            CommentIds.Add(comment.Id);
         }
 
         // hm..
@@ -62,39 +75,36 @@ namespace Lunatic.Domain.Entities {
                 case TaskStatus.CREATED:
                     if (status == TaskStatus.IN_PROGRESS) {
                         Status = status;
-                        StartedDate = DateTime.Now;
-                    }
-                    else {
+                        StartedDate = DateTime.UtcNow;
+                    } else {
                         // throw
                     }
                     break;
                 case TaskStatus.IN_PROGRESS:
                     if (status == TaskStatus.DONE) {
                         Status = status;
-                        EndedDate = DateTime.Now;
-                    }
-                    else {
+                        EndedDate = DateTime.UtcNow;
+                    } else {
                         // throw
                     }
                     break;
                 case TaskStatus.DONE:
                     if (status == TaskStatus.IN_PROGRESS) {
                         Status = status;
-                        EndedDate = DateTime.Now;
-                    }
-                    else {
+                        EndedDate = DateTime.UtcNow;
+                    } else {
                         // throw
                     }
                     break;
             }
         }
 
-        public void AddAssignee(User user) {
-            if (Assignees == null) {
-                Assignees = new List<Guid>();
+        public void AddUserAssign(User user) {
+            if(UserAssignIds == null) {
+                UserAssignIds = new List<Guid>();
             }
 
-            Assignees.Add(new Guid(user.Id));
+            UserAssignIds.Add(new Guid(user.Id));
         }
     }
 }

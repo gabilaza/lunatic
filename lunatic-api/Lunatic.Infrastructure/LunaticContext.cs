@@ -9,11 +9,11 @@ namespace Lunatic.Infrastructure
     public class LunaticContext : DbContext {
         public LunaticContext(DbContextOptions<LunaticContext> options) : base(options) {}
 
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Task> Tasks { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<Team> Teams { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Comment> Comment { get; set; }
+        public DbSet<Task> Task { get; set; }
+        public DbSet<Project> Project { get; set; }
+        public DbSet<Team> Team { get; set; }
+        public DbSet<User> User { get; set; }
 
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         //     optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=LunaticDB;User Guid=lunatic;Password=lunatic");
