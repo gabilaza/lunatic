@@ -36,7 +36,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
 
             return new UpdateProjectCommandResponse {
                 Success = true,
-                Project = new ProjectDTO {
+                Project = new ProjectDto {
                     Id = dbProject.Value.Id,
                     Title = dbProject.Value.Title,
                     Description = dbProject.Value.Description,

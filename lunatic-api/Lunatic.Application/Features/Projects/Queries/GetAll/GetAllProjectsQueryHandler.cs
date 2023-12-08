@@ -16,12 +16,12 @@ namespace Lunatic.Application.Features.Projects.Queries.GetAll {
             var projects = await projectRepository.GetAllAsync();
 
             if(projects.IsSuccess) {
-                response.Projects = projects.Value.Select(u => new ProjectDTO {
-                    Id = u.Id,
-                    CreatedByUserId = u.CreatedByUserId,
-                    Title = u.Title,
-                    Description = u.Description,
-                    TaskIds = u.TaskIds
+                response.Projects = projects.Value.Select(p => new ProjectDto {
+                    Id = p.Id,
+                    CreatedByUserId = p.CreatedByUserId,
+                    Title = p.Title,
+                    Description = p.Description,
+                    TaskIds = p.TaskIds
                 }).ToList();
             }
             return response;

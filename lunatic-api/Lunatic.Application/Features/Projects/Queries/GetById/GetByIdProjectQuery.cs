@@ -3,5 +3,5 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Projects.Queries.GetById {
-    public record GetByIdProjectQuery(Guid Id) : IRequest<ProjectDTO>;
+    public record GetByIdProjectQuery(Guid Id) : IRequest<GetByIdProjectResponse>;
 }

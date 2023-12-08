@@ -4,6 +4,7 @@ using Lunatic.Application.Features.Projects.Commands.UpdateProject;
 using Lunatic.Application.Features.Projects.Queries.GetAll;
 using Lunatic.Application.Features.Projects.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lunatic.API.Controllers {
     public class ProjectsController : ApiControllerBase {
@@ -22,7 +23,7 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProjectCommand command) {
-            var existsResult = Mediator.Send(new GetByIdProjectQuery(id));
+            var existsResult = await Mediator.Send(new GetByIdProjectQuery(id));
             if(!existsResult.Success) {
                 return BadRequest(existsResult);
             }
