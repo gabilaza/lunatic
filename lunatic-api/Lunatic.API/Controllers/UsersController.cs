@@ -3,6 +3,7 @@ using Lunatic.Application.Features.Users.Commands.UpdateUser;
 using Lunatic.Application.Features.Users.Queries.GetAll;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Lunatic.Application.Features.Users.Queries.GetById;
 
 namespace Lunatic.API.Controllers {
     public class UsersController : ApiControllerBase {

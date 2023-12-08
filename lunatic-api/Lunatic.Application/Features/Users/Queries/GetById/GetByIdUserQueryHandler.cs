@@ -16,19 +16,19 @@
 
 //            var user = await userRepository.FindByIdAsync(request.Id);
 
-            if (user.IsSuccess) {
-                return new UserDto {
-                    Id = new Guid(user.Value.Id),
-                    FirstName = user.Value.FirstName,
-                    LastName = user.Value.LastName,
-                    Email = user.Value.Email,
-                    Username = user.Value.UserName,
-                    Password = user.Value.PasswordHash,
-                    Role = user.Value.Role,
-                    Teams = user.Value.Teams
-                };
-            }
-            return new UserDto();
-        }
-    }
-}
+//            if (user.IsSuccess) {
+//                return new UserDto {
+//                    Id = new Guid(user.Value.Id),
+//                    FirstName = user.Value.FirstName,
+//                    LastName = user.Value.LastName,
+//                    Email = user.Value.Email,
+//                    Username = user.Value.UserName,
+//                    Password = user.Value.PasswordHash,
+//                    Role = user.Value.Role,
+//                    Teams = user.Value.Teams
+//                };
+//            }
+//            return new UserDto();
+//        }
+//    }
+//}
