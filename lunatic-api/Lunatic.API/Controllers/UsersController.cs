@@ -13,13 +13,13 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserCommand command) {
-            var existsResult = Mediator.Send(new GetByIdUserQuery(id));
-            if (existsResult.Result == null) {
-                return BadRequest(existsResult);
+            var existsResult = await Mediator.Send(new GetByIdUserQuery(id));
+            if(!existsResult.Success) {
+                return NotFound(existsResult);
             }
 
             var result = await Mediator.Send(command);
-            if (!result.Success) {
+            if(!result.Success) {
                 return BadRequest(result);
             }
             return Ok(result);
@@ -49,9 +49,13 @@ namespace Lunatic.API.Controllers {
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Get(Guid id) {
             var result = await Mediator.Send(new GetByIdUserQuery(id));
+            if(!result.Success) {
+                return NotFound(result);
+            }
             return Ok(result);
         }
     }
