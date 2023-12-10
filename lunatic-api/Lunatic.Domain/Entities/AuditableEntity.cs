@@ -1,16 +1,16 @@
 
 namespace Lunatic.Domain.Entities {
     public class AuditableEntity {
-        public User CreatedByUser { get; protected set; }
+        public Guid CreatedByUserId { get; protected set; }
         public DateTime CreatedDate { get; protected set; }
-        public User LastModifiedByUser { get; set; }
+        public Guid LastModifiedByUserId { get; set; }
         public DateTime LastModifiedDate { get; set; }
 
-        protected AuditableEntity(User createdByUser) {
-            CreatedByUser = createdByUser;
+        protected AuditableEntity(Guid createdByUser) {
+            CreatedByUserId = createdByUser;
             CreatedDate = DateTime.UtcNow;
 
-            LastModifiedByUser = CreatedByUser;
+            LastModifiedByUserId = CreatedByUserId;
             LastModifiedDate = CreatedDate;
         }
     }

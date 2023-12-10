@@ -3,7 +3,7 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Project : AuditableEntity {
-        private Project(User createdByUser, Team team, string title, string description) : base(createdByUser) {
+        private Project(Guid createdByUserId, Team team, string title, string description) : base(createdByUserId) {
             Id = Guid.NewGuid();
             Team = team;
 
@@ -17,9 +17,13 @@ namespace Lunatic.Domain.Entities {
         public string Title { get; private set; }
         public string Description { get; private set; }
 
-        public ICollection<Task> Tasks { get; private set; } = new List<Task>();
+        public ICollection<Guid> TaskIds { get; private set; } = new List<Guid>();
 
-        public static Result<Project> Create(User createdByUser, Team team,string title, string description) {
+        public static Result<Project> Create(Guid createdByUserId, Team team,string title, string description) {
+            if(createdByUserId == default) {
+                return Result<Project>.Failure("Created by User Id is required.");
+            }
+
             if(string.IsNullOrWhiteSpace(title)) {
                 return Result<Project>.Failure("Title is required.");
             }
@@ -28,7 +32,7 @@ namespace Lunatic.Domain.Entities {
                 return Result<Project>.Failure("Description is required.");
             }
 
-            return Result<Project>.Success(new Project(createdByUser, team, title, description));
+            return Result<Project>.Success(new Project(createdByUserId, team, title, description));
         }
 
         public void Update(string title, string description) {
@@ -36,7 +40,7 @@ namespace Lunatic.Domain.Entities {
             Description = description;
         }
 
-        public void AddTask(Task task) => Tasks.Add(task);
-        public void RemoveTask(Task task) => Tasks.Remove(task);
+        public void AddTask(Task task) => TaskIds.Add(task.Id);
+        public void RemoveTask(Task task) => TaskIds.Remove(task.Id);
     }
 }

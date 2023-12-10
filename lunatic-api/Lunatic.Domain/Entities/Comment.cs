@@ -3,33 +3,41 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Comment : AuditableEntity {
-        private Comment(User createdByUser, Task task, string content) : base(createdByUser) {
+        private Comment(Guid createdByUserId, Guid taskId, string content) : base(createdByUserId) {
             Id = Guid.NewGuid();
 
-            Task = task;
+            TaskId = taskId;
             Content = content;
         }
 
         public Guid Id { get; private set; }
-        public Task Task { get; private set; }
+        public Guid TaskId { get; private set; }
 
         public string Content { get; private set; }
 
-        public ICollection<CommentEmote> Emotes { get; private set; } = new List<CommentEmote>();
+        public ICollection<Guid> EmoteIds { get; private set; } = new List<Guid>();
 
-        public static Result<Comment> Create(User createdByUser, Task task, string content) {
+        public static Result<Comment> Create(Guid createdByUserId, Guid taskId, string content) {
+            if(createdByUserId == default) {
+                return Result<Comment>.Failure("Created by User Id is required.");
+            }
+
+            if(taskId == default) {
+                return Result<Comment>.Failure("Task Id is required.");
+            }
+
             if(string.IsNullOrWhiteSpace(content)) {
                 return Result<Comment>.Failure("Content is required.");
             }
 
-            return Result<Comment>.Success(new Comment(createdByUser, task, content));
+            return Result<Comment>.Success(new Comment(createdByUserId, taskId, content));
         }
 
         public void Update(string content) {
             Content = content;
         }
 
-        public void AddEmote(CommentEmote commentEmote) => Emotes.Add(commentEmote);
-        public void RemoveEmote(CommentEmote commentEmote) => Emotes.Remove(commentEmote);
+        public void AddEmote(CommentEmote commentEmote) => EmoteIds.Add(commentEmote.Id);
+        public void RemoveEmote(CommentEmote commentEmote) => EmoteIds.Remove(commentEmote.Id);
     }
 }

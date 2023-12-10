@@ -3,22 +3,30 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class CommentEmote {
-        private CommentEmote(User user, Comment comment, Emote emote) {
+        private CommentEmote(Guid userId, Guid commentId, Emote emote) {
             Id = Guid.NewGuid();
-            User = user;
-            Comment = comment;
+            UserId = userId;
+            CommentId = commentId;
 
             Emote = emote;
         }
 
         public Guid Id { get; private set; }
-        public User User { get; private set; }
-        public Comment Comment { get; private set; }
+        public Guid UserId { get; private set; }
+        public Guid CommentId { get; private set; }
 
         public Emote Emote { get; private set; }
 
-        public static Result<CommentEmote> Create(User user, Comment comment, Emote emote) {
-            return Result<CommentEmote>.Success(new CommentEmote(user, comment, emote));
+        public static Result<CommentEmote> Create(Guid userId, Guid commentId, Emote emote) {
+            if(userId == default) {
+                return Result<CommentEmote>.Failure("User Id is required.");
+            }
+
+            if(commentId == default) {
+                return Result<CommentEmote>.Failure("Comment Id is required.");
+            }
+
+            return Result<CommentEmote>.Success(new CommentEmote(userId, commentId, emote));
         }
     }
 }
