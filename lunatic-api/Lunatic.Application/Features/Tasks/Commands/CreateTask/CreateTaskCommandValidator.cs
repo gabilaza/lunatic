@@ -10,8 +10,11 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
         public CreateTaskCommandValidator(ITaskRepository taskRepository) {
             this.taskRepository = taskRepository;
 
-            // hm..
             RuleFor(t => t.UserId)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
+
+            RuleFor(t => t.ProjectId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
 

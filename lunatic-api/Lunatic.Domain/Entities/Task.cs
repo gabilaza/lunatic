@@ -21,9 +21,9 @@ namespace Lunatic.Domain.Entities {
         public TaskPriority Priority { get; private set; }
         public TaskStatus  Status { get; private set; }
 
-        public ICollection<Tag> Tags { get; private set; } = new List<Tag>();
-        public ICollection<Guid> CommentIds { get; private set; } = new List<Guid>();
-        public ICollection<Guid> AssigneeIds { get; private set; } = new List<Guid>();
+        public List<Tag> Tags { get; private set; } = new List<Tag>();
+        public List<Guid> CommentIds { get; private set; } = new List<Guid>();
+        public List<Guid> AssigneeIds { get; private set; } = new List<Guid>();
 
         public DateTime? StartedDate { get; private set; }
         public DateTime? EndedDate { get; private set; }

@@ -25,7 +25,7 @@ namespace Lunatic.Domain.Entities {
         public string Password { get; private set; }
         public Role Role { get; private set; }
 
-        public ICollection<Guid> TeamIds { get; private set; } = new List<Guid>();
+        public List<Guid> TeamIds { get; private set; } = new List<Guid>();
 
         public static Result<User> Create(string firstName, string lastName, string email, string username, string password, Role role) {
             if(string.IsNullOrWhiteSpace(firstName)) {

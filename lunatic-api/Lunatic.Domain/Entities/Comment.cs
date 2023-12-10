@@ -15,7 +15,7 @@ namespace Lunatic.Domain.Entities {
 
         public string Content { get; private set; }
 
-        public ICollection<Guid> EmoteIds { get; private set; } = new List<Guid>();
+        public List<Guid> EmoteIds { get; private set; } = new List<Guid>();
 
         public static Result<Comment> Create(Guid createdByUserId, Guid taskId, string content) {
             if(createdByUserId == default) {

@@ -10,6 +10,10 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
         public UpdateUserCommandValidator(IUserRepository userRepository) {
             this.userRepository = userRepository;
 
+            RuleFor(u => u.Id)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
+
             RuleFor(u => u.FirstName)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
@@ -36,7 +40,9 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
-            RuleFor(p => p.Role).NotNull();
+            RuleFor(p => p.Role)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
         }
     }
 }

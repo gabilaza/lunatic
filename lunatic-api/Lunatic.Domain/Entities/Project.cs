@@ -17,7 +17,7 @@ namespace Lunatic.Domain.Entities {
         public string Title { get; private set; }
         public string Description { get; private set; }
 
-        public ICollection<Guid> TaskIds { get; private set; } = new List<Guid>();
+        public List<Guid> TaskIds { get; private set; } = new List<Guid>();
 
         public static Result<Project> Create(Guid createdByUserId, Guid teamId, string title, string description) {
             if(createdByUserId == default) {

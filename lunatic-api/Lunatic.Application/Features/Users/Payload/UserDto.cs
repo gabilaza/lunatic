@@ -13,6 +13,6 @@ namespace Lunatic.Application.Features.Users.Payload {
         public string Password { get; set; } = default!;
         public Role Role { get; set; } = default!;
 
-        public ICollection<Guid> TeamIds { get; set; } = default!;
+        public List<Guid> TeamIds { get; set; } = default!;
     }
 }

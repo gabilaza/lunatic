@@ -10,6 +10,14 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
         public UpdateTaskCommandValidator(ITaskRepository taskRepository) {
             this.taskRepository = taskRepository;
 
+            RuleFor(t => t.Id)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
+
+            RuleFor(t => t.ProjectId)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
+
             RuleFor(t => t.Title)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
@@ -21,6 +29,11 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 50 characters.");
 
             RuleFor(t => t.Priority)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
+
+            RuleFor(t => t.Status)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
         }
     }

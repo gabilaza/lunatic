@@ -36,7 +36,9 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
-            RuleFor(p => p.Role).NotNull();
+            RuleFor(p => p.Role)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.");
         }
     }
 }

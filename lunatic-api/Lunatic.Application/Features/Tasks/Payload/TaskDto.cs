@@ -13,9 +13,9 @@ namespace Lunatic.Application.Features.Tasks.Payload {
         public TaskPriority Priority { get; set; } = default!;
         public TaskStatus Status { get; set; } = default!;
 
-        public ICollection<Tag> Tags { get; set; } = default!;
-        public ICollection<Guid> CommentIds { get; set; } = default!;
-        public ICollection<Guid> AssigneeIds { get; set; } = default!;
+        public List<Tag> Tags { get; set; } = default!;
+        public List<Guid> CommentIds { get; set; } = default!;
+        public List<Guid> AssigneeIds { get; set; } = default!;
 
         public DateTime? StartedDate { get; set; } = default!;
         public DateTime? EndedDate { get; set; } = default!;

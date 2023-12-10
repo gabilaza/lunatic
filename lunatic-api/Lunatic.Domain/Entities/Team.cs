@@ -13,8 +13,8 @@ namespace Lunatic.Domain.Entities {
 
         public string Name { get; private set; }
 
-        public ICollection<Guid> MemberIds { get; private set; } = new List<Guid>();
-        public ICollection<Guid> ProjectIds { get; private set; } = new List<Guid>();
+        public List<Guid> MemberIds { get; private set; } = new List<Guid>();
+        public List<Guid> ProjectIds { get; private set; } = new List<Guid>();
 
         public static Result<Team> Create(Guid createdByUserId, string name) {
             if(createdByUserId == default) {
