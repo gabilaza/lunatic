@@ -3,9 +3,9 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Task : AuditableEntity {
-        private Task(Guid createdByUserId, Project project, string title, string description, TaskPriority priority) : base(createdByUserId) {
+        private Task(Guid createdByUserId, Guid projectId, string title, string description, TaskPriority priority) : base(createdByUserId) {
             Id = Guid.NewGuid();
-            Project = project;
+            ProjectId = projectId;
 
             Title = title;
             Description = description;
@@ -14,7 +14,7 @@ namespace Lunatic.Domain.Entities {
         }
 
         public Guid Id { get; private set; }
-        public Project Project { get; private set; }
+        public Guid ProjectId { get; private set; }
 
         public string Title { get; private set; }
         public string Description { get; private set; }
@@ -28,9 +28,13 @@ namespace Lunatic.Domain.Entities {
         public DateTime? StartedDate { get; private set; }
         public DateTime? EndedDate { get; private set; }
 
-        public static Result<Task> Create(Guid createdByUserId, Project project, string title, string description, TaskPriority priority) {
+        public static Result<Task> Create(Guid createdByUserId, Guid projectId, string title, string description, TaskPriority priority) {
             if(createdByUserId == default) {
                 return Result<Task>.Failure("Created by User Id is required.");
+            }
+
+            if(projectId == default) {
+                return Result<Task>.Failure("Project Id is required.");
             }
 
             if(string.IsNullOrWhiteSpace(title)) {
@@ -41,7 +45,7 @@ namespace Lunatic.Domain.Entities {
                 return Result<Task>.Failure("Description is required.");
             }
 
-            return Result<Task>.Success(new Task(createdByUserId, project, title, description, priority));
+            return Result<Task>.Success(new Task(createdByUserId, projectId, title, description, priority));
         }
 
         public void Update(string title, string description, TaskPriority priority, TaskStatus status) {

@@ -25,7 +25,7 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
                 Success = true,
                 Task = new TaskDto {
                     Id = task.Value.Id,
-                    Project = task.Value.Project,
+                    ProjectId = task.Value.ProjectId,
 
                     Title = task.Value.Title,
                     Description = task.Value.Description,
@@ -33,8 +33,8 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
                     Status = task.Value.Status,
 
                     Tags = task.Value.Tags,
-                    Comments = task.Value.Comments,
-                    Assignees = task.Value.Assignees,
+                    CommentIds = task.Value.CommentIds,
+                    AssigneeIds = task.Value.AssigneeIds,
 
                     StartedDate = task.Value.StartedDate,
                     EndedDate = task.Value.EndedDate,

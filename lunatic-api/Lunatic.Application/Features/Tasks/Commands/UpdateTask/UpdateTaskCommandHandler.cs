@@ -39,7 +39,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 Success = true,
                 Task = new TaskDto {
                     Id = dbTask.Value.Id,
-                    Project = dbTask.Value.Project,
+                    ProjectId = dbTask.Value.ProjectId,
 
                     Title = dbTask.Value.Title,
                     Description = dbTask.Value.Description,
@@ -47,8 +47,8 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                     Status = dbTask.Value.Status,
 
                     Tags = dbTask.Value.Tags,
-                    Comments = dbTask.Value.Comments,
-                    Assignees = dbTask.Value.Assignees,
+                    CommentIds = dbTask.Value.CommentIds,
+                    AssigneeIds = dbTask.Value.AssigneeIds,
 
                     StartedDate = dbTask.Value.StartedDate,
                     EndedDate = dbTask.Value.EndedDate,

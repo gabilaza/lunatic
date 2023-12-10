@@ -46,7 +46,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                 };
             }
 
-            var task = Task.Create(user.Value, project.Value, request.Title, request.Description, request.Priority);
+            var task = Task.Create(user.Value.Id, project.Value.Id, request.Title, request.Description, request.Priority);
             if(!task.IsSuccess) {
                 return new CreateTaskCommandResponse {
                     Success = false,
@@ -60,7 +60,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                 Success = true,
                 Task = new TaskDto {
                     Id = task.Value.Id,
-                    Project = task.Value.Project,
+                    ProjectId = task.Value.ProjectId,
 
                     Title = task.Value.Title,
                     Description = task.Value.Description,
@@ -68,8 +68,8 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                     Status = task.Value.Status,
 
                     Tags = task.Value.Tags,
-                    Comments = task.Value.Comments,
-                    Assignees = task.Value.Assignees,
+                    CommentIds = task.Value.CommentIds,
+                    AssigneeIds = task.Value.AssigneeIds,
 
                     StartedDate = task.Value.StartedDate,
                     EndedDate = task.Value.EndedDate,

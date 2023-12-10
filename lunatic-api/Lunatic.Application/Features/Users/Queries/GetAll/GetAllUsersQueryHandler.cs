@@ -27,7 +27,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetAll {
                     Password = u.Password,
                     Role = u.Role,
 
-                    Teams = u.Teams
+                    TeamIds = u.TeamIds
                 }).ToList();
             }
             return response;

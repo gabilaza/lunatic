@@ -47,7 +47,7 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                     Password = dbUser.Value.Password,
                     Role = dbUser.Value.Role,
 
-                    Teams = dbUser.Value.Teams
+                    TeamIds = dbUser.Value.TeamIds
                 }
             };
 

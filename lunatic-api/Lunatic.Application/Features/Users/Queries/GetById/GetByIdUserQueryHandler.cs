@@ -33,7 +33,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetById {
                     Password = user.Value.Password,
                     Role = user.Value.Role,
 
-                    Teams = user.Value.Teams
+                    TeamIds = user.Value.TeamIds
                 }
             };
         }
