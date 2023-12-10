@@ -1,10 +1,11 @@
 ﻿
 using Lunatic.Application.Responses;
+using Lunatic.Application.Features.Users.Payload;
 
 
 namespace Lunatic.Application.Features.Users.Commands.CreateUser {
     public class CreateUserCommandResponse : ResponseBase {
         public CreateUserCommandResponse() : base() { }
-        public CreateUserDto User { get; set; } = default!;
+        public UserDto User { get; set; } = default!;
     }
 }

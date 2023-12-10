@@ -1,12 +1,12 @@
 ﻿
 using Lunatic.Application.Persistence;
 using Lunatic.Domain.Entities;
+using Lunatic.Application.Features.Users.Payload;
 using MediatR;
 
 
 namespace Lunatic.Application.Features.Users.Commands.CreateUser {
     public class CreateUserCommandHandler : IRequestHandler<CreateUserComand, CreateUserCommandResponse> {
-
         private readonly IUserRepository userRepository;
 
         public CreateUserCommandHandler(IUserRepository userRepository) {
@@ -36,14 +36,16 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
 
             return new CreateUserCommandResponse {
                 Success = true,
-                User = new CreateUserDto {
+                User = new UserDto {
                     Id = user.Value.Id,
+
                     FirstName = user.Value.FirstName,
                     LastName = user.Value.LastName,
                     Email = user.Value.Email,
                     Username = user.Value.Username,
                     Password = user.Value.Password,
                     Role = user.Value.Role,
+
                     Teams = user.Value.Teams
                 }
             };

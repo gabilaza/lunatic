@@ -1,5 +1,6 @@
 ﻿
 using Lunatic.Application.Persistence;
+using Lunatic.Application.Features.Tasks.Payload;
 using MediatR;
 
 
@@ -24,13 +25,17 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
                 Success = true,
                 Task = new TaskDto {
                     Id = task.Value.Id,
+                    Project = task.Value.Project,
+
                     Title = task.Value.Title,
                     Description = task.Value.Description,
                     Priority = task.Value.Priority,
                     Status = task.Value.Status,
+
                     Tags = task.Value.Tags,
-                    CommentIds = task.Value.CommentIds,
-                    UserAssignIds = task.Value.UserAssignIds,
+                    Comments = task.Value.Comments,
+                    Assignees = task.Value.Assignees,
+
                     StartedDate = task.Value.StartedDate,
                     EndedDate = task.Value.EndedDate,
                 }

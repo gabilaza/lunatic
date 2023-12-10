@@ -1,5 +1,6 @@
 ﻿
 using Lunatic.Application.Persistence;
+using Lunatic.Application.Features.Tasks.Payload;
 using MediatR;
 
 
@@ -30,21 +31,25 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 };
             }
 
-            taskResult.Value.Update(request.Title, request.Description, request.Priority, request.Status, request.Tags, request.CommentIds, request.UserAssignIds, request.StartedDate, request.EndedDate);
+            taskResult.Value.Update(request.Title, request.Description, request.Priority, request.Status);
 
             var dbTask = await taskRepository.UpdateAsync(taskResult.Value);
 
             return new UpdateTaskCommandResponse {
                 Success = true,
-                Task = new UpdateTaskDto {
+                Task = new TaskDto {
                     Id = dbTask.Value.Id,
+                    Project = dbTask.Value.Project,
+
                     Title = dbTask.Value.Title,
                     Description = dbTask.Value.Description,
                     Priority = dbTask.Value.Priority,
                     Status = dbTask.Value.Status,
+
                     Tags = dbTask.Value.Tags,
-                    CommentIds = dbTask.Value.CommentIds,
-                    UserAssignIds = dbTask.Value.UserAssignIds,
+                    Comments = dbTask.Value.Comments,
+                    Assignees = dbTask.Value.Assignees,
+
                     StartedDate = dbTask.Value.StartedDate,
                     EndedDate = dbTask.Value.EndedDate,
                 }

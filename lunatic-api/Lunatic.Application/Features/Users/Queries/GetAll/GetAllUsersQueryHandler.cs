@@ -1,5 +1,6 @@
 ﻿
 using Lunatic.Application.Persistence;
+using Lunatic.Application.Features.Users.Payload;
 using MediatR;
 
 
@@ -18,12 +19,14 @@ namespace Lunatic.Application.Features.Users.Queries.GetAll {
             if(users.IsSuccess) {
                 response.Users = users.Value.Select(u => new UserDto {
                     Id = u.Id,
+
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     Email = u.Email,
                     Username = u.Username,
                     Password = u.Password,
                     Role = u.Role,
+
                     Teams = u.Teams
                 }).ToList();
             }

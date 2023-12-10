@@ -1,5 +1,6 @@
 ﻿
 using Lunatic.Application.Persistence;
+using Lunatic.Application.Features.Users.Payload;
 using MediatR;
 
 
@@ -12,7 +13,6 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
         }
 
         public async Task<UpdateUserCommandResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken) {
-
             var validator = new UpdateUserCommandValidator(userRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
@@ -31,20 +31,22 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 };
             }
 
-            userResult.Value.Update(request.FirstName, request.LastName, request.Email, request.Username, request.Password, request.Role, request.Teams);
+            userResult.Value.Update(request.FirstName, request.LastName, request.Email, request.Username, request.Password, request.Role);
 
             var dbUser = await userRepository.UpdateAsync(userResult.Value);
 
             return new UpdateUserCommandResponse {
                 Success = true,
-                User = new UpdateUserDto {
+                User = new UserDto {
                     Id = dbUser.Value.Id,
+
                     FirstName = dbUser.Value.FirstName,
                     LastName = dbUser.Value.LastName,
                     Email = dbUser.Value.Email,
                     Username = dbUser.Value.Username,
                     Password = dbUser.Value.Password,
                     Role = dbUser.Value.Role,
+
                     Teams = dbUser.Value.Teams
                 }
             };

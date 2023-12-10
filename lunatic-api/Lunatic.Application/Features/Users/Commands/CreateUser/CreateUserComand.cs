@@ -10,6 +10,6 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
         public string Email { get; set; } = default!;
         public string Username { get; set; } = default!;
         public string Password { get; set; } = default!;
-        public Role Role { get; set; }
+        public Role Role { get; set; } = default!;
     }
 }
