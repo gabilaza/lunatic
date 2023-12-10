@@ -14,10 +14,6 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
 
-            RuleFor(t => t.ProjectId)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
-
             RuleFor(t => t.Title)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")

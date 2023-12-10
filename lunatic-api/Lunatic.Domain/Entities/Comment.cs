@@ -5,8 +5,8 @@ namespace Lunatic.Domain.Entities {
     public class Comment : AuditableEntity {
         private Comment(Guid createdByUserId, Guid taskId, string content) : base(createdByUserId) {
             Id = Guid.NewGuid();
-
             TaskId = taskId;
+
             Content = content;
         }
 
