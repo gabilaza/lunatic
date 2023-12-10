@@ -4,8 +4,9 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class User {
         private User(string firstName, string lastName, string email, string username, string password, Role role) {
-            CreatedDate = DateTime.UtcNow;
             Id = Guid.NewGuid();
+            CreatedDate = DateTime.UtcNow;
+
             FirstName = firstName;
             LastName = lastName;
             Email = email;
@@ -14,15 +15,17 @@ namespace Lunatic.Domain.Entities {
             Role = role;
         }
 
-        public DateTime CreatedDate { get; private set; }
         public Guid Id { get; private set; }
+        public DateTime CreatedDate { get; private set; }
+
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public string Email { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
         public Role Role { get; private set; }
-        public List<Team>? Teams { get; private set; }
+
+        public ICollection<Team> Teams { get; private set; } = new List<Team>();
 
         public static Result<User> Create(string firstName, string lastName, string email, string username, string password, Role role) {
             if(string.IsNullOrWhiteSpace(firstName)) {
@@ -48,7 +51,6 @@ namespace Lunatic.Domain.Entities {
             return Result<User>.Success(new User(firstName, lastName, email, username, password, role));
         }
 
-        // hm...
         public void Update(string firstName, string lastName, string email, string username, string password, Role role, List<Team> teams) {
             FirstName = firstName;
             LastName = lastName;
@@ -59,12 +61,8 @@ namespace Lunatic.Domain.Entities {
             Teams = teams;
         }
 
-        public void AddTeam(Team team) {
-            if(Teams == null) {
-                Teams = new List<Team>();
-            }
+        public void AddTeam(Team team) => Teams.Add(team);
 
-            Teams.Add(team);
-        }
+        public void RemoveTeam(Team team) => Teams.Remove(team);
     }
 }

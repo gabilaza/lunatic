@@ -3,22 +3,21 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Project : AuditableEntity {
-        private Project(Guid createdByUserId, string title, string description) : base(createdByUserId) {
+        private Project(User createdByUser, string title, string description) : base(createdByUser) {
             Id = Guid.NewGuid();
+
             Title = title;
             Description = description;
         }
 
         public Guid Id { get; private set; }
+
         public string Title { get; private set; }
         public string Description { get; private set; }
-        public List<Task>? Tasks { get; private set; }
 
-        public static Result<Project> Create(Guid createdByUserId, string title, string description) {
-            if(createdByUserId == default) {
-                return Result<Project>.Failure("Created User id should not be default.");
-            }
+        public ICollection<Task> Tasks { get; private set; } = new List<Task>();
 
+        public static Result<Project> Create(User createdByUser, string title, string description) {
             if(string.IsNullOrWhiteSpace(title)) {
                 return Result<Project>.Failure("Title is required.");
             }
@@ -27,15 +26,10 @@ namespace Lunatic.Domain.Entities {
                 return Result<Project>.Failure("Description is required.");
             }
 
-            return Result<Project>.Success(new Project(createdByUserId, title, description));
+            return Result<Project>.Success(new Project(createdByUser, title, description));
         }
 
-        public void AddTask(Task task) {
-            if(Tasks == null) {
-                Tasks = new List<Task>();
-            }
-
-            Tasks.Add(task);
-        }
+        public void AddTask(Task task) => Tasks.Add(task);
+        public void RemoveTask(Task task) => Tasks.Remove(task);
     }
 }

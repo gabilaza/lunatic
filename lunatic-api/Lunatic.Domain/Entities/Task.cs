@@ -3,32 +3,32 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Task : AuditableEntity {
-        private Task(Guid createdByUserId, string title, string description, TaskPriority priority) : base(createdByUserId) {
+        private Task(User createdByUser, Project project, string title, string description, TaskPriority priority) : base(createdByUser) {
             Id = Guid.NewGuid();
+            Project = project;
+
             Title = title;
             Description = description;
-            Status = TaskStatus.CREATED;
-            StartedDate = DateTime.UtcNow;
             Priority = priority;
+            Status = TaskStatus.CREATED;
         }
 
         public Guid Id { get; private set; }
+        public Project Project { get; private set; }
+
         public string Title { get; private set; }
         public string Description { get; private set; }
         public TaskPriority Priority { get; private set; }
         public TaskStatus  Status { get; private set; }
-        public List<Tag>? Tags { get; private set; }
-        public List<Guid>? CommentIds { get; private set; }
-        public List<Guid>? UserAssignIds { get; private set; }
+
+        public ICollection<Tag> Tags { get; private set; } = new List<Tag>();
+        public ICollection<Comment> Comments { get; private set; } = new List<Comment>();
+        public ICollection<User> Assignees { get; private set; } = new List<User>();
 
         public DateTime? StartedDate { get; private set; }
         public DateTime? EndedDate { get; private set; }
 
-        public static Result<Task> Create(Guid createdByUserId, string title, string description, TaskPriority priority) {
-            if(createdByUserId == default) {
-                return Result<Task>.Failure("Created User id should not be default.");
-            }
-
+        public static Result<Task> Create(User createdByUser, Project project, string title, string description, TaskPriority priority) {
             if(string.IsNullOrWhiteSpace(title)) {
                 return Result<Task>.Failure("Title is required.");
             }
@@ -37,73 +37,42 @@ namespace Lunatic.Domain.Entities {
                 return Result<Task>.Failure("Description is required.");
             }
 
-            return Result<Task>.Success(new Task(createdByUserId, title, description, priority));
+            return Result<Task>.Success(new Task(createdByUser, project, title, description, priority));
         }
 
-        public void Update(string title, string description, TaskPriority priority, TaskStatus status, List<Tag>? tags, List<Guid>? commentIds, List<Guid>? userAssignIds, DateTime? startedDate, DateTime? endedDate) {
+        public void Update(string title, string description, TaskPriority priority, TaskStatus status, List<Tag> tags, List<Comment> comments, List<User> assignees, DateTime startedDate, DateTime endedDate) {
             Title = title;
             Description = description;
             Priority = priority;
             Status = status;
             Tags = tags;
-            CommentIds = commentIds;
-            UserAssignIds = userAssignIds;
+            Comments = comments;
+            Assignees = assignees;
             StartedDate = startedDate;
             EndedDate = endedDate;
         }
 
-        public void AddTag(Tag tag) {
-            if(Tags == null) {
-                Tags = new List<Tag>();
-            }
+        public void AddTag(Tag tag) => Tags.Add(tag);
+        public void RemoveTag(Tag tag) => Tags.Remove(tag);
 
-            Tags.Add(tag);
+        public void AddComment(Comment comment) => Comments.Add(comment);
+        public void RemoveComment(Comment comment) => Comments.Remove(comment);
+
+        public void AddAssignee(User user) => Assignees.Add(user);
+        public void RemoveAssignee(User user) => Assignees.Remove(user);
+
+        public void MarkAsInProgress() {
+            if(!Status.IsCreated() && !Status.IsDone()) {
+                throw new InvalidActionException($"Can't mark as in progress if you are in status {Status}");
+            }
+            Status = TaskStatus.IN_PROGRESS;
+            StartedDate = DateTime.UtcNow;
+            EndedDate = null;
         }
 
-        public void AddComment(Comment comment) {
-            if(CommentIds == null) {
-                CommentIds = new List<Guid>();
-            }
-
-            CommentIds.Add(comment.Id);
-        }
-
-        // hm..
-        public void SetStatus(TaskStatus status) {
-            switch(Status) {
-                case TaskStatus.CREATED:
-                    if(status == TaskStatus.IN_PROGRESS) {
-                        Status = status;
-                        StartedDate = DateTime.UtcNow;
-                    } else {
-                        // throw
-                    }
-                    break;
-                case TaskStatus.IN_PROGRESS:
-                    if(status == TaskStatus.DONE) {
-                        Status = status;
-                        EndedDate = DateTime.UtcNow;
-                    } else {
-                        // throw
-                    }
-                    break;
-                case TaskStatus.DONE:
-                    if(status == TaskStatus.IN_PROGRESS) {
-                        Status = status;
-                        EndedDate = DateTime.UtcNow;
-                    } else {
-                        // throw
-                    }
-                    break;
-            }
-        }
-
-        public void AddUserAssign(User user) {
-            if(UserAssignIds == null) {
-                UserAssignIds = new List<Guid>();
-            }
-
-            UserAssignIds.Add(user.Id);
+        public void MarkAsDone() {
+            Status = TaskStatus.DONE;
+            EndedDate = DateTime.UtcNow;
         }
     }
 }

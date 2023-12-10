@@ -3,42 +3,37 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Domain.Entities {
     public class Team : AuditableEntity {
-        private Team(Guid createdByUserId, string name) : base(createdByUserId) {
+        private Team(User createdByUser, string name) : base(createdByUser) {
             Id = Guid.NewGuid();
+
             Name = name;
         }
 
         public Guid Id { get; private set; }
+
         public string Name { get; private set; }
-        public List<User>? Members { get; private set; }
-        public List<Project>? Projects { get; private set; }
 
-        public static Result<Team> Create(Guid createdByUserId, string name) {
-            if(createdByUserId == default) {
-                return Result<Team>.Failure("Created User id should not be default.");
-            }
+        public ICollection<User> Members { get; private set; } = new List<User>();
+        public ICollection<Project> Projects { get; private set; } = new List<Project>();
 
+        public static Result<Team> Create(User createdByUser, string name) {
             if(string.IsNullOrWhiteSpace(name)) {
                 return Result<Team>.Failure("Name is required.");
             }
 
-            return Result<Team>.Success(new Team(createdByUserId, name));
+            return Result<Team>.Success(new Team(createdByUser, name));
         }
 
-        public void AddMember(User user) {
-            if(Members == null) {
-                Members = new List<User>();
-            }
-
-            Members.Add(user);
+        public void Update(string name, List<User> members, List<Project> projects) {
+            Name = name;
+            Members = members;
+            Projects = projects;
         }
 
-        public void AddProject(Project project) {
-            if(Projects == null) {
-                Projects = new List<Project>();
-            }
+        public void AddMember(User user) => Members.Add(user);
+        public void RemoveMember(User user) => Members.Remove(user);
 
-            Projects.Add(project);
-        }
+        public void AddProject(Project project) => Projects.Add(project);
+        public void RemoveProject(Project project) => Projects.Remove(project);
     }
 }
