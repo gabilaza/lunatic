@@ -51,14 +51,13 @@ namespace Lunatic.Domain.Entities {
             return Result<User>.Success(new User(firstName, lastName, email, username, password, role));
         }
 
-        public void Update(string firstName, string lastName, string email, string username, string password, Role role, List<Team> teams) {
+        public void Update(string firstName, string lastName, string email, string username, string password, Role role) {
             FirstName = firstName;
             LastName = lastName;
             Email = email;
             Username = username;
             Password = password;
             Role = role;
-            Teams = teams;
         }
 
         public void AddTeam(Team team) => Teams.Add(team);

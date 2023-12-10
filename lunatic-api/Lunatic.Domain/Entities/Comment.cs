@@ -11,8 +11,8 @@ namespace Lunatic.Domain.Entities {
         }
 
         public Guid Id { get; private set; }
-
         public Task Task { get; private set; }
+
         public string Content { get; private set; }
 
         public ICollection<CommentEmote> Emotes { get; private set; } = new List<CommentEmote>();
@@ -23,6 +23,10 @@ namespace Lunatic.Domain.Entities {
             }
 
             return Result<Comment>.Success(new Comment(createdByUser, task, content));
+        }
+
+        public void Update(string content) {
+            Content = content;
         }
 
         public void AddEmote(CommentEmote commentEmote) => Emotes.Add(commentEmote);

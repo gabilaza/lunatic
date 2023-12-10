@@ -40,16 +40,11 @@ namespace Lunatic.Domain.Entities {
             return Result<Task>.Success(new Task(createdByUser, project, title, description, priority));
         }
 
-        public void Update(string title, string description, TaskPriority priority, TaskStatus status, List<Tag> tags, List<Comment> comments, List<User> assignees, DateTime startedDate, DateTime endedDate) {
+        public void Update(string title, string description, TaskPriority priority, TaskStatus status) {
             Title = title;
             Description = description;
             Priority = priority;
             Status = status;
-            Tags = tags;
-            Comments = comments;
-            Assignees = assignees;
-            StartedDate = startedDate;
-            EndedDate = endedDate;
         }
 
         public void AddTag(Tag tag) => Tags.Add(tag);
