@@ -9,6 +9,7 @@ namespace Lunatic.API.Controllers {
     public class TasksController : ApiControllerBase {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateTaskComand command) {
             var result = await Mediator.Send(command);
             if(!result.Success) {
@@ -18,6 +19,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Update(Guid id, UpdateTaskCommand command) {
@@ -36,7 +38,6 @@ namespace Lunatic.API.Controllers {
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id) {
             var deleteTaskCommand = new DeleteTaskCommand() { Id = id };
             var result = await Mediator.Send(deleteTaskCommand);
