@@ -50,7 +50,7 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
             if(!comment.IsSuccess) {
                 return new CreateCommentCommandResponse {
                     Success = false,
-                    ValidationErrors = new List<string> { task.Error }
+                    ValidationErrors = new List<string> { comment.Error }
                 };
             }
 

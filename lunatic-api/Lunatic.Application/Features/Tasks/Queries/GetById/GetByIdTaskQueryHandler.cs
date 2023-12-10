@@ -5,23 +5,23 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Tasks.Queries.GetById {
-    public class GetByIdTaskQueryHandler : IRequestHandler<GetByIdTaskQuery, GetByIdTaskResponse> {
+    public class GetByIdTaskQueryHandler : IRequestHandler<GetByIdTaskQuery, GetByIdTaskQueryResponse> {
         private readonly ITaskRepository taskRepository;
 
         public GetByIdTaskQueryHandler(ITaskRepository taskRepository) {
             this.taskRepository = taskRepository;
         }
 
-        public async Task<GetByIdTaskResponse> Handle(GetByIdTaskQuery request, CancellationToken cancellationToken) {
+        public async Task<GetByIdTaskQueryResponse> Handle(GetByIdTaskQuery request, CancellationToken cancellationToken) {
             var task = await taskRepository.FindByIdAsync(request.Id);
             if(!task.IsSuccess) {
-                return new GetByIdTaskResponse {
+                return new GetByIdTaskQueryResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Task not found" }
                 };
             }
 
-            return new GetByIdTaskResponse {
+            return new GetByIdTaskQueryResponse {
                 Success = true,
                 Task = new TaskDto {
                     Id = task.Value.Id,

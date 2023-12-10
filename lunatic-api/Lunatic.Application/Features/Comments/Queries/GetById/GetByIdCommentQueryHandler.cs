@@ -5,23 +5,23 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Comments.Queries.GetById {
-    public class GetByIdCommentQueryHandler : IRequestHandler<GetByIdCommentQuery, GetByIdCommentResponse> {
+    public class GetByIdCommentQueryHandler : IRequestHandler<GetByIdCommentQuery, GetByIdCommentQueryResponse> {
         private readonly ICommentRepository commentRepository;
 
         public GetByIdCommentQueryHandler(ICommentRepository commentRepository) {
             this.commentRepository = commentRepository;
         }
 
-        public async Task<GetByIdCommentResponse> Handle(GetByIdCommentQuery request, CancellationToken cancellationToken) {
+        public async Task<GetByIdCommentQueryResponse> Handle(GetByIdCommentQuery request, CancellationToken cancellationToken) {
             var comment = await commentRepository.FindByIdAsync(request.Id);
             if(!comment.IsSuccess) {
-                return new GetByIdCommentResponse {
+                return new GetByIdCommentQueryResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Comment not found" }
                 };
             }
 
-            return new GetByIdCommentResponse {
+            return new GetByIdCommentQueryResponse {
                 Success = true,
                 Comment = new CommentDto {
                     Id = comment.Value.Id,
