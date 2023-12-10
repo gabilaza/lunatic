@@ -3,6 +3,7 @@ using Lunatic.Application.Features.Users.Commands.DeleteUser;
 using Lunatic.Application.Features.Users.Commands.UpdateUser;
 using Lunatic.Application.Features.Users.Queries.GetAll;
 using Lunatic.Application.Features.Users.Queries.GetById;
+using Lunatic.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
@@ -22,6 +23,13 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateUserCommand command) {
+            if(id != command.Id) {
+                return BadRequest(new ResponseBase {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
+                });
+            }
+
             var existsResult = await Mediator.Send(new GetByIdUserQuery(id));
             if(!existsResult.Success) {
                 return BadRequest(existsResult);

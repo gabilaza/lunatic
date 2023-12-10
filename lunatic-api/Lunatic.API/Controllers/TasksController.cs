@@ -3,6 +3,7 @@ using Lunatic.Application.Features.Tasks.Commands.DeleteTask;
 using Lunatic.Application.Features.Tasks.Commands.UpdateTask;
 using Lunatic.Application.Features.Tasks.Queries.GetAll;
 using Lunatic.Application.Features.Tasks.Queries.GetById;
+using Lunatic.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
@@ -23,6 +24,13 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Update(Guid id, UpdateTaskCommand command) {
+            if(id != command.Id) {
+                return BadRequest(new ResponseBase {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
+                });
+            }
+
             var existsResult = await Mediator.Send(new GetByIdTaskQuery(id));
             if(!existsResult.Success) {
                 return NotFound(existsResult);
