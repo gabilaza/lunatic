@@ -60,7 +60,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
                 Success = true,
                 Project = new ProjectDto {
                     Id = project.Value.Id,
-                    TeamId = project.Value.TaskId,
+                    TeamId = project.Value.TeamId,
 
                     Title = project.Value.Title,
                     Description = project.Value.Description,

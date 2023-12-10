@@ -21,7 +21,7 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
             RuleFor(t => t.Content)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(100).WithMessage("{PropertyName} must not exceed 50 characters.");
+                .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
         }
     }
 }

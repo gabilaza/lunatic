@@ -3,21 +3,21 @@ using Lunatic.Application.Persistence;
 using FluentValidation;
 
 
-namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
-    internal class UpdateCommentCommandValidator : AbstractValidator<UpdateCommentCommand> {
-        private readonly ICommentRepository commentRepository;
+namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
+    internal class UpdateTeamCommandValidator : AbstractValidator<UpdateTeamCommand> {
+        private readonly ITeamRepository commentRepository;
 
-        public UpdateCommentCommandValidator(ICommentRepository commentRepository) {
+        public UpdateTeamCommandValidator(ITeamRepository commentRepository) {
             this.commentRepository = commentRepository;
 
             RuleFor(t => t.Id)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
 
-            RuleFor(t => t.Content)
+            RuleFor(t => t.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
+                .MaximumLength(30).WithMessage("{PropertyName} must not exceed 30 characters.");
         }
     }
 }
