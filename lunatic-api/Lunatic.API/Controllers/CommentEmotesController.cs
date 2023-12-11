@@ -7,6 +7,7 @@ using Lunatic.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
+    [Route("api/v1/comment/emotes")]
     public class CommentEmotesController : ApiControllerBase {
         [HttpPost]
         [ProducesResponseType<CreateCommentEmoteCommandResponse>(StatusCodes.Status201Created)]
