@@ -1,5 +1,6 @@
 using Lunatic.Application;
 using Lunatic.Infrastructure;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +12,12 @@ builder.Services.AddApplicationServices();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => {
+    c.SwaggerDoc("v1", new OpenApiInfo {
+            Version = "v1",
+            Title = "Lunatic API",
+        });
+});
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
