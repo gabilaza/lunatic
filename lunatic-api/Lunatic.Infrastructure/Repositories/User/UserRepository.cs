@@ -20,19 +20,31 @@ namespace Lunatic.Infrastructure.Repositories {
         }
 
         public async Task<Result<User>> FindByUsernameAsync(string username) {
-            var result = await context.Set<User>().FindAsync(username);
-            if(result == null) {
-                return Result<User>.Failure($"Entity with username {username} not found");
+            var result = await GetAllAsync();
+            if(result.IsSuccess) {
+                List<User> users = result.Value.ToList();
+                User? expectedUser = users.Find(user => user.Username == username);
+
+                if(expectedUser == null) {
+                    return Result<User>.Failure($"Entity with username {username} not found");
+                }
+                return Result<User>.Success(expectedUser);
             }
-            return Result<User>.Success(result);
+            return Result<User>.Failure($"Entity with username {username} not found");
         }
 
         public async Task<Result<User>> FindByEmailAsync(string email) {
-            var result = await context.Set<User>().FindAsync(email); //cautare cu predicat + extensie ; first or default + predicat 
-            if(result == null) {
-                return Result<User>.Failure($"Entity with username {email} not found");
+            var result = await GetAllAsync();
+            if(result.IsSuccess) {
+                List<User> users = result.Value.ToList();
+                User? expectedUser = users.Find(user => user.Email == email);
+
+                if(expectedUser == null) {
+                    return Result<User>.Failure($"Entity with email {email} not found");
+                }
+                return Result<User>.Success(expectedUser);
             }
-            return Result<User>.Success(result);
+            return Result<User>.Failure($"Entity with email {email} not found");
         }
     }
 }

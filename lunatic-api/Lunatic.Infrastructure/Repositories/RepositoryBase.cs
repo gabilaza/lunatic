@@ -19,7 +19,7 @@ namespace Lunatic.Infrastructure.Repositories {
 
         public virtual async Task<Result<T>> FindByIdAsync(Guid id) {
             var result = await context.Set<T>().FindAsync(id);
-            if (result == null) {
+            if(result == null) {
                 return Result<T>.Failure($"Entity with id {id} not found");
             }
             return Result<T>.Success(result);
@@ -39,7 +39,7 @@ namespace Lunatic.Infrastructure.Repositories {
 
         public virtual async Task<Result<T>> DeleteAsync(Guid id) {
             var result = await FindByIdAsync(id);
-            if (result.Value != null) {
+            if(result.IsSuccess) {
                 context.Set<T>().Remove(result.Value);
                 await context.SaveChangesAsync();
                 return Result<T>.Success(result.Value);
