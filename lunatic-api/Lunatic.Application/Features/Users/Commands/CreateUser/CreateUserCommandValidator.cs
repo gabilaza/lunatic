@@ -25,14 +25,14 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.")
                 .EmailAddress().WithMessage("{PropertyName} is not a valid email address.")
-                .MustAsync(async (email, cancellationToken) => await this.userRepository.ExistsByEmailAsync(email))
+                .MustAsync(async (email, cancellationToken) => !await this.userRepository.ExistsByEmailAsync(email))
                 .WithMessage("{PropertyName} exists already.");
 
             RuleFor(u => u.Username)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.")
-                .MustAsync(async (username, cancellationToken) => await this.userRepository.ExistsByUsernameAsync(username))
+                .MustAsync(async (username, cancellationToken) => !await this.userRepository.ExistsByUsernameAsync(username))
                 .WithMessage("{PropertyName} exists already.");
 
             RuleFor(u => u.Password)
