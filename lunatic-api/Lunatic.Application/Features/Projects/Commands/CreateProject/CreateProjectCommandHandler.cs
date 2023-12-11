@@ -38,6 +38,10 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
                 };
             }
 
+            var team = (await this.teamRepository.FindByIdAsync(request.TeamId)).Value;
+            team.AddProject(projectResult.Value);
+            await this.teamRepository.UpdateAsync(team);
+
             await this.projectRepository.AddAsync(projectResult.Value);
 
             return new CreateProjectCommandResponse {
