@@ -4,7 +4,7 @@ using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
-    internal class CreateProjectCommandValidator : AbstractValidator<CreateProjectComand> {
+    internal class CreateProjectCommandValidator : AbstractValidator<CreateProjectCommand> {
         private readonly IUserRepository userRepository;
 
         private readonly ITeamRepository teamRepository;

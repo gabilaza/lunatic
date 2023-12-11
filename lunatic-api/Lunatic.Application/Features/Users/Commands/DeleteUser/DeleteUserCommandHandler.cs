@@ -4,14 +4,14 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Users.Commands.DeleteUser {
-    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserComand, DeleteUserCommandResponse> {
+    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, DeleteUserCommandResponse> {
         private readonly IUserRepository userRepository;
 
         public DeleteUserCommandHandler(IUserRepository userRepository) {
             this.userRepository = userRepository;
         }
 
-        public async Task<DeleteUserCommandResponse> Handle(DeleteUserComand request, CancellationToken cancellationToken) {
+        public async Task<DeleteUserCommandResponse> Handle(DeleteUserCommand request, CancellationToken cancellationToken) {
             var result = await this.userRepository.DeleteAsync(request.Id);
 
             if(!result.IsSuccess) {

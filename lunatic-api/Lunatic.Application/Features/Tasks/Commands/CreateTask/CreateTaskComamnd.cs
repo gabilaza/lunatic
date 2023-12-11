@@ -4,7 +4,7 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
-    public class CreateTaskComand : IRequest<CreateTaskCommandResponse> {
+    public class CreateTaskCommand : IRequest<CreateTaskCommandResponse> {
         public Guid UserId { get; set; } = default!;
         public Guid ProjectId { get; set; } = default!;
 

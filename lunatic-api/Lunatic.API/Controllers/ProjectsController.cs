@@ -11,7 +11,7 @@ namespace Lunatic.API.Controllers {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create(CreateProjectComand command) {
+        public async Task<IActionResult> Create(CreateProjectCommand command) {
             var result = await Mediator.Send(command);
             if(!result.Success) {
                 return BadRequest(result);

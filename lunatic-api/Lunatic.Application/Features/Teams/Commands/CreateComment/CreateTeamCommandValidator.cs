@@ -4,7 +4,7 @@ using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
-    internal class CreateTeamCommandValidator : AbstractValidator<CreateTeamComand> {
+    internal class CreateTeamCommandValidator : AbstractValidator<CreateTeamCommand> {
         private readonly IUserRepository userRepository;
 
         public CreateTeamCommandValidator(IUserRepository userRepository) {

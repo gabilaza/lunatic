@@ -3,7 +3,7 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
-    public class CreateCommentComand : IRequest<CreateCommentCommandResponse> {
+    public class CreateCommentCommand : IRequest<CreateCommentCommandResponse> {
         public Guid UserId { get; set; } = default!;
         public Guid TaskId { get; set; } = default!;
 

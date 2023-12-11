@@ -11,7 +11,7 @@ namespace Lunatic.API.Controllers {
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create(CreateUserComand command) {
+        public async Task<IActionResult> Create(CreateUserCommand command) {
             var result = await Mediator.Send(command);
             if(!result.Success) {
                 return BadRequest(result);
@@ -46,7 +46,7 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id) {
-            var deleteUserCommand = new DeleteUserComand() { Id = id };
+            var deleteUserCommand = new DeleteUserCommand() { Id = id };
             var result = await Mediator.Send(deleteUserCommand);
             if(!result.Success) {
                 return NotFound(result);

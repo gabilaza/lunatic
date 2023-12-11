@@ -4,7 +4,7 @@ using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Users.Commands.CreateUser {
-    internal class CreateUserCommandValidator : AbstractValidator<CreateUserComand> {
+    internal class CreateUserCommandValidator : AbstractValidator<CreateUserCommand> {
         private readonly IUserRepository userRepository;
 
         public CreateUserCommandValidator(IUserRepository userRepository) {

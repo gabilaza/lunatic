@@ -6,7 +6,7 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
-    public class CreateCommentCommandHandler : IRequestHandler<CreateCommentComand, CreateCommentCommandResponse> {
+    public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CreateCommentCommandResponse> {
         private readonly ICommentRepository commentRepository;
 
         private readonly ITaskRepository taskRepository;
@@ -19,7 +19,7 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
             this.userRepository = userRepository;
         }
 
-        public async Task<CreateCommentCommandResponse> Handle(CreateCommentComand request, CancellationToken cancellationToken) {
+        public async Task<CreateCommentCommandResponse> Handle(CreateCommentCommand request, CancellationToken cancellationToken) {
             var validator = new CreateCommentCommandValidator(this.userRepository, this.taskRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 

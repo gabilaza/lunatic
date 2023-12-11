@@ -4,7 +4,7 @@ using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
-    internal class CreateTaskCommandValidator : AbstractValidator<CreateTaskComand> {
+    internal class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand> {
         private readonly IUserRepository userRepository;
 
         private readonly IProjectRepository projectRepository;

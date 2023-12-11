@@ -6,7 +6,7 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
-    public class CreateProjectCommandHandler : IRequestHandler<CreateProjectComand, CreateProjectCommandResponse> {
+    public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, CreateProjectCommandResponse> {
         private readonly IProjectRepository projectRepository;
 
         private readonly ITeamRepository teamRepository;
@@ -19,7 +19,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
             this.userRepository = userRepository;
         }
 
-        public async Task<CreateProjectCommandResponse> Handle(CreateProjectComand request, CancellationToken cancellationToken) {
+        public async Task<CreateProjectCommandResponse> Handle(CreateProjectCommand request, CancellationToken cancellationToken) {
             var validator = new CreateProjectCommandValidator(this.userRepository, this.teamRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 

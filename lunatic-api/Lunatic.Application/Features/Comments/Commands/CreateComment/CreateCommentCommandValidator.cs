@@ -4,7 +4,7 @@ using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
-    internal class CreateCommentCommandValidator : AbstractValidator<CreateCommentComand> {
+    internal class CreateCommentCommandValidator : AbstractValidator<CreateCommentCommand> {
         private readonly IUserRepository userRepository;
 
         private readonly ITaskRepository taskRepository;

@@ -6,7 +6,7 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
-    public class CreateTeamCommandHandler : IRequestHandler<CreateTeamComand, CreateTeamCommandResponse> {
+    public class CreateTeamCommandHandler : IRequestHandler<CreateTeamCommand, CreateTeamCommandResponse> {
         private readonly ITeamRepository teamRepository;
 
         private readonly IUserRepository userRepository;
@@ -16,7 +16,7 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
             this.userRepository = userRepository;
         }
 
-        public async Task<CreateTeamCommandResponse> Handle(CreateTeamComand request, CancellationToken cancellationToken) {
+        public async Task<CreateTeamCommandResponse> Handle(CreateTeamCommand request, CancellationToken cancellationToken) {
             var validator = new CreateTeamCommandValidator(this.userRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
