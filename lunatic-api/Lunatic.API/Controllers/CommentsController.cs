@@ -3,12 +3,12 @@ using Lunatic.Application.Features.Comments.Commands.DeleteComment;
 using Lunatic.Application.Features.Comments.Commands.UpdateComment;
 using Lunatic.Application.Features.Comments.Queries.GetAll;
 using Lunatic.Application.Features.Comments.Queries.GetById;
-using Lunatic.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
     public class CommentsController : ApiControllerBase {
         [HttpPost]
+        [Produces("application/json")]
         [ProducesResponseType<CreateCommentCommandResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType<CreateCommentCommandResponse>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateCommentCommand command) {
@@ -20,11 +20,13 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpPut("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateCommentCommand command) {
             if(id != command.Id) {
-                return BadRequest(new ResponseBase {
+                return BadRequest(new UpdateCommentCommandResponse {
                         Success = false,
                         ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
                 });
@@ -43,6 +45,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpDelete("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id) {
@@ -55,6 +58,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpGet]
+        [Produces("application/json")]
         [ProducesResponseType<GetAllCommentsQueryResponse>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll() {
             var result = await Mediator.Send(new GetAllCommentsQuery());
@@ -62,6 +66,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpGet("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id) {
