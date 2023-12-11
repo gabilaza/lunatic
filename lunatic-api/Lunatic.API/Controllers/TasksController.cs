@@ -3,12 +3,12 @@ using Lunatic.Application.Features.Tasks.Commands.DeleteTask;
 using Lunatic.Application.Features.Tasks.Commands.UpdateTask;
 using Lunatic.Application.Features.Tasks.Queries.GetAll;
 using Lunatic.Application.Features.Tasks.Queries.GetById;
-using Lunatic.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
     public class TasksController : ApiControllerBase {
         [HttpPost]
+        [Produces("application/json")]
         [ProducesResponseType<CreateTaskCommandResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType<CreateTaskCommandResponse>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateTaskCommand command) {
@@ -20,11 +20,12 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpPut("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<UpdateTaskCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateTaskCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateTaskCommand command) {
             if(id != command.Id) {
-                return BadRequest(new ResponseBase {
+                return BadRequest(new UpdateTaskCommandResponse {
                         Success = false,
                         ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
                 });
@@ -43,6 +44,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpDelete("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<DeleteTaskCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<DeleteTaskCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id) {
@@ -55,6 +57,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpGet]
+        [Produces("application/json")]
         [ProducesResponseType<GetAllTasksQueryResponse>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll() {
             var result = await Mediator.Send(new GetAllTasksQuery());
@@ -62,6 +65,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpGet("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<GetByIdTaskQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetByIdTaskQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id) {

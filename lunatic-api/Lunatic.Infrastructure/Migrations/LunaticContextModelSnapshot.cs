@@ -57,6 +57,26 @@ namespace Lunatic.Infrastructure.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("Lunatic.Domain.Entities.CommentEmote", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Emote")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CommentEmotes");
+                });
+
             modelBuilder.Entity("Lunatic.Domain.Entities.Project", b =>
                 {
                     b.Property<Guid>("Id")

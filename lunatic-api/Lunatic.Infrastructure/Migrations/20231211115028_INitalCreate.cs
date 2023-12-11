@@ -7,11 +7,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Lunatic.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class INitialCreate : Migration
+    public partial class INitalCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "CommentEmotes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CommentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Emote = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentEmotes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
@@ -115,6 +129,9 @@ namespace Lunatic.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CommentEmotes");
+
             migrationBuilder.DropTable(
                 name: "Comments");
 

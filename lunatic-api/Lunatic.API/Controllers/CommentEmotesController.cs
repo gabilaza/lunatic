@@ -3,13 +3,13 @@ using Lunatic.Application.Features.CommentEmotes.Commands.DeleteCommentEmote;
 using Lunatic.Application.Features.CommentEmotes.Commands.UpdateCommentEmote;
 using Lunatic.Application.Features.CommentEmotes.Queries.GetAll;
 using Lunatic.Application.Features.CommentEmotes.Queries.GetById;
-using Lunatic.Application.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
     [Route("api/v1/comment/emotes")]
     public class CommentEmotesController : ApiControllerBase {
         [HttpPost]
+        [Produces("application/json")]
         [ProducesResponseType<CreateCommentEmoteCommandResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType<CreateCommentEmoteCommandResponse>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateCommentEmoteCommand command) {
@@ -21,11 +21,12 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpPut("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<UpdateCommentEmoteCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateCommentEmoteCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateCommentEmoteCommand command) {
             if(id != command.Id) {
-                return BadRequest(new ResponseBase {
+                return BadRequest(new UpdateCommentEmoteCommandResponse {
                         Success = false,
                         ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
                 });
@@ -44,6 +45,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpDelete("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<DeleteCommentEmoteCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<DeleteCommentEmoteCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id) {
@@ -56,6 +58,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpGet]
+        [Produces("application/json")]
         [ProducesResponseType<GetAllCommentEmotesQueryResponse>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll() {
             var result = await Mediator.Send(new GetAllCommentEmotesQuery());
@@ -63,6 +66,7 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpGet("{id}")]
+        [Produces("application/json")]
         [ProducesResponseType<GetByIdCommentEmoteQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetByIdCommentEmoteQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id) {
