@@ -43,7 +43,7 @@ namespace Lunatic.Application.Features.CommentEmotes.Commands.CreateCommentEmote
             return new CreateCommentEmoteCommandResponse {
                 Success = true,
                 CommentEmote = new CommentEmoteDto {
-                    Id = commentEmoteResult.Value.Id,
+                    CommentEmoteId = commentEmoteResult.Value.CommentEmoteId,
                     UserId = commentEmoteResult.Value.UserId,
                     CommentId = commentEmoteResult.Value.CommentId,
 

@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.CommentEmotes.Commands.UpdateCommentEmote
                 };
             }
 
-            var commentEmoteResult = await this.commentEmoteRepository.FindByIdAsync(request.Id);
+            var commentEmoteResult = await this.commentEmoteRepository.FindByIdAsync(request.CommentEmoteId);
             if(!commentEmoteResult.IsSuccess) {
                 return new UpdateCommentEmoteCommandResponse {
                     Success = false,
@@ -38,7 +38,7 @@ namespace Lunatic.Application.Features.CommentEmotes.Commands.UpdateCommentEmote
             return new UpdateCommentEmoteCommandResponse {
                 Success = true,
                 CommentEmote = new CommentEmoteDto {
-                    Id = dbCommentEmoteResult.Value.Id,
+                    CommentEmoteId = dbCommentEmoteResult.Value.CommentEmoteId,
                     UserId = dbCommentEmoteResult.Value.UserId,
                     CommentId = dbCommentEmoteResult.Value.CommentId,
 

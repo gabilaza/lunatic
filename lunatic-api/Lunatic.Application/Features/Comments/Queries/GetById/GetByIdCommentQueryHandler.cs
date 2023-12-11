@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Comments.Queries.GetById {
         }
 
         public async Task<GetByIdCommentQueryResponse> Handle(GetByIdCommentQuery request, CancellationToken cancellationToken) {
-            var commentResult = await this.commentRepository.FindByIdAsync(request.Id);
+            var commentResult = await this.commentRepository.FindByIdAsync(request.CommentId);
             if(!commentResult.IsSuccess) {
                 return new GetByIdCommentQueryResponse {
                     Success = false,
@@ -24,7 +24,7 @@ namespace Lunatic.Application.Features.Comments.Queries.GetById {
             return new GetByIdCommentQueryResponse {
                 Success = true,
                 Comment = new CommentDto {
-                    Id = commentResult.Value.Id,
+                    CommentId = commentResult.Value.CommentId,
                     TaskId = commentResult.Value.TaskId,
 
                     Content = commentResult.Value.Content,

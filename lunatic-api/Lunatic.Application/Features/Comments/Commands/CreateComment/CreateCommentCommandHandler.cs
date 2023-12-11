@@ -43,7 +43,7 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
             return new CreateCommentCommandResponse {
                 Success = true,
                 Comment = new CommentDto {
-                    Id = commentResult.Value.Id,
+                    CommentId = commentResult.Value.CommentId,
                     TaskId = commentResult.Value.TaskId,
 
                     Content = commentResult.Value.Content,

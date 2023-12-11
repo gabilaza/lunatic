@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetById {
         }
 
         public async Task<GetByIdUserQueryResponse> Handle(GetByIdUserQuery request, CancellationToken cancellationToken) {
-            var userResult = await this.userRepository.FindByIdAsync(request.Id);
+            var userResult = await this.userRepository.FindByIdAsync(request.UserId);
             if(!userResult.IsSuccess) {
                 return new GetByIdUserQueryResponse {
                     Success = false,
@@ -24,7 +24,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetById {
             return new GetByIdUserQueryResponse { 
                 Success = true,
                 User = new UserDto {
-                    Id = userResult.Value.Id,
+                    UserId = userResult.Value.UserId,
 
                     FirstName = userResult.Value.FirstName,
                     LastName = userResult.Value.LastName,

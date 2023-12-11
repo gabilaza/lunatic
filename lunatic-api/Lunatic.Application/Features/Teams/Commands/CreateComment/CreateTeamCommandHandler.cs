@@ -40,7 +40,7 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
             return new CreateTeamCommandResponse {
                 Success = true,
                 Team = new TeamDto {
-                    Id = teamResult.Value.Id,
+                    TeamId = teamResult.Value.TeamId,
 
                     Name = teamResult.Value.Name,
 

@@ -4,7 +4,7 @@ using Lunatic.Domain.Entities;
 
 namespace Lunatic.Application.Features.Users.Payload {
     public class UserDto {
-        public Guid Id { get; set; } = default!;
+        public Guid UserId { get; set; } = default!;
 
         public string FirstName { get; set; } = default!;
         public string LastName { get; set; } = default!;

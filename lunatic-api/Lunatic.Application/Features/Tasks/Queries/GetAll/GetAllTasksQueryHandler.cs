@@ -18,7 +18,7 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetAll {
 
             if(tasks.IsSuccess) {
                 response.Tasks = tasks.Value.Select(t => new TaskDto {
-                    Id = t.Id,
+                    TaskId = t.TaskId,
                     ProjectId = t.ProjectId,
 
                     Title = t.Title,

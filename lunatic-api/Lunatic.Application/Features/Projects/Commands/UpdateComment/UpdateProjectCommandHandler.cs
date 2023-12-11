@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
                 };
             }
 
-            var projectResult = await this.projectRepository.FindByIdAsync(request.Id);
+            var projectResult = await this.projectRepository.FindByIdAsync(request.ProjectId);
             if(!projectResult.IsSuccess) {
                 return new UpdateProjectCommandResponse {
                     Success = false,
@@ -38,7 +38,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
             return new UpdateProjectCommandResponse {
                 Success = true,
                 Project = new ProjectDto {
-                    Id = dbProjectResult.Value.Id,
+                    ProjectId = dbProjectResult.Value.ProjectId,
                     TeamId = dbProjectResult.Value.TeamId,
 
                     Title = dbProjectResult.Value.Title,

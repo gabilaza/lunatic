@@ -43,7 +43,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
             return new CreateTaskCommandResponse {
                 Success = true,
                 Task = new TaskDto {
-                    Id = taskResult.Value.Id,
+                    TaskId = taskResult.Value.TaskId,
                     ProjectId = taskResult.Value.ProjectId,
 
                     Title = taskResult.Value.Title,

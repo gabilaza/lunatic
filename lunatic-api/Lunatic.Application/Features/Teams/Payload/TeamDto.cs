@@ -1,7 +1,7 @@
 ﻿
 namespace Lunatic.Application.Features.Teams.Payload {
     public class TeamDto {
-        public Guid Id { get; set; } = default!;
+        public Guid TeamId { get; set; } = default!;
 
         public string Name { get; set; } = default!;
 

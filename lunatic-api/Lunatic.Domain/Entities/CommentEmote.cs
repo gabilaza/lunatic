@@ -4,14 +4,14 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class CommentEmote {
         private CommentEmote(Guid userId, Guid commentId, Emote emote) {
-            Id = Guid.NewGuid();
+            CommentEmoteId = Guid.NewGuid();
             UserId = userId;
             CommentId = commentId;
 
             Emote = emote;
         }
 
-        public Guid Id { get; private set; }
+        public Guid CommentEmoteId { get; private set; }
         public Guid UserId { get; private set; }
         public Guid CommentId { get; private set; }
 

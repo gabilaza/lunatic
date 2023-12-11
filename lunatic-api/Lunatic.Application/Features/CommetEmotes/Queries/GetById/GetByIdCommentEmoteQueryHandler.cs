@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.CommentEmotes.Queries.GetById {
         }
 
         public async Task<GetByIdCommentEmoteQueryResponse> Handle(GetByIdCommentEmoteQuery request, CancellationToken cancellationToken) {
-            var commentEmoteResult = await this.commentEmoteRepository.FindByIdAsync(request.Id);
+            var commentEmoteResult = await this.commentEmoteRepository.FindByIdAsync(request.CommentEmoteId);
             if(!commentEmoteResult.IsSuccess) {
                 return new GetByIdCommentEmoteQueryResponse {
                     Success = false,
@@ -24,7 +24,7 @@ namespace Lunatic.Application.Features.CommentEmotes.Queries.GetById {
             return new GetByIdCommentEmoteQueryResponse {
                 Success = true,
                 CommentEmote = new CommentEmoteDto {
-                    Id = commentEmoteResult.Value.Id,
+                    CommentEmoteId = commentEmoteResult.Value.CommentEmoteId,
                     UserId = commentEmoteResult.Value.UserId,
                     CommentId = commentEmoteResult.Value.CommentId,
 

@@ -4,14 +4,14 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class Project : AuditableEntity {
         private Project(Guid createdByUserId, Guid teamId, string title, string description) : base(createdByUserId) {
-            Id = Guid.NewGuid();
+            ProjectId = Guid.NewGuid();
             TeamId = teamId;
 
             Title = title;
             Description = description;
         }
 
-        public Guid Id { get; private set; }
+        public Guid ProjectId { get; private set; }
         public Guid TeamId { get; private set; }
 
         public string Title { get; private set; }
@@ -44,7 +44,7 @@ namespace Lunatic.Domain.Entities {
             Description = description;
         }
 
-        public void AddTask(Task task) => TaskIds.Add(task.Id);
-        public void RemoveTask(Task task) => TaskIds.Remove(task.Id);
+        public void AddTask(Task task) => TaskIds.Add(task.TaskId);
+        public void RemoveTask(Task task) => TaskIds.Remove(task.TaskId);
     }
 }

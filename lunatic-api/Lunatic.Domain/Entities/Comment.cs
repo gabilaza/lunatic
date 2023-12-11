@@ -4,13 +4,13 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class Comment : AuditableEntity {
         private Comment(Guid createdByUserId, Guid taskId, string content) : base(createdByUserId) {
-            Id = Guid.NewGuid();
+            CommentId = Guid.NewGuid();
             TaskId = taskId;
 
             Content = content;
         }
 
-        public Guid Id { get; private set; }
+        public Guid CommentId { get; private set; }
         public Guid TaskId { get; private set; }
 
         public string Content { get; private set; }
@@ -37,7 +37,7 @@ namespace Lunatic.Domain.Entities {
             Content = content;
         }
 
-        public void AddEmote(CommentEmote commentEmote) => EmoteIds.Add(commentEmote.Id);
-        public void RemoveEmote(CommentEmote commentEmote) => EmoteIds.Remove(commentEmote.Id);
+        public void AddEmote(CommentEmote commentEmote) => EmoteIds.Add(commentEmote.CommentEmoteId);
+        public void RemoveEmote(CommentEmote commentEmote) => EmoteIds.Remove(commentEmote.CommentEmoteId);
     }
 }

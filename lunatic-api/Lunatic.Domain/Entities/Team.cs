@@ -4,12 +4,12 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class Team : AuditableEntity {
         private Team(Guid createdByUserId, string name) : base(createdByUserId) {
-            Id = Guid.NewGuid();
+            TeamId = Guid.NewGuid();
 
             Name = name;
         }
 
-        public Guid Id { get; private set; }
+        public Guid TeamId { get; private set; }
 
         public string Name { get; private set; }
 
@@ -32,10 +32,10 @@ namespace Lunatic.Domain.Entities {
             Name = name;
         }
 
-        public void AddMember(User user) => MemberIds.Add(user.Id);
-        public void RemoveMember(User user) => MemberIds.Remove(user.Id);
+        public void AddMember(User user) => MemberIds.Add(user.UserId);
+        public void RemoveMember(User user) => MemberIds.Remove(user.UserId);
 
-        public void AddProject(Project project) => ProjectIds.Add(project.Id);
-        public void RemoveProject(Project project) => ProjectIds.Remove(project.Id);
+        public void AddProject(Project project) => ProjectIds.Add(project.TeamId);
+        public void RemoveProject(Project project) => ProjectIds.Remove(project.TeamId);
     }
 }

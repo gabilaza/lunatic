@@ -4,7 +4,7 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class User {
         private User(string firstName, string lastName, string email, string username, string password, Role role) {
-            Id = Guid.NewGuid();
+            UserId = Guid.NewGuid();
             CreatedDate = DateTime.UtcNow;
 
             FirstName = firstName;
@@ -15,7 +15,7 @@ namespace Lunatic.Domain.Entities {
             Role = role;
         }
 
-        public Guid Id { get; private set; }
+        public Guid UserId { get; private set; }
         public DateTime CreatedDate { get; private set; }
 
         public string FirstName { get; private set; }
@@ -60,7 +60,7 @@ namespace Lunatic.Domain.Entities {
             Role = role;
         }
 
-        public void AddTeam(Team team) => TeamIds.Add(team.Id);
-        public void RemoveTeam(Team team) => TeamIds.Remove(team.Id);
+        public void AddTeam(Team team) => TeamIds.Add(team.TeamId);
+        public void RemoveTeam(Team team) => TeamIds.Remove(team.TeamId);
     }
 }

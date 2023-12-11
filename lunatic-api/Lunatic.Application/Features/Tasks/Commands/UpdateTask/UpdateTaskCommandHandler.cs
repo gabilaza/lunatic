@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 };
             }
 
-            var taskResult = await this.taskRepository.FindByIdAsync(request.Id);
+            var taskResult = await this.taskRepository.FindByIdAsync(request.TaskId);
             if(!taskResult.IsSuccess) {
                 return new UpdateTaskCommandResponse {
                     Success = false,
@@ -38,7 +38,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
             return new UpdateTaskCommandResponse {
                 Success = true,
                 Task = new TaskDto {
-                    Id = dbTaskResult.Value.Id,
+                    TaskId = dbTaskResult.Value.TaskId,
                     ProjectId = dbTaskResult.Value.ProjectId,
 
                     Title = dbTaskResult.Value.Title,

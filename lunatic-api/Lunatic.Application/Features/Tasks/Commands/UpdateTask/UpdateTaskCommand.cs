@@ -6,7 +6,7 @@ using TaskStatus = Lunatic.Domain.Entities.TaskStatus;
 
 namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
     public class UpdateTaskCommand : IRequest<UpdateTaskCommandResponse> {
-        public Guid Id { get; set; } = default!;
+        public Guid TaskId { get; set; } = default!;
 
         public string Title { get; set; } = default!;
         public string Description { get; set; } = default!;

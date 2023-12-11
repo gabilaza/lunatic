@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Projects.Queries.GetById {
         }
 
         public async Task<GetByIdProjectQueryResponse> Handle(GetByIdProjectQuery request, CancellationToken cancellationToken) {
-            var projectResult = await this.projectRepository.FindByIdAsync(request.Id);
+            var projectResult = await this.projectRepository.FindByIdAsync(request.ProjectId);
             if(!projectResult.IsSuccess) {
                 return new GetByIdProjectQueryResponse {
                     Success = false,
@@ -24,7 +24,7 @@ namespace Lunatic.Application.Features.Projects.Queries.GetById {
             return new GetByIdProjectQueryResponse {
                 Success = true,
                 Project = new ProjectDto {
-                    Id = projectResult.Value.Id,
+                    ProjectId = projectResult.Value.ProjectId,
                     TeamId = projectResult.Value.TeamId,
 
                     Title = projectResult.Value.Title,

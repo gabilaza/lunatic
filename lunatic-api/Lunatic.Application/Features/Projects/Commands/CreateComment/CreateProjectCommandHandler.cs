@@ -43,7 +43,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
             return new CreateProjectCommandResponse {
                 Success = true,
                 Project = new ProjectDto {
-                    Id = projectResult.Value.Id,
+                    ProjectId = projectResult.Value.ProjectId,
                     TeamId = projectResult.Value.TeamId,
 
                     Title = projectResult.Value.Title,

@@ -19,20 +19,20 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{commentId}")]
         [Produces("application/json")]
         [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid id, UpdateCommentCommand command) {
-            if(id != command.Id) {
+        public async Task<IActionResult> Update(Guid commentId, UpdateCommentCommand command) {
+            if(commentId != command.CommentId) {
                 return BadRequest(new UpdateCommentCommandResponse {
                         Success = false,
                         ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
                 });
             }
 
-            var existsResult = await Mediator.Send(new GetByIdCommentQuery(id));
+            var existsResult = await Mediator.Send(new GetByIdCommentQuery(commentId));
             if(!existsResult.Success) {
                 return NotFound(existsResult);
             }
@@ -44,12 +44,12 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{commentId}")]
         [Produces("application/json")]
         [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid id) {
-            var deleteCommentCommand = new DeleteCommentCommand() { Id = id };
+        public async Task<IActionResult> Delete(Guid commentId) {
+            var deleteCommentCommand = new DeleteCommentCommand() { CommentId = commentId };
             var result = await Mediator.Send(deleteCommentCommand);
             if(!result.Success) {
                 return NotFound(result);
@@ -65,12 +65,12 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{commentId}")]
         [Produces("application/json")]
         [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Get(Guid id) {
-            var result = await Mediator.Send(new GetByIdCommentQuery(id));
+        public async Task<IActionResult> Get(Guid commentId) {
+            var result = await Mediator.Send(new GetByIdCommentQuery(commentId));
             if(!result.Success) {
                 return NotFound(result);
             }

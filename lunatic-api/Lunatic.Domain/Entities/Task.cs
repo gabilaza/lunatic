@@ -4,7 +4,7 @@ using Lunatic.Domain.Utils;
 namespace Lunatic.Domain.Entities {
     public class Task : AuditableEntity {
         private Task(Guid createdByUserId, Guid projectId, string title, string description, TaskPriority priority) : base(createdByUserId) {
-            Id = Guid.NewGuid();
+            TaskId = Guid.NewGuid();
             ProjectId = projectId;
 
             Title = title;
@@ -13,7 +13,7 @@ namespace Lunatic.Domain.Entities {
             Status = TaskStatus.CREATED;
         }
 
-        public Guid Id { get; private set; }
+        public Guid TaskId { get; private set; }
         public Guid ProjectId { get; private set; }
 
         public string Title { get; private set; }
@@ -58,11 +58,11 @@ namespace Lunatic.Domain.Entities {
         public void AddTag(Tag tag) => Tags.Add(tag);
         public void RemoveTag(Tag tag) => Tags.Remove(tag);
 
-        public void AddComment(Comment comment) => CommentIds.Add(comment.Id);
-        public void RemoveComment(Comment comment) => CommentIds.Remove(comment.Id);
+        public void AddComment(Comment comment) => CommentIds.Add(comment.CommentId);
+        public void RemoveComment(Comment comment) => CommentIds.Remove(comment.CommentId);
 
-        public void AddAssignee(User user) => AssigneeIds.Add(user.Id);
-        public void RemoveAssignee(User user) => AssigneeIds.Remove(user.Id);
+        public void AddAssignee(User user) => AssigneeIds.Add(user.UserId);
+        public void RemoveAssignee(User user) => AssigneeIds.Remove(user.UserId);
 
         public void MarkAsInProgress() {
             if(!Status.IsCreated() && !Status.IsDone()) {

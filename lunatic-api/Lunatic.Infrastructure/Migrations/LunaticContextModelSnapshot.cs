@@ -25,7 +25,7 @@ namespace Lunatic.Infrastructure.Migrations
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Comment", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CommentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -52,14 +52,14 @@ namespace Lunatic.Infrastructure.Migrations
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("CommentId");
 
                     b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.CommentEmote", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("CommentEmoteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -72,14 +72,14 @@ namespace Lunatic.Infrastructure.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("CommentEmoteId");
 
                     b.ToTable("CommentEmotes");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Project", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ProjectId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -110,14 +110,14 @@ namespace Lunatic.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProjectId");
 
                     b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Task", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TaskId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -168,14 +168,14 @@ namespace Lunatic.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("TaskId");
 
                     b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.Team", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("TeamId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -203,14 +203,14 @@ namespace Lunatic.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("uuid[]");
 
-                    b.HasKey("Id");
+                    b.HasKey("TeamId");
 
                     b.ToTable("Teams");
                 });
 
             modelBuilder.Entity("Lunatic.Domain.Entities.User", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
@@ -244,7 +244,7 @@ namespace Lunatic.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
 
                     b.ToTable("Users");
                 });

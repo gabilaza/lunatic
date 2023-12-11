@@ -17,13 +17,13 @@ namespace Lunatic.Application.Features.Teams.Queries.GetAll {
             var teams = await this.teamRepository.GetAllAsync();
 
             if(teams.IsSuccess) {
-                response.Teams = teams.Value.Select(t => new TeamDto {
-                    Id = t.Id,
+                response.Teams = teams.Value.Select(team => new TeamDto {
+                    TeamId = team.TeamId,
 
-                    Name = t.Name,
+                    Name = team.Name,
 
-                    MemberIds = t.MemberIds,
-                    ProjectIds = t.ProjectIds,
+                    MemberIds = team.MemberIds,
+                    ProjectIds = team.ProjectIds,
                 }).ToList();
             }
             return response;

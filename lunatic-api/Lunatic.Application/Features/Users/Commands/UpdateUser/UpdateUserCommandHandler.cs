@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 };
             }
 
-            var userResult = await this.userRepository.FindByIdAsync(request.Id);
+            var userResult = await this.userRepository.FindByIdAsync(request.UserId);
             if(!userResult.IsSuccess) {
                 return new UpdateUserCommandResponse {
                     Success = false,
@@ -38,7 +38,7 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
             return new UpdateUserCommandResponse {
                 Success = true,
                 User = new UserDto {
-                    Id = dbUserResult.Value.Id,
+                    UserId = dbUserResult.Value.UserId,
 
                     FirstName = dbUserResult.Value.FirstName,
                     LastName = dbUserResult.Value.LastName,

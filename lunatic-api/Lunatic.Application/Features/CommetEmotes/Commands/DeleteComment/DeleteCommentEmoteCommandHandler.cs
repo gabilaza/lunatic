@@ -12,7 +12,7 @@ namespace Lunatic.Application.Features.CommentEmotes.Commands.DeleteCommentEmote
         }
 
         public async Task<DeleteCommentEmoteCommandResponse> Handle(DeleteCommentEmoteCommand request, CancellationToken cancellationToken) {
-            var result = await this.commentEmoteRepository.DeleteAsync(request.Id);
+            var result = await this.commentEmoteRepository.DeleteAsync(request.CommentEmoteId);
 
             if(!result.IsSuccess) {
                 return new DeleteCommentEmoteCommandResponse {

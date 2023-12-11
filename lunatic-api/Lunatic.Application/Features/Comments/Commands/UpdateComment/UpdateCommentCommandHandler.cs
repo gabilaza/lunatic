@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
                 };
             }
 
-            var commentResult = await this.commentRepository.FindByIdAsync(request.Id);
+            var commentResult = await this.commentRepository.FindByIdAsync(request.CommentId);
             if(!commentResult.IsSuccess) {
                 return new UpdateCommentCommandResponse {
                     Success = false,
@@ -38,7 +38,7 @@ namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
             return new UpdateCommentCommandResponse {
                 Success = true,
                 Comment = new CommentDto {
-                    Id = dbCommentResult.Value.Id,
+                    CommentId = dbCommentResult.Value.CommentId,
                     TaskId = dbCommentResult.Value.TaskId,
 
                     Content = dbCommentResult.Value.Content,

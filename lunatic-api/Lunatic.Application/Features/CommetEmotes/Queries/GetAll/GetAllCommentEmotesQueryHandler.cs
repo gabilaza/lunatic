@@ -17,12 +17,12 @@ namespace Lunatic.Application.Features.CommentEmotes.Queries.GetAll {
             var commentEmotesResult = await this.commentEmoteRepository.GetAllAsync();
 
             if(commentEmotesResult.IsSuccess) {
-                response.CommentEmotes = commentEmotesResult.Value.Select(ce => new CommentEmoteDto {
-                    Id = ce.Id,
-                    UserId = ce.UserId,
-                    CommentId = ce.CommentId,
+                response.CommentEmotes = commentEmotesResult.Value.Select(commentEmote => new CommentEmoteDto {
+                    CommentEmoteId = commentEmote.CommentEmoteId,
+                    UserId = commentEmote.UserId,
+                    CommentId = commentEmote.CommentId,
 
-                    Emote = ce.Emote,
+                    Emote = commentEmote.Emote,
                 }).ToList();
             }
             return response;

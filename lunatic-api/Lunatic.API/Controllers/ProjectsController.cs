@@ -19,20 +19,20 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{projectId}")]
         [Produces("application/json")]
         [ProducesResponseType<UpdateProjectCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateProjectCommandResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<UpdateProjectCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid id, UpdateProjectCommand command) {
-            if(id != command.Id) {
+        public async Task<IActionResult> Update(Guid projectId, UpdateProjectCommand command) {
+            if(projectId != command.ProjectId) {
                 return BadRequest(new UpdateProjectCommandResponse {
                         Success = false,
                         ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
                 });
             }
 
-            var existsResult = await Mediator.Send(new GetByIdProjectQuery(id));
+            var existsResult = await Mediator.Send(new GetByIdProjectQuery(projectId));
             if(!existsResult.Success) {
                 return NotFound(existsResult);
             }
@@ -44,12 +44,12 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{projectId}")]
         [Produces("application/json")]
         [ProducesResponseType<DeleteProjectCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<DeleteProjectCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid id) {
-            var deleteProjectCommand = new DeleteProjectCommand() { Id = id };
+        public async Task<IActionResult> Delete(Guid projectId) {
+            var deleteProjectCommand = new DeleteProjectCommand() { ProjectId = projectId };
             var result = await Mediator.Send(deleteProjectCommand);
             if(!result.Success) {
                 return NotFound(result);
@@ -65,12 +65,12 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{projectId}")]
         [Produces("application/json")]
         [ProducesResponseType<GetByIdProjectQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetByIdProjectQueryResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Get(Guid id) {
-            var result = await Mediator.Send(new GetByIdProjectQuery(id));
+        public async Task<IActionResult> Get(Guid projectId) {
+            var result = await Mediator.Send(new GetByIdProjectQuery(projectId));
             if(!result.Success) {
                 return NotFound(result);
             }

@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Teams.Queries.GetById {
         }
 
         public async Task<GetByIdTeamQueryResponse> Handle(GetByIdTeamQuery request, CancellationToken cancellationToken) {
-            var teamResult = await this.teamRepository.FindByIdAsync(request.Id);
+            var teamResult = await this.teamRepository.FindByIdAsync(request.TeamId);
             if(!teamResult.IsSuccess) {
                 return new GetByIdTeamQueryResponse {
                     Success = false,
@@ -24,7 +24,7 @@ namespace Lunatic.Application.Features.Teams.Queries.GetById {
             return new GetByIdTeamQueryResponse {
                 Success = true,
                 Team = new TeamDto {
-                    Id = teamResult.Value.Id,
+                    TeamId = teamResult.Value.TeamId,
 
                     Name = teamResult.Value.Name,
 

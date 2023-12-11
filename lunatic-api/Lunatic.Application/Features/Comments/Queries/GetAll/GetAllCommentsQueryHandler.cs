@@ -17,13 +17,13 @@ namespace Lunatic.Application.Features.Comments.Queries.GetAll {
             var comments = await this.commentRepository.GetAllAsync();
 
             if(comments.IsSuccess) {
-                response.Comments = comments.Value.Select(c => new CommentDto {
-                    Id = c.Id,
-                    TaskId = c.TaskId,
+                response.Comments = comments.Value.Select(comment => new CommentDto {
+                    CommentId = comment.CommentId,
+                    TaskId = comment.TaskId,
 
-                    Content = c.Content,
+                    Content = comment.Content,
 
-                    EmoteIds = c.EmoteIds,
+                    EmoteIds = comment.EmoteIds,
                 }).ToList();
             }
             return response;

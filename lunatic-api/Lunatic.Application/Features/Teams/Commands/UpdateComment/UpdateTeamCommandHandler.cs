@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
                 };
             }
 
-            var teamResult = await this.teamRepository.FindByIdAsync(request.Id);
+            var teamResult = await this.teamRepository.FindByIdAsync(request.TeamId);
             if(!teamResult.IsSuccess) {
                 return new UpdateTeamCommandResponse {
                     Success = false,
@@ -38,7 +38,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
             return new UpdateTeamCommandResponse {
                 Success = true,
                 Team = new TeamDto {
-                    Id = dbTeamResult.Value.Id,
+                    TeamId = dbTeamResult.Value.TeamId,
 
                     Name = dbTeamResult.Value.Name,
 
