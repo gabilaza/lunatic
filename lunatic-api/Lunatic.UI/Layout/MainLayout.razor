@@ -10,8 +10,9 @@
 <MudLayout>
 	<MudAppBar Color="Color.Dark" Fixed="false" Dense>
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+		<MudButton Color="Color.Inherit" OnClick="GoToTeams"> My Teams</MudButton>
 		<MudSpacer />
-		<MudBreadcrumbs Items="_items" MaxItems="4" Separator="/"> 
+		<MudBreadcrumbs Items="_items" MaxItems="4" Separator="/">
 			<SeparatorTemplate>
 				<MudIcon Icon="@Icons.Material.Filled.ArrowRight" Size="Size.Small" Color="Color.Secondary" />
 			</SeparatorTemplate>
@@ -20,7 +21,7 @@
 					@item.Text.ToUpper()
 				</MudLink>
 			</ItemTemplate>
-			
+
 		</MudBreadcrumbs>
 		<MudSpacer />
 
@@ -29,21 +30,27 @@
 	</MudAppBar>
 
 
-		@Body
+	@Body
 
 </MudLayout>
 
 @code {
 	private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
+	private string lastUrl = ""; //working with PWAs means there is no page refresh on page change
 }
 
-@functions{
-	protected override void OnParametersSet() {
+@functions {
+
+	protected async Task SetBreadcrumbs() {
+		if(lastUrl == NavigationManager.Uri) return;
+		
+		_items.Clear();
+
 		_items.Add(new BreadcrumbItem("Home", href: NavigationManager.BaseUri));
 
 		string currentUrl = NavigationManager.Uri;
 		var currentPageUrl = currentUrl.Replace(NavigationManager.BaseUri, "");
-		
+
 		var path = currentPageUrl.Split('/');
 
 		foreach (var link in path) {
@@ -52,6 +59,16 @@
 			var lastLink = _items.Last();
 			_items.Add(new BreadcrumbItem(link, href: $"{lastLink.Href}{link}"));
 		}
+
+		lastUrl = currentUrl;
+	}
+
+	protected override void OnParametersSet() {
+		SetBreadcrumbs();
 		base.OnParametersSet();
+	}
+
+	public void GoToTeams() {
+		NavigationManager.NavigateTo("/teams");
 	}
 }
