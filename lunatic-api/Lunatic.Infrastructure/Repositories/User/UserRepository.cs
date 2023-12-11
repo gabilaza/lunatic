@@ -9,6 +9,16 @@ namespace Lunatic.Infrastructure.Repositories {
         public UserRepository(LunaticContext context) : base(context) {
         }
 
+        public async Task<bool> ExistsByUsernameAsync(string username) {
+            var result = await FindByUsernameAsync(username);
+            return result.IsSuccess;
+        }
+
+        public async Task<bool> ExistsByEmailAsync(string email) {
+            var result = await FindByEmailAsync(email);
+            return result.IsSuccess;
+        }
+
         public async Task<Result<User>> FindByUsernameAsync(string username) {
             var result = await context.Set<User>().FindAsync(username);
             if(result == null) {
