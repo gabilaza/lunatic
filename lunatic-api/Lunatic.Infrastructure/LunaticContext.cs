@@ -7,6 +7,7 @@ namespace Lunatic.Infrastructure {
     public class LunaticContext : DbContext {
         public LunaticContext(DbContextOptions<LunaticContext> options) : base(options) {}
 
+        public DbSet<CommentEmote> CommentEmotes { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<Project> Projects { get; set; }

@@ -28,6 +28,10 @@ namespace Lunatic.Domain.Entities {
 
             return Result<CommentEmote>.Success(new CommentEmote(userId, commentId, emote));
         }
+
+        public void Update(Emote emote) {
+            Emote = emote;
+        }
     }
 }
 
