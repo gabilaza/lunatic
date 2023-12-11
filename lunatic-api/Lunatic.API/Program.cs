@@ -14,9 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo {
-            Version = "v1",
-            Title = "Lunatic API",
-        });
+        Version = "v1",
+        Title = "Lunatic API",
+    });
 });
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -24,8 +24,8 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 // if(app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 // }
 
 app.UseHttpsRedirection();

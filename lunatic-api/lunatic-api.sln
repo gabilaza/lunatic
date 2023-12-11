@@ -25,7 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{632C27
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{6E1D79AB-7591-456F-9BC5-ABFEBCDD1DE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lunatic.UI", "Lunatic.UI\Lunatic.UI.csproj", "{976A7CEB-4C85-4278-9F8F-97703512AF42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lunatic.UI", "Lunatic.UI\Lunatic.UI.csproj", "{976A7CEB-4C85-4278-9F8F-97703512AF42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
