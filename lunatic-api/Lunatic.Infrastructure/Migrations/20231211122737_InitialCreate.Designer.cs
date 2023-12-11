@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lunatic.Infrastructure.Migrations
 {
     [DbContext(typeof(LunaticContext))]
-    [Migration("20231211115028_INitalCreate")]
-    partial class INitalCreate
+    [Migration("20231211122737_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
