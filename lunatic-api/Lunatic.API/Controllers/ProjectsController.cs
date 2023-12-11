@@ -1,5 +1,3 @@
-using Lunatic.Application.Features.Projects.Commands.CreateProject;
-using Lunatic.Application.Features.Projects.Commands.DeleteProject;
 using Lunatic.Application.Features.Projects.Commands.UpdateProject;
 using Lunatic.Application.Features.Projects.Queries.GetAll;
 using Lunatic.Application.Features.Projects.Queries.GetById;
@@ -7,18 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
     public class ProjectsController : ApiControllerBase {
-        [HttpPost]
-        [Produces("application/json")]
-        [ProducesResponseType<CreateProjectCommandResponse>(StatusCodes.Status201Created)]
-        [ProducesResponseType<CreateProjectCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create(CreateProjectCommand command) {
-            var result = await Mediator.Send(command);
-            if(!result.Success) {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
         [HttpPut("{projectId}")]
         [Produces("application/json")]
         [ProducesResponseType<UpdateProjectCommandResponse>(StatusCodes.Status200OK)]
@@ -40,19 +26,6 @@ namespace Lunatic.API.Controllers {
             var result = await Mediator.Send(command);
             if(!result.Success) {
                 return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
-        [HttpDelete("{projectId}")]
-        [Produces("application/json")]
-        [ProducesResponseType<DeleteProjectCommandResponse>(StatusCodes.Status200OK)]
-        [ProducesResponseType<DeleteProjectCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid projectId) {
-            var deleteProjectCommand = new DeleteProjectCommand() { ProjectId = projectId };
-            var result = await Mediator.Send(deleteProjectCommand);
-            if(!result.Success) {
-                return NotFound(result);
             }
             return Ok(result);
         }

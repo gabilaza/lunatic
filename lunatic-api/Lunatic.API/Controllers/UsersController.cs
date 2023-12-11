@@ -2,6 +2,7 @@ using Lunatic.Application.Features.Users.Commands.CreateUser;
 using Lunatic.Application.Features.Users.Commands.DeleteUser;
 using Lunatic.Application.Features.Users.Commands.UpdateUser;
 using Lunatic.Application.Features.Users.Queries.GetById;
+using Lunatic.Application.Features.Users.Queries.GetAllTeams;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
@@ -62,6 +63,18 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType<GetByIdUserQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid userId) {
             var result = await Mediator.Send(new GetByIdUserQuery(userId));
+            if(!result.Success) {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("{userId}/teams")]
+        [Produces("application/json")]
+        [ProducesResponseType<GetAllUserTeamsQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetAllUserTeamsQueryResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetTeams(Guid userId) {
+            var result = await Mediator.Send(new GetAllUserTeamsQuery(userId));
             if(!result.Success) {
                 return NotFound(result);
             }

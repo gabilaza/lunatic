@@ -5,11 +5,11 @@ using FluentValidation;
 namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
     internal class UpdateCommentCommandValidator : AbstractValidator<UpdateCommentCommand> {
         public UpdateCommentCommandValidator() {
-            RuleFor(commet => commet.CommentId)
+            RuleFor(request => request.CommentId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
 
-            RuleFor(commet => commet.Content)
+            RuleFor(request => request.Content)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");

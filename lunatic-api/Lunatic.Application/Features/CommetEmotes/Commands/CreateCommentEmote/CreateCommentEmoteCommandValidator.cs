@@ -13,19 +13,19 @@ namespace Lunatic.Application.Features.CommentEmotes.Commands.CreateCommentEmote
             this.userRepository = userRepository;
             this.commentRepository = commentRepository;
 
-            RuleFor(commetEmote => commetEmote.UserId)
+            RuleFor(request => request.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
                 .WithMessage("{PropertyName} must exists.");
 
-            RuleFor(commetEmote => commetEmote.CommentId)
+            RuleFor(request => request.CommentId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (commentId, cancellationToken) => await this.commentRepository.ExistsByIdAsync(commentId))
                 .WithMessage("{PropertyName} must exists.");
 
-            RuleFor(commetEmote => commetEmote.Emote)
+            RuleFor(request => request.Emote)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .IsInEnum().WithMessage("{PropertyName} is not a valid emote.");

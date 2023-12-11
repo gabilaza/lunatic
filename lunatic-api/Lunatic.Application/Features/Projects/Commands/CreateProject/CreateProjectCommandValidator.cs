@@ -13,24 +13,24 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
             this.userRepository = userRepository;
             this.teamRepository = teamRepository;
 
-            RuleFor(project => project.UserId)
+            RuleFor(request => request.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
                 .WithMessage("{PropertyName} must exists.");
 
-            RuleFor(project => project.TeamId)
+            RuleFor(request => request.TeamId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (teamId, cancellationToken) => await this.teamRepository.ExistsByIdAsync(teamId))
                 .WithMessage("{PropertyName} must exists.");
 
-            RuleFor(project => project.Title)
+            RuleFor(request => request.Title)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(25).WithMessage("{PropertyName} must not exceed 25 characters.");
 
-            RuleFor(project => project.Description)
+            RuleFor(request => request.Description)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");

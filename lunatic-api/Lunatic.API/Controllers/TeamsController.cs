@@ -1,7 +1,10 @@
 using Lunatic.Application.Features.Teams.Commands.CreateTeam;
 using Lunatic.Application.Features.Teams.Commands.DeleteTeam;
+using Lunatic.Application.Features.Teams.Commands.DeleteTeamProject;
 using Lunatic.Application.Features.Teams.Commands.UpdateTeam;
+using Lunatic.Application.Features.Projects.Commands.CreateProject;
 using Lunatic.Application.Features.Teams.Queries.GetAll;
+using Lunatic.Application.Features.Teams.Queries.GetAllProjects;
 using Lunatic.Application.Features.Teams.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
 
@@ -71,6 +74,53 @@ namespace Lunatic.API.Controllers {
         [ProducesResponseType<GetByIdTeamQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid teamId) {
             var result = await Mediator.Send(new GetByIdTeamQuery(teamId));
+            if(!result.Success) {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("{teamId}/projects")]
+        [Produces("application/json")]
+        [ProducesResponseType<GetAllTeamProjectsQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetAllTeamProjectsQueryResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetProjects(Guid teamId) {
+            var result = await Mediator.Send(new GetAllTeamProjectsQuery(teamId));
+            if(!result.Success) {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("{teamId}/projects")]
+        [Produces("application/json")]
+        [ProducesResponseType<CreateProjectCommandResponse>(StatusCodes.Status201Created)]
+        [ProducesResponseType<CreateProjectCommandResponse>(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateProject(Guid teamId, CreateProjectCommand command) {
+            if(teamId != command.TeamId) {
+                return BadRequest(new CreateProjectCommandResponse {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
+                });
+            }
+
+            var result = await Mediator.Send(command);
+            if(!result.Success) {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpDelete("{teamId}/projects/{projectId}")]
+        [Produces("application/json")]
+        [ProducesResponseType<DeleteTeamProjectCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<DeleteTeamProjectCommandResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteProject(Guid teamId, Guid projectId) {
+            var deleteTeamProjectCommand = new DeleteTeamProjectCommand() { 
+                TeamId = teamId,
+                ProjectId = projectId
+            };
+            var result = await Mediator.Send(deleteTeamProjectCommand);
             if(!result.Success) {
                 return NotFound(result);
             }

@@ -10,21 +10,21 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
         public UpdateUserCommandValidator(IUserRepository userRepository) {
             this.userRepository = userRepository;
 
-            RuleFor(user => user.UserId)
+            RuleFor(request => request.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
 
-            RuleFor(user => user.FirstName)
+            RuleFor(request => request.FirstName)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
-            RuleFor(user => user.LastName)
+            RuleFor(request => request.LastName)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
-            RuleFor(user => user.Email)
+            RuleFor(request => request.Email)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.")
@@ -32,19 +32,19 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 .MustAsync(async (email, cancellationToken) => !await this.userRepository.ExistsByEmailAsync(email))
                 .WithMessage("{PropertyName} exists already.");
 
-            RuleFor(user => user.Username)
+            RuleFor(request => request.Username)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.")
                 .MustAsync(async (username, cancellationToken) => !await this.userRepository.ExistsByUsernameAsync(username))
                 .WithMessage("{PropertyName} exists already.");
 
-            RuleFor(user => user.Password)
+            RuleFor(request => request.Password)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
-            RuleFor(user => user.Role)
+            RuleFor(request => request.Role)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .IsInEnum().WithMessage("{PropertyName} is not a valid role.");

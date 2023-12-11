@@ -13,19 +13,19 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
             this.userRepository = userRepository;
             this.taskRepository = taskRepository;
 
-            RuleFor(commet => commet.UserId)
+            RuleFor(request => request.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
                 .WithMessage("{PropertyName} must exists.");
 
-            RuleFor(commet => commet.TaskId)
+            RuleFor(request => request.TaskId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (taskId, cancellationToken) => await this.taskRepository.ExistsByIdAsync(taskId))
                 .WithMessage("{PropertyName} must exists.");
 
-            RuleFor(commet => commet.Content)
+            RuleFor(request => request.Content)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");

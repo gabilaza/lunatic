@@ -5,11 +5,11 @@ using FluentValidation;
 namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
     internal class UpdateTeamCommandValidator : AbstractValidator<UpdateTeamCommand> {
         public UpdateTeamCommandValidator() {
-            RuleFor(team => team.TeamId)
+            RuleFor(request => request.TeamId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");
 
-            RuleFor(team => team.Name)
+            RuleFor(request => request.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(30).WithMessage("{PropertyName} must not exceed 30 characters.");
