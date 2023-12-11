@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lunatic.API.Controllers {
     public class TasksController : ApiControllerBase {
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<CreateTaskCommandResponse>(StatusCodes.Status201Created)]
+        [ProducesResponseType<CreateTaskCommandResponse>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateTaskCommand command) {
             var result = await Mediator.Send(command);
             if(!result.Success) {
@@ -20,9 +20,8 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesDefaultResponseType]
+        [ProducesResponseType<UpdateTaskCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<UpdateTaskCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateTaskCommand command) {
             if(id != command.Id) {
                 return BadRequest(new ResponseBase {
@@ -44,27 +43,27 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<DeleteTaskCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<DeleteTaskCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id) {
             var deleteTaskCommand = new DeleteTaskCommand() { Id = id };
             var result = await Mediator.Send(deleteTaskCommand);
             if(!result.Success) {
                 return NotFound(result);
             }
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetAllTasksQueryResponse>(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll() {
             var result = await Mediator.Send(new GetAllTasksQuery());
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<GetByIdTaskQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetByIdTaskQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id) {
             var result = await Mediator.Send(new GetByIdTaskQuery(id));
             if(!result.Success) {

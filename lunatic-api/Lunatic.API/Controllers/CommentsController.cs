@@ -10,7 +10,7 @@ namespace Lunatic.API.Controllers {
     public class CommentsController : ApiControllerBase {
         [HttpPost]
         [ProducesResponseType<CreateCommentCommandResponse>(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<CreateCommentCommandResponse>(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create(CreateCommentCommand command) {
             var result = await Mediator.Send(command);
             if(!result.Success) {
@@ -21,7 +21,7 @@ namespace Lunatic.API.Controllers {
 
         [HttpPut("{id}")]
         [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateCommentCommand command) {
             if(id != command.Id) {
                 return BadRequest(new ResponseBase {
@@ -43,15 +43,15 @@ namespace Lunatic.API.Controllers {
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType<DeleteCommentCommand>(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(Guid id) {
             var deleteCommentCommand = new DeleteCommentCommand() { Id = id };
             var result = await Mediator.Send(deleteCommentCommand);
             if(!result.Success) {
                 return NotFound(result);
             }
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpGet]
@@ -63,7 +63,7 @@ namespace Lunatic.API.Controllers {
 
         [HttpGet("{id}")]
         [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(Guid id) {
             var result = await Mediator.Send(new GetByIdCommentQuery(id));
             if(!result.Success) {
