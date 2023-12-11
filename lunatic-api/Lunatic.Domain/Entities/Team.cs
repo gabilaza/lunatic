@@ -33,9 +33,13 @@ namespace Lunatic.Domain.Entities {
         }
 
         public void AddMember(User user) => MemberIds.Add(user.UserId);
+        public void AddMember(Guid userId) => MemberIds.Add(userId);
         public void RemoveMember(User user) => MemberIds.Remove(user.UserId);
+        public void RemoveMember(Guid userId) => MemberIds.Remove(userId);
 
-        public void AddProject(Project project) => ProjectIds.Add(project.TeamId);
-        public void RemoveProject(Project project) => ProjectIds.Remove(project.TeamId);
+        public void AddProject(Project project) => ProjectIds.Add(project.ProjectId);
+        public void AddProject(Guid projectId) => ProjectIds.Add(projectId);
+        public void RemoveProject(Project project) => ProjectIds.Remove(project.ProjectId);
+        public void RemoveProject(Guid projectId) => ProjectIds.Remove(projectId);
     }
 }

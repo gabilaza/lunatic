@@ -45,6 +45,8 @@ namespace Lunatic.Domain.Entities {
         }
 
         public void AddTask(Task task) => TaskIds.Add(task.TaskId);
+        public void AddTask(Guid taskId) => TaskIds.Add(taskId);
         public void RemoveTask(Task task) => TaskIds.Remove(task.TaskId);
+        public void RemoveTask(Guid taskId) => TaskIds.Remove(taskId);
     }
 }

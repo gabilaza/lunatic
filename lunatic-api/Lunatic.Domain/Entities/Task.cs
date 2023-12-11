@@ -59,10 +59,14 @@ namespace Lunatic.Domain.Entities {
         public void RemoveTag(Tag tag) => Tags.Remove(tag);
 
         public void AddComment(Comment comment) => CommentIds.Add(comment.CommentId);
+        public void AddComment(Guid commentId) => CommentIds.Add(commentId);
         public void RemoveComment(Comment comment) => CommentIds.Remove(comment.CommentId);
+        public void RemoveComment(Guid commentId) => CommentIds.Remove(commentId);
 
         public void AddAssignee(User user) => AssigneeIds.Add(user.UserId);
+        public void AddAssignee(Guid userId) => AssigneeIds.Add(userId);
         public void RemoveAssignee(User user) => AssigneeIds.Remove(user.UserId);
+        public void RemoveAssignee(Guid userId) => AssigneeIds.Remove(userId);
 
         public void MarkAsInProgress() {
             if(!Status.IsCreated() && !Status.IsDone()) {

@@ -38,6 +38,8 @@ namespace Lunatic.Domain.Entities {
         }
 
         public void AddEmote(CommentEmote commentEmote) => EmoteIds.Add(commentEmote.CommentEmoteId);
+        public void AddEmote(Guid commentEmoteId) => EmoteIds.Add(commentEmoteId);
         public void RemoveEmote(CommentEmote commentEmote) => EmoteIds.Remove(commentEmote.CommentEmoteId);
+        public void RemoveEmote(Guid commentEmoteId) => EmoteIds.Remove(commentEmoteId);
     }
 }

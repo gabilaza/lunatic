@@ -35,6 +35,8 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
                 };
             }
 
+            teamResult.Value.AddMember(request.UserId);
+
             await this.teamRepository.AddAsync(teamResult.Value);
 
             return new CreateTeamCommandResponse {
