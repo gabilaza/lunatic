@@ -28,13 +28,8 @@ namespace Lunatic.API.Controllers {
             if(userId != command.UserId) {
                 return BadRequest(new UpdateUserCommandResponse {
                         Success = false,
-                        ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
+                        ValidationErrors = new List<string> { "The team Id Path and team Id Body must be equal." }
                 });
-            }
-
-            var existsResult = await Mediator.Send(new GetByIdUserQuery(userId));
-            if(!existsResult.Success) {
-                return NotFound(existsResult);
             }
 
             var result = await Mediator.Send(command);

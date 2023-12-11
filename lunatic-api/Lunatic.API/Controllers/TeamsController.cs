@@ -1,8 +1,9 @@
 using Lunatic.Application.Features.Teams.Commands.CreateTeam;
 using Lunatic.Application.Features.Teams.Commands.DeleteTeam;
+using Lunatic.Application.Features.Teams.Commands.CreateTeamProject;
+using Lunatic.Application.Features.Teams.Commands.UpdateTeamProject;
 using Lunatic.Application.Features.Teams.Commands.DeleteTeamProject;
 using Lunatic.Application.Features.Teams.Commands.UpdateTeam;
-using Lunatic.Application.Features.Projects.Commands.CreateProject;
 using Lunatic.Application.Features.Teams.Queries.GetAll;
 using Lunatic.Application.Features.Teams.Queries.GetAllProjects;
 using Lunatic.Application.Features.Teams.Queries.GetById;
@@ -94,13 +95,13 @@ namespace Lunatic.API.Controllers {
 
         [HttpPost("{teamId}/projects")]
         [Produces("application/json")]
-        [ProducesResponseType<CreateProjectCommandResponse>(StatusCodes.Status201Created)]
-        [ProducesResponseType<CreateProjectCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateProject(Guid teamId, CreateProjectCommand command) {
+        [ProducesResponseType<CreateTeamProjectCommandResponse>(StatusCodes.Status201Created)]
+        [ProducesResponseType<CreateTeamProjectCommandResponse>(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateTeamProject(Guid teamId, CreateTeamProjectCommand command) {
             if(teamId != command.TeamId) {
-                return BadRequest(new CreateProjectCommandResponse {
+                return BadRequest(new CreateTeamProjectCommandResponse {
                         Success = false,
-                        ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
+                        ValidationErrors = new List<string> { "The team Id Path and team Id Body must be equal." }
                 });
             }
 
@@ -110,6 +111,33 @@ namespace Lunatic.API.Controllers {
             }
             return Ok(result);
         }
+
+        [HttpPut("{teamId}/projects/{projectId}")]
+        [Produces("application/json")]
+        [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Update(Guid teamId, Guid projectId, UpdateTeamProjectCommand command) {
+            if(teamId != command.TeamId) {
+                return BadRequest(new UpdateTeamProjectCommandResponse {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The team Id Path and team Id Body must be equal." }
+                });
+            }
+            if(projectId != command.ProjectId) {
+                return BadRequest(new UpdateTeamProjectCommandResponse {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The project Id Path and project Id Body must be equal." }
+                });
+            }
+
+            var result = await Mediator.Send(command);
+            if(!result.Success) {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
 
         [HttpDelete("{teamId}/projects/{projectId}")]
         [Produces("application/json")]

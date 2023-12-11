@@ -4,38 +4,35 @@ using Lunatic.Application.Features.Projects.Payload;
 using MediatR;
 
 
-namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
-    public class UpdateProjectCommandHandler : IRequestHandler<UpdateProjectCommand, UpdateProjectCommandResponse> {
+namespace Lunatic.Application.Features.Teams.Commands.UpdateTeamProject {
+    public class UpdateTeamProjectCommandHandler : IRequestHandler<UpdateTeamProjectCommand, UpdateTeamProjectCommandResponse> {
+        private readonly ITeamRepository teamRepository;
+
         private readonly IProjectRepository projectRepository;
 
-        public UpdateProjectCommandHandler(IProjectRepository projectRepository) {
+        public UpdateTeamProjectCommandHandler(ITeamRepository teamRepository, IProjectRepository projectRepository) {
+            this.teamRepository = teamRepository;
             this.projectRepository = projectRepository;
         }
 
-        public async Task<UpdateProjectCommandResponse> Handle(UpdateProjectCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateProjectCommandValidator();
+        public async Task<UpdateTeamProjectCommandResponse> Handle(UpdateTeamProjectCommand request, CancellationToken cancellationToken) {
+            var validator = new UpdateTeamProjectCommandValidator(this.teamRepository, this.projectRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
-                return new UpdateProjectCommandResponse {
+                return new UpdateTeamProjectCommandResponse {
                     Success = false,
                     ValidationErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToList()
                 };
             }
 
             var projectResult = await this.projectRepository.FindByIdAsync(request.ProjectId);
-            if(!projectResult.IsSuccess) {
-                return new UpdateProjectCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { "Project not found" }
-                };
-            }
 
             projectResult.Value.Update(request.Title, request.Description);
 
             var dbProjectResult = await this.projectRepository.UpdateAsync(projectResult.Value);
 
-            return new UpdateProjectCommandResponse {
+            return new UpdateTeamProjectCommandResponse {
                 Success = true,
                 Project = new ProjectDto {
                     ProjectId = dbProjectResult.Value.ProjectId,

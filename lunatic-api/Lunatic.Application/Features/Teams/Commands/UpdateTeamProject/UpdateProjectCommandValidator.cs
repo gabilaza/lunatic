@@ -3,26 +3,26 @@ using Lunatic.Application.Persistence;
 using FluentValidation;
 
 
-namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
-    internal class CreateProjectCommandValidator : AbstractValidator<CreateProjectCommand> {
-        private readonly IUserRepository userRepository;
-
+namespace Lunatic.Application.Features.Teams.Commands.UpdateTeamProject {
+    internal class UpdateTeamProjectCommandValidator : AbstractValidator<UpdateTeamProjectCommand> {
         private readonly ITeamRepository teamRepository;
 
-        public CreateProjectCommandValidator(IUserRepository userRepository, ITeamRepository teamRepository) {
-            this.userRepository = userRepository;
-            this.teamRepository = teamRepository;
+        private readonly IProjectRepository projectRepository;
 
-            RuleFor(request => request.UserId)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.")
-                .MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
-                .WithMessage("{PropertyName} must exists.");
+        public UpdateTeamProjectCommandValidator(ITeamRepository teamRepository, IProjectRepository projectRepository) {
+            this.teamRepository = teamRepository;
+            this.projectRepository = projectRepository;
 
             RuleFor(request => request.TeamId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (teamId, cancellationToken) => await this.teamRepository.ExistsByIdAsync(teamId))
+                .WithMessage("{PropertyName} must exists.");
+
+            RuleFor(request => request.ProjectId)
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MustAsync(async (projectId, cancellationToken) => await this.projectRepository.ExistsByIdAsync(projectId))
                 .WithMessage("{PropertyName} must exists.");
 
             RuleFor(request => request.Title)

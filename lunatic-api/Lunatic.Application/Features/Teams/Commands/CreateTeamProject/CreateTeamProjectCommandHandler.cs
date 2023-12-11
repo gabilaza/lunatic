@@ -5,26 +5,26 @@ using Lunatic.Application.Features.Projects.Payload;
 using MediatR;
 
 
-namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
-    public class CreateProjectCommandHandler : IRequestHandler<CreateProjectCommand, CreateProjectCommandResponse> {
+namespace Lunatic.Application.Features.Teams.Commands.CreateTeamProject {
+    public class CreateTeamProjectCommandHandler : IRequestHandler<CreateTeamProjectCommand, CreateTeamProjectCommandResponse> {
         private readonly IProjectRepository projectRepository;
 
         private readonly ITeamRepository teamRepository;
 
         private readonly IUserRepository userRepository;
 
-        public CreateProjectCommandHandler(IProjectRepository projectRepository, ITeamRepository teamRepository, IUserRepository userRepository) {
+        public CreateTeamProjectCommandHandler(IProjectRepository projectRepository, ITeamRepository teamRepository, IUserRepository userRepository) {
             this.projectRepository = projectRepository;
             this.teamRepository = teamRepository;
             this.userRepository = userRepository;
         }
 
-        public async Task<CreateProjectCommandResponse> Handle(CreateProjectCommand request, CancellationToken cancellationToken) {
-            var validator = new CreateProjectCommandValidator(this.userRepository, this.teamRepository);
+        public async Task<CreateTeamProjectCommandResponse> Handle(CreateTeamProjectCommand request, CancellationToken cancellationToken) {
+            var validator = new CreateTeamProjectCommandValidator(this.userRepository, this.teamRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
-                return new CreateProjectCommandResponse {
+                return new CreateTeamProjectCommandResponse {
                     Success = false,
                     ValidationErrors = validatorResult.Errors.Select(e => e.ErrorMessage).ToList()
                 };
@@ -32,7 +32,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
 
             var projectResult = Project.Create(request.UserId, request.TeamId, request.Title, request.Description);
             if(!projectResult.IsSuccess) {
-                return new CreateProjectCommandResponse {
+                return new CreateTeamProjectCommandResponse {
                     Success = false,
                     ValidationErrors = new List<string> { projectResult.Error }
                 };
@@ -44,7 +44,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
 
             await this.projectRepository.AddAsync(projectResult.Value);
 
-            return new CreateProjectCommandResponse {
+            return new CreateTeamProjectCommandResponse {
                 Success = true,
                 Project = new ProjectDto {
                     ProjectId = projectResult.Value.ProjectId,
