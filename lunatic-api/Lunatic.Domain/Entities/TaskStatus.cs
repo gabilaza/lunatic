@@ -7,9 +7,9 @@ namespace Lunatic.Domain.Entities {
     }
 
     public enum TaskStatus {
-        CREATED,
-        IN_PROGRESS,
-        DONE
+        CREATED = 1,
+        IN_PROGRESS = 2,
+        DONE = 3,
     }
 
     static class TaskStatusMethods {

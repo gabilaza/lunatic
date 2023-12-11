@@ -1,9 +1,9 @@
 
 namespace Lunatic.Domain.Entities {
     public enum TaskPriority {
-        HIGH,
-        MEDIUM,
-        LOW
+        LOW = 1,
+        MEDIUM = 2,
+        HIGH = 3,
     }
 }
 

@@ -36,7 +36,9 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
 
             RuleFor(t => t.Priority)
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotEmpty().WithMessage("{PropertyName} is required.")
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .IsInEnum().WithMessage("{PropertyName} is not a valid priority.");
         }
     }
 }

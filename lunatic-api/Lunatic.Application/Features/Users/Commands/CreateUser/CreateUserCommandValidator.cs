@@ -42,7 +42,8 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
 
             RuleFor(p => p.Role)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .IsInEnum().WithMessage("{PropertyName} is not a valid role.");
         }
     }
 }

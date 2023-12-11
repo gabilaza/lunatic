@@ -1,8 +1,8 @@
 
 namespace Lunatic.Domain.Entities {
     public enum Role {
-        ADMIN,
-        USER
+        USER = 1,
+        ADMIN = 2,
     }
 }
 

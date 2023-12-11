@@ -21,11 +21,13 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
 
             RuleFor(t => t.Priority)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .IsInEnum().WithMessage("{PropertyName} is not a valid priority.");
 
             RuleFor(t => t.Status)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .IsInEnum().WithMessage("{PropertyName} is not a valid status.");
         }
     }
 }
