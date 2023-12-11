@@ -13,8 +13,8 @@ namespace Lunatic.Application.Features.Comments.Queries.GetById {
         }
 
         public async Task<GetByIdCommentQueryResponse> Handle(GetByIdCommentQuery request, CancellationToken cancellationToken) {
-            var comment = await commentRepository.FindByIdAsync(request.Id);
-            if(!comment.IsSuccess) {
+            var commentResult = await this.commentRepository.FindByIdAsync(request.Id);
+            if(!commentResult.IsSuccess) {
                 return new GetByIdCommentQueryResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Comment not found" }
@@ -24,12 +24,12 @@ namespace Lunatic.Application.Features.Comments.Queries.GetById {
             return new GetByIdCommentQueryResponse {
                 Success = true,
                 Comment = new CommentDto {
-                    Id = comment.Value.Id,
-                    TaskId = comment.Value.TaskId,
+                    Id = commentResult.Value.Id,
+                    TaskId = commentResult.Value.TaskId,
 
-                    Content = comment.Value.Content,
+                    Content = commentResult.Value.Content,
 
-                    EmoteIds = comment.Value.EmoteIds,
+                    EmoteIds = commentResult.Value.EmoteIds,
                 }
             };
         }

@@ -14,7 +14,7 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetAll {
 
         public async Task<GetAllTasksQueryResponse> Handle(GetAllTasksQuery request, CancellationToken cancellationToken) {
             GetAllTasksQueryResponse response = new GetAllTasksQueryResponse();
-            var tasks = await taskRepository.GetAllAsync();
+            var tasks = await this.taskRepository.GetAllAsync();
 
             if(tasks.IsSuccess) {
                 response.Tasks = tasks.Value.Select(t => new TaskDto {

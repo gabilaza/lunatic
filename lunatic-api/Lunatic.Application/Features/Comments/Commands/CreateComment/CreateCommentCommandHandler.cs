@@ -20,7 +20,7 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
         }
 
         public async Task<CreateCommentCommandResponse> Handle(CreateCommentComand request, CancellationToken cancellationToken) {
-            var validator = new CreateCommentCommandValidator(commentRepository);
+            var validator = new CreateCommentCommandValidator(this.userRepository, this.taskRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -30,41 +30,25 @@ namespace Lunatic.Application.Features.Comments.Commands.CreateComment {
                 };
             }
 
-            var task = await this.taskRepository.FindByIdAsync(request.TaskId);
-            if(!task.IsSuccess) {
+            var commentResult = Comment.Create(request.UserId, request.TaskId, request.Content);
+            if(!commentResult.IsSuccess) {
                 return new CreateCommentCommandResponse {
                     Success = false,
-                    ValidationErrors = new List<string> { "Task not found" }
+                    ValidationErrors = new List<string> { commentResult.Error }
                 };
             }
 
-            var user = await this.userRepository.FindByIdAsync(request.UserId);
-            if(!user.IsSuccess) {
-                return new CreateCommentCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { "User not found" }
-                };
-            }
-
-            var comment = Comment.Create(user.Value.Id, task.Value.Id, request.Content);
-            if(!comment.IsSuccess) {
-                return new CreateCommentCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { comment.Error }
-                };
-            }
-
-            await commentRepository.AddAsync(comment.Value);
+            await this.commentRepository.AddAsync(commentResult.Value);
 
             return new CreateCommentCommandResponse {
                 Success = true,
                 Comment = new CommentDto {
-                    Id = comment.Value.Id,
-                    TaskId = comment.Value.TaskId,
+                    Id = commentResult.Value.Id,
+                    TaskId = commentResult.Value.TaskId,
 
-                    Content = comment.Value.Content,
+                    Content = commentResult.Value.Content,
 
-                    EmoteIds = comment.Value.EmoteIds,
+                    EmoteIds = commentResult.Value.EmoteIds,
                 }
             };
         }

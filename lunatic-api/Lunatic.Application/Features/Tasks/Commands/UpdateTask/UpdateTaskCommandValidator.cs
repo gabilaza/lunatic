@@ -1,15 +1,10 @@
 ﻿
-using Lunatic.Application.Persistence;
 using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
     internal class UpdateTaskCommandValidator : AbstractValidator<UpdateTaskCommand> {
-        private readonly ITaskRepository taskRepository;
-
-        public UpdateTaskCommandValidator(ITaskRepository taskRepository) {
-            this.taskRepository = taskRepository;
-
+        public UpdateTaskCommandValidator() {
             RuleFor(t => t.Id)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");

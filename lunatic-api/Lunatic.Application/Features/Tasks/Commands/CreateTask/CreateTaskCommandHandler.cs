@@ -20,7 +20,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
         }
 
         public async Task<CreateTaskCommandResponse> Handle(CreateTaskComand request, CancellationToken cancellationToken) {
-            var validator = new CreateTaskCommandValidator(taskRepository);
+            var validator = new CreateTaskCommandValidator(this.userRepository, this.projectRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -30,49 +30,33 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
                 };
             }
 
-            var project = await this.projectRepository.FindByIdAsync(request.ProjectId);
-            if(!project.IsSuccess) {
+            var taskResult = Task.Create(request.UserId, request.ProjectId, request.Title, request.Description, request.Priority);
+            if(!taskResult.IsSuccess) {
                 return new CreateTaskCommandResponse {
                     Success = false,
-                    ValidationErrors = new List<string> { "Project not found" }
+                    ValidationErrors = new List<string> { taskResult.Error }
                 };
             }
 
-            var user = await this.userRepository.FindByIdAsync(request.UserId);
-            if(!user.IsSuccess) {
-                return new CreateTaskCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { "User not found" }
-                };
-            }
-
-            var task = Task.Create(user.Value.Id, project.Value.Id, request.Title, request.Description, request.Priority);
-            if(!task.IsSuccess) {
-                return new CreateTaskCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { task.Error }
-                };
-            }
-
-            await taskRepository.AddAsync(task.Value);
+            await this.taskRepository.AddAsync(taskResult.Value);
 
             return new CreateTaskCommandResponse {
                 Success = true,
                 Task = new TaskDto {
-                    Id = task.Value.Id,
-                    ProjectId = task.Value.ProjectId,
+                    Id = taskResult.Value.Id,
+                    ProjectId = taskResult.Value.ProjectId,
 
-                    Title = task.Value.Title,
-                    Description = task.Value.Description,
-                    Priority = task.Value.Priority,
-                    Status = task.Value.Status,
+                    Title = taskResult.Value.Title,
+                    Description = taskResult.Value.Description,
+                    Priority = taskResult.Value.Priority,
+                    Status = taskResult.Value.Status,
 
-                    Tags = task.Value.Tags,
-                    CommentIds = task.Value.CommentIds,
-                    AssigneeIds = task.Value.AssigneeIds,
+                    Tags = taskResult.Value.Tags,
+                    CommentIds = taskResult.Value.CommentIds,
+                    AssigneeIds = taskResult.Value.AssigneeIds,
 
-                    StartedDate = task.Value.StartedDate,
-                    EndedDate = task.Value.EndedDate,
+                    StartedDate = taskResult.Value.StartedDate,
+                    EndedDate = taskResult.Value.EndedDate,
                 }
             };
         }

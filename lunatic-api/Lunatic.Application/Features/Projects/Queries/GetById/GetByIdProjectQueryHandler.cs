@@ -13,8 +13,8 @@ namespace Lunatic.Application.Features.Projects.Queries.GetById {
         }
 
         public async Task<GetByIdProjectQueryResponse> Handle(GetByIdProjectQuery request, CancellationToken cancellationToken) {
-            var project = await projectRepository.FindByIdAsync(request.Id);
-            if(!project.IsSuccess) {
+            var projectResult = await this.projectRepository.FindByIdAsync(request.Id);
+            if(!projectResult.IsSuccess) {
                 return new GetByIdProjectQueryResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Project not found" }
@@ -24,13 +24,13 @@ namespace Lunatic.Application.Features.Projects.Queries.GetById {
             return new GetByIdProjectQueryResponse {
                 Success = true,
                 Project = new ProjectDto {
-                    Id = project.Value.Id,
-                    TeamId = project.Value.TeamId,
+                    Id = projectResult.Value.Id,
+                    TeamId = projectResult.Value.TeamId,
 
-                    Title = project.Value.Title,
-                    Description = project.Value.Description,
+                    Title = projectResult.Value.Title,
+                    Description = projectResult.Value.Description,
 
-                    TaskIds = project.Value.TaskIds,
+                    TaskIds = projectResult.Value.TaskIds,
                 }
             };
         }

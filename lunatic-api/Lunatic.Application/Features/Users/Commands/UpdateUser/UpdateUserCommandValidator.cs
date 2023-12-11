@@ -28,12 +28,16 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.")
-                .EmailAddress().WithMessage("{PropertyName} is not a valid email address.");
+                .EmailAddress().WithMessage("{PropertyName} is not a valid email address.")
+                .MustAsync(async (email, cancellationToken) => await this.userRepository.ExistsByEmailAsync())
+                .WithMessage("{PropertyName} exists already.");
 
             RuleFor(u => u.Username)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.")
+                .MustAsync(async (email, cancellationToken) => await this.userRepository.ExistsByUsernameAsync())
+                .WithMessage("{PropertyName} exists already.");
 
             RuleFor(u => u.Password)
                 .NotEmpty().WithMessage("{PropertyName} is required.")

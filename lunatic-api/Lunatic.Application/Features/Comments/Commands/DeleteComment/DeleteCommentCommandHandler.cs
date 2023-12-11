@@ -12,7 +12,7 @@ namespace Lunatic.Application.Features.Comments.Commands.DeleteComment {
         }
 
         public async Task<DeleteCommentCommandResponse> Handle(DeleteCommentCommand request, CancellationToken cancellationToken) {
-            var result = await commentRepository.DeleteAsync(request.Id);
+            var result = await this.commentRepository.DeleteAsync(request.Id);
 
             if(!result.IsSuccess) {
                 return new DeleteCommentCommandResponse {

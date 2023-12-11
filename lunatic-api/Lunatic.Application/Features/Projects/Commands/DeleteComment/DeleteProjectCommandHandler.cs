@@ -12,7 +12,7 @@ namespace Lunatic.Application.Features.Projects.Commands.DeleteProject {
         }
 
         public async Task<DeleteProjectCommandResponse> Handle(DeleteProjectCommand request, CancellationToken cancellationToken) {
-            var result = await projectRepository.DeleteAsync(request.Id);
+            var result = await this.projectRepository.DeleteAsync(request.Id);
 
             if(!result.IsSuccess) {
                 return new DeleteProjectCommandResponse {

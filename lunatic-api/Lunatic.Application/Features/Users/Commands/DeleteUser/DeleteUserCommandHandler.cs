@@ -12,7 +12,7 @@ namespace Lunatic.Application.Features.Users.Commands.DeleteUser {
         }
 
         public async Task<DeleteUserCommandResponse> Handle(DeleteUserComand request, CancellationToken cancellationToken) {
-            var result = await userRepository.DeleteAsync(request.Id);
+            var result = await this.userRepository.DeleteAsync(request.Id);
 
             if(!result.IsSuccess) {
                 return new DeleteUserCommandResponse {

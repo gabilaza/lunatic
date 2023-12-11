@@ -17,7 +17,7 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
         }
 
         public async Task<CreateTeamCommandResponse> Handle(CreateTeamComand request, CancellationToken cancellationToken) {
-            var validator = new CreateTeamCommandValidator(teamRepository);
+            var validator = new CreateTeamCommandValidator(this.userRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -27,33 +27,25 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
                 };
             }
 
-            var user = await this.userRepository.FindByIdAsync(request.UserId);
-            if(!user.IsSuccess) {
+            var teamResult = Team.Create(request.UserId, request.Name);
+            if(!teamResult.IsSuccess) {
                 return new CreateTeamCommandResponse {
                     Success = false,
-                    ValidationErrors = new List<string> { "User not found" }
+                    ValidationErrors = new List<string> { teamResult.Error }
                 };
             }
 
-            var team = Team.Create(user.Value.Id, request.Name);
-            if(!team.IsSuccess) {
-                return new CreateTeamCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { team.Error }
-                };
-            }
-
-            await teamRepository.AddAsync(team.Value);
+            await this.teamRepository.AddAsync(teamResult.Value);
 
             return new CreateTeamCommandResponse {
                 Success = true,
                 Team = new TeamDto {
-                    Id = team.Value.Id,
+                    Id = teamResult.Value.Id,
 
-                    Name = team.Value.Name,
+                    Name = teamResult.Value.Name,
 
-                    MemberIds = team.Value.MemberIds,
-                    ProjectIds = team.Value.ProjectIds,
+                    MemberIds = teamResult.Value.MemberIds,
+                    ProjectIds = teamResult.Value.ProjectIds,
                 }
             };
         }

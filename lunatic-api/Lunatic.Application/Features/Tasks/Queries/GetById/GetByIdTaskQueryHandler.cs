@@ -13,8 +13,8 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
         }
 
         public async Task<GetByIdTaskQueryResponse> Handle(GetByIdTaskQuery request, CancellationToken cancellationToken) {
-            var task = await taskRepository.FindByIdAsync(request.Id);
-            if(!task.IsSuccess) {
+            var taskResult = await this.taskRepository.FindByIdAsync(request.Id);
+            if(!taskResult.IsSuccess) {
                 return new GetByIdTaskQueryResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Task not found" }
@@ -24,20 +24,20 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetById {
             return new GetByIdTaskQueryResponse {
                 Success = true,
                 Task = new TaskDto {
-                    Id = task.Value.Id,
-                    ProjectId = task.Value.ProjectId,
+                    Id = taskResult.Value.Id,
+                    ProjectId = taskResult.Value.ProjectId,
 
-                    Title = task.Value.Title,
-                    Description = task.Value.Description,
-                    Priority = task.Value.Priority,
-                    Status = task.Value.Status,
+                    Title = taskResult.Value.Title,
+                    Description = taskResult.Value.Description,
+                    Priority = taskResult.Value.Priority,
+                    Status = taskResult.Value.Status,
 
-                    Tags = task.Value.Tags,
-                    CommentIds = task.Value.CommentIds,
-                    AssigneeIds = task.Value.AssigneeIds,
+                    Tags = taskResult.Value.Tags,
+                    CommentIds = taskResult.Value.CommentIds,
+                    AssigneeIds = taskResult.Value.AssigneeIds,
 
-                    StartedDate = task.Value.StartedDate,
-                    EndedDate = task.Value.EndedDate,
+                    StartedDate = taskResult.Value.StartedDate,
+                    EndedDate = taskResult.Value.EndedDate,
                 }
             };
         }

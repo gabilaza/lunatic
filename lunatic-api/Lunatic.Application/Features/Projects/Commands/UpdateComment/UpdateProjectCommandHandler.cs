@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
         }
 
         public async Task<UpdateProjectCommandResponse> Handle(UpdateProjectCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateProjectCommandValidator(projectRepository);
+            var validator = new UpdateProjectCommandValidator();
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
                 };
             }
 
-            var projectResult = await projectRepository.FindByIdAsync(request.Id);
+            var projectResult = await this.projectRepository.FindByIdAsync(request.Id);
             if(!projectResult.IsSuccess) {
                 return new UpdateProjectCommandResponse {
                     Success = false,
@@ -33,18 +33,18 @@ namespace Lunatic.Application.Features.Projects.Commands.UpdateProject {
 
             projectResult.Value.Update(request.Title, request.Description);
 
-            var dbProject = await projectRepository.UpdateAsync(projectResult.Value);
+            var dbProjectResult = await this.projectRepository.UpdateAsync(projectResult.Value);
 
             return new UpdateProjectCommandResponse {
                 Success = true,
                 Project = new ProjectDto {
-                    Id = dbProject.Value.Id,
-                    TeamId = dbProject.Value.TeamId,
+                    Id = dbProjectResult.Value.Id,
+                    TeamId = dbProjectResult.Value.TeamId,
 
-                    Title = dbProject.Value.Title,
-                    Description = dbProject.Value.Description,
+                    Title = dbProjectResult.Value.Title,
+                    Description = dbProjectResult.Value.Description,
 
-                    TaskIds = dbProject.Value.TaskIds,
+                    TaskIds = dbProjectResult.Value.TaskIds,
                 }
             };
         }

@@ -14,7 +14,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetAll {
 
         public async Task<GetAllUsersQueryResponse> Handle(GetAllUsersQuery request, CancellationToken cancellationToken) {
             GetAllUsersQueryResponse response = new GetAllUsersQueryResponse();
-            var users = await userRepository.GetAllAsync();
+            var users = await this.userRepository.GetAllAsync();
 
             if(users.IsSuccess) {
                 response.Users = users.Value.Select(u => new UserDto {

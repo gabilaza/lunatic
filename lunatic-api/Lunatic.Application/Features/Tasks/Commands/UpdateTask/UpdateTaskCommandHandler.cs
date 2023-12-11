@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
         }
 
         public async Task<UpdateTaskCommandResponse> Handle(UpdateTaskCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateTaskCommandValidator(taskRepository);
+            var validator = new UpdateTaskCommandValidator();
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
                 };
             }
 
-            var taskResult = await taskRepository.FindByIdAsync(request.Id);
+            var taskResult = await this.taskRepository.FindByIdAsync(request.Id);
             if(!taskResult.IsSuccess) {
                 return new UpdateTaskCommandResponse {
                     Success = false,
@@ -33,25 +33,25 @@ namespace Lunatic.Application.Features.Tasks.Commands.UpdateTask {
 
             taskResult.Value.Update(request.Title, request.Description, request.Priority, request.Status);
 
-            var dbTask = await taskRepository.UpdateAsync(taskResult.Value);
+            var dbTaskResult = await this.taskRepository.UpdateAsync(taskResult.Value);
 
             return new UpdateTaskCommandResponse {
                 Success = true,
                 Task = new TaskDto {
-                    Id = dbTask.Value.Id,
-                    ProjectId = dbTask.Value.ProjectId,
+                    Id = dbTaskResult.Value.Id,
+                    ProjectId = dbTaskResult.Value.ProjectId,
 
-                    Title = dbTask.Value.Title,
-                    Description = dbTask.Value.Description,
-                    Priority = dbTask.Value.Priority,
-                    Status = dbTask.Value.Status,
+                    Title = dbTaskResult.Value.Title,
+                    Description = dbTaskResult.Value.Description,
+                    Priority = dbTaskResult.Value.Priority,
+                    Status = dbTaskResult.Value.Status,
 
-                    Tags = dbTask.Value.Tags,
-                    CommentIds = dbTask.Value.CommentIds,
-                    AssigneeIds = dbTask.Value.AssigneeIds,
+                    Tags = dbTaskResult.Value.Tags,
+                    CommentIds = dbTaskResult.Value.CommentIds,
+                    AssigneeIds = dbTaskResult.Value.AssigneeIds,
 
-                    StartedDate = dbTask.Value.StartedDate,
-                    EndedDate = dbTask.Value.EndedDate,
+                    StartedDate = dbTaskResult.Value.StartedDate,
+                    EndedDate = dbTaskResult.Value.EndedDate,
                 }
             };
         }

@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
         }
 
         public async Task<UpdateCommentCommandResponse> Handle(UpdateCommentCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateCommentCommandValidator(commentRepository);
+            var validator = new UpdateCommentCommandValidator();
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
                 };
             }
 
-            var commentResult = await commentRepository.FindByIdAsync(request.Id);
+            var commentResult = await this.commentRepository.FindByIdAsync(request.Id);
             if(!commentResult.IsSuccess) {
                 return new UpdateCommentCommandResponse {
                     Success = false,
@@ -33,17 +33,17 @@ namespace Lunatic.Application.Features.Comments.Commands.UpdateComment {
 
             commentResult.Value.Update(request.Content);
 
-            var dbComment = await commentRepository.UpdateAsync(commentResult.Value);
+            var dbCommentResult = await this.commentRepository.UpdateAsync(commentResult.Value);
 
             return new UpdateCommentCommandResponse {
                 Success = true,
                 Comment = new CommentDto {
-                    Id = dbComment.Value.Id,
-                    TaskId = dbComment.Value.TaskId,
+                    Id = dbCommentResult.Value.Id,
+                    TaskId = dbCommentResult.Value.TaskId,
 
-                    Content = dbComment.Value.Content,
+                    Content = dbCommentResult.Value.Content,
 
-                    EmoteIds = dbComment.Value.EmoteIds,
+                    EmoteIds = dbCommentResult.Value.EmoteIds,
                 }
             };
         }

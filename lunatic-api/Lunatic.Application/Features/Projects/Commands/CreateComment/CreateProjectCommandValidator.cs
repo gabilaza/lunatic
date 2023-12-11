@@ -5,18 +5,25 @@ using FluentValidation;
 
 namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
     internal class CreateProjectCommandValidator : AbstractValidator<CreateProjectComand> {
-        private readonly IProjectRepository projectRepository;
+        private readonly IUserRepository userRepository;
 
-        public CreateProjectCommandValidator(IProjectRepository projectRepository) {
-            this.projectRepository = projectRepository;
+        private readonly ITeamRepository teamRepository;
+
+        public CreateProjectCommandValidator(IUserRepository userRepository, ITeamRepository teamRepository) {
+            this.userRepository = userRepository;
+            this.teamRepository = teamRepository;
 
             RuleFor(t => t.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
+                .WithMessage("{PropertyName} must exists.");
 
             RuleFor(t => t.TeamId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MustAsync(async (teamId, cancellationToken) => await this.teamRepository.ExistsByIdAsync(teamId))
+                .WithMessage("{PropertyName} must exists.");
 
             RuleFor(t => t.Title)
                 .NotEmpty().WithMessage("{PropertyName} is required.")

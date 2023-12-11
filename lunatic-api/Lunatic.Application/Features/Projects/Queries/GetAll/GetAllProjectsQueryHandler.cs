@@ -14,7 +14,7 @@ namespace Lunatic.Application.Features.Projects.Queries.GetAll {
 
         public async Task<GetAllProjectsQueryResponse> Handle(GetAllProjectsQuery request, CancellationToken cancellationToken) {
             GetAllProjectsQueryResponse response = new GetAllProjectsQueryResponse();
-            var projects = await projectRepository.GetAllAsync();
+            var projects = await this.projectRepository.GetAllAsync();
 
             if(projects.IsSuccess) {
                 response.Projects = projects.Value.Select(p => new ProjectDto {

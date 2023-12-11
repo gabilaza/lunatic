@@ -14,7 +14,7 @@ namespace Lunatic.Application.Features.Teams.Queries.GetAll {
 
         public async Task<GetAllTeamsQueryResponse> Handle(GetAllTeamsQuery request, CancellationToken cancellationToken) {
             GetAllTeamsQueryResponse response = new GetAllTeamsQueryResponse();
-            var teams = await teamRepository.GetAllAsync();
+            var teams = await this.teamRepository.GetAllAsync();
 
             if(teams.IsSuccess) {
                 response.Teams = teams.Value.Select(t => new TeamDto {

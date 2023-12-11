@@ -20,7 +20,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
         }
 
         public async Task<CreateProjectCommandResponse> Handle(CreateProjectComand request, CancellationToken cancellationToken) {
-            var validator = new CreateProjectCommandValidator(projectRepository);
+            var validator = new CreateProjectCommandValidator(this.userRepository, this.teamRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -30,42 +30,26 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProject {
                 };
             }
 
-            var team = await this.teamRepository.FindByIdAsync(request.TeamId);
-            if(!team.IsSuccess) {
+            var projectResult = Project.Create(request.UserId, request.TeamId, request.Title, request.Description);
+            if(!projectResult.IsSuccess) {
                 return new CreateProjectCommandResponse {
                     Success = false,
-                    ValidationErrors = new List<string> { "Task not found" }
+                    ValidationErrors = new List<string> { projectResult.Error }
                 };
             }
 
-            var user = await this.userRepository.FindByIdAsync(request.UserId);
-            if(!user.IsSuccess) {
-                return new CreateProjectCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { "User not found" }
-                };
-            }
-
-            var project = Project.Create(user.Value.Id, team.Value.Id, request.Title, request.Description);
-            if(!project.IsSuccess) {
-                return new CreateProjectCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { project.Error }
-                };
-            }
-
-            await projectRepository.AddAsync(project.Value);
+            await this.projectRepository.AddAsync(projectResult.Value);
 
             return new CreateProjectCommandResponse {
                 Success = true,
                 Project = new ProjectDto {
-                    Id = project.Value.Id,
-                    TeamId = project.Value.TeamId,
+                    Id = projectResult.Value.Id,
+                    TeamId = projectResult.Value.TeamId,
 
-                    Title = project.Value.Title,
-                    Description = project.Value.Description,
+                    Title = projectResult.Value.Title,
+                    Description = projectResult.Value.Description,
 
-                    TaskIds = project.Value.TaskIds,
+                    TaskIds = projectResult.Value.TaskIds,
                 }
             };
         }

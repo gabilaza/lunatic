@@ -14,7 +14,7 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
         }
 
         public async Task<CreateUserCommandResponse> Handle(CreateUserComand request, CancellationToken cancellationToken) {
-            var validator = new CreateUserCommandValidator(userRepository);
+            var validator = new CreateUserCommandValidator(this.userRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -32,7 +32,7 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                 };
             }
 
-            await userRepository.AddAsync(user.Value);
+            await this.userRepository.AddAsync(user.Value);
 
             return new CreateUserCommandResponse {
                 Success = true,

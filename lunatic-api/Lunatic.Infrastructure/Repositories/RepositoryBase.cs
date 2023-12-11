@@ -12,6 +12,11 @@ namespace Lunatic.Infrastructure.Repositories {
             this.context = context;
         }
 
+        public virtual async Task<bool> ExistsByIdAsync(Guid id) {
+            var result = await FindByIdAsync(id);
+            return result.IsSuccess;
+        }
+
         public virtual async Task<Result<T>> FindByIdAsync(Guid id) {
             var result = await context.Set<T>().FindAsync(id);
             if (result == null) {

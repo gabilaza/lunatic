@@ -12,7 +12,7 @@ namespace Lunatic.Application.Features.Teams.Commands.DeleteTeam {
         }
 
         public async Task<DeleteTeamCommandResponse> Handle(DeleteTeamCommand request, CancellationToken cancellationToken) {
-            var result = await teamRepository.DeleteAsync(request.Id);
+            var result = await this.teamRepository.DeleteAsync(request.Id);
 
             if(!result.IsSuccess) {
                 return new DeleteTeamCommandResponse {

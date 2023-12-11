@@ -5,14 +5,16 @@ using FluentValidation;
 
 namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
     internal class CreateTeamCommandValidator : AbstractValidator<CreateTeamComand> {
-        private readonly ITeamRepository teamRepository;
+        private readonly IUserRepository userRepository;
 
-        public CreateTeamCommandValidator(ITeamRepository teamRepository) {
-            this.teamRepository = teamRepository;
+        public CreateTeamCommandValidator(IUserRepository userRepository) {
+            this.userRepository = userRepository;
 
             RuleFor(t => t.UserId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.");
+                .NotNull().WithMessage("{PropertyName} is required.")
+                .MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
+                .WithMessage("{PropertyName} must exists.");
 
             RuleFor(t => t.Name)
                 .NotEmpty().WithMessage("{PropertyName} is required.")

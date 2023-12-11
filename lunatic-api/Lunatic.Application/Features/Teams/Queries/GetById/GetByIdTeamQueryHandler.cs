@@ -13,8 +13,8 @@ namespace Lunatic.Application.Features.Teams.Queries.GetById {
         }
 
         public async Task<GetByIdTeamQueryResponse> Handle(GetByIdTeamQuery request, CancellationToken cancellationToken) {
-            var team = await teamRepository.FindByIdAsync(request.Id);
-            if(!team.IsSuccess) {
+            var teamResult = await this.teamRepository.FindByIdAsync(request.Id);
+            if(!teamResult.IsSuccess) {
                 return new GetByIdTeamQueryResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Team not found" }
@@ -24,12 +24,12 @@ namespace Lunatic.Application.Features.Teams.Queries.GetById {
             return new GetByIdTeamQueryResponse {
                 Success = true,
                 Team = new TeamDto {
-                    Id = team.Value.Id,
+                    Id = teamResult.Value.Id,
 
-                    Name = team.Value.Name,
+                    Name = teamResult.Value.Name,
 
-                    MemberIds = team.Value.MemberIds,
-                    ProjectIds = team.Value.ProjectIds,
+                    MemberIds = teamResult.Value.MemberIds,
+                    ProjectIds = teamResult.Value.ProjectIds,
                 }
             };
         }

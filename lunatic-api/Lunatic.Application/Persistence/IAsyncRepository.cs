@@ -3,6 +3,7 @@ using Lunatic.Domain.Utils;
 
 namespace Lunatic.Application.Persistence {
     public interface IAsyncRepository<T> where T : class {
+        Task<bool> ExistsByIdAsync(Guid id);
         Task<Result<T>> FindByIdAsync(Guid id);
         Task<Result<T>> AddAsync(T entity);
         Task<Result<T>> UpdateAsync(T entity);

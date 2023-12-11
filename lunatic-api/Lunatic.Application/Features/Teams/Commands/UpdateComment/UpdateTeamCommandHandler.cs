@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
         }
 
         public async Task<UpdateTeamCommandResponse> Handle(UpdateTeamCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateTeamCommandValidator(teamRepository);
+            var validator = new UpdateTeamCommandValidator();
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
@@ -23,7 +23,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
                 };
             }
 
-            var teamResult = await teamRepository.FindByIdAsync(request.Id);
+            var teamResult = await this.teamRepository.FindByIdAsync(request.Id);
             if(!teamResult.IsSuccess) {
                 return new UpdateTeamCommandResponse {
                     Success = false,
@@ -33,17 +33,17 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
 
             teamResult.Value.Update(request.Name);
 
-            var dbTeam = await teamRepository.UpdateAsync(teamResult.Value);
+            var dbTeamResult = await this.teamRepository.UpdateAsync(teamResult.Value);
 
             return new UpdateTeamCommandResponse {
                 Success = true,
                 Team = new TeamDto {
-                    Id = dbTeam.Value.Id,
+                    Id = dbTeamResult.Value.Id,
 
-                    Name = dbTeam.Value.Name,
+                    Name = dbTeamResult.Value.Name,
 
-                    MemberIds = dbTeam.Value.MemberIds,
-                    ProjectIds = dbTeam.Value.ProjectIds,
+                    MemberIds = dbTeamResult.Value.MemberIds,
+                    ProjectIds = dbTeamResult.Value.ProjectIds,
                 }
             };
         }

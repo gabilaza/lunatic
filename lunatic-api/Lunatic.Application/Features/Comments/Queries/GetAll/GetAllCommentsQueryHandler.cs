@@ -14,7 +14,7 @@ namespace Lunatic.Application.Features.Comments.Queries.GetAll {
 
         public async Task<GetAllCommentsQueryResponse> Handle(GetAllCommentsQuery request, CancellationToken cancellationToken) {
             GetAllCommentsQueryResponse response = new GetAllCommentsQueryResponse();
-            var comments = await commentRepository.GetAllAsync();
+            var comments = await this.commentRepository.GetAllAsync();
 
             if(comments.IsSuccess) {
                 response.Comments = comments.Value.Select(c => new CommentDto {

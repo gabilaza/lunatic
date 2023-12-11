@@ -1,15 +1,10 @@
 ﻿
-using Lunatic.Application.Persistence;
 using FluentValidation;
 
 
 namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
     internal class UpdateTeamCommandValidator : AbstractValidator<UpdateTeamCommand> {
-        private readonly ITeamRepository commentRepository;
-
-        public UpdateTeamCommandValidator(ITeamRepository commentRepository) {
-            this.commentRepository = commentRepository;
-
+        public UpdateTeamCommandValidator() {
             RuleFor(t => t.Id)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.");

@@ -12,7 +12,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.DeleteTask {
         }
 
         public async Task<DeleteTaskCommandResponse> Handle(DeleteTaskCommand request, CancellationToken cancellationToken) {
-            var result = await taskRepository.DeleteAsync(request.Id);
+            var result = await this.taskRepository.DeleteAsync(request.Id);
 
             if(!result.IsSuccess) {
                 return new DeleteTaskCommandResponse {

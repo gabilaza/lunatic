@@ -1,5 +1,4 @@
 ﻿
-using Lunatic.Domain.Entities;
 using MediatR;
 
 
