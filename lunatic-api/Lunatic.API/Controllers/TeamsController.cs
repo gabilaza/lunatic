@@ -6,6 +6,7 @@ using Lunatic.Application.Features.Teams.Commands.DeleteTeamProject;
 using Lunatic.Application.Features.Teams.Commands.UpdateTeam;
 using Lunatic.Application.Features.Teams.Queries.GetAll;
 using Lunatic.Application.Features.Teams.Queries.GetAllProjects;
+using Lunatic.Application.Features.Teams.Queries.GetAllMembers;
 using Lunatic.Application.Features.Teams.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
 
@@ -81,6 +82,18 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
+        [HttpGet("{teamId}/members")]
+        [Produces("application/json")]
+        [ProducesResponseType<GetAllTeamMembersQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetAllTeamMembersQueryResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetMembers(Guid teamId) {
+            var result = await Mediator.Send(new GetAllTeamMembersQuery(teamId));
+            if(!result.Success) {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
         [HttpGet("{teamId}/projects")]
         [Produces("application/json")]
         [ProducesResponseType<GetAllTeamProjectsQueryResponse>(StatusCodes.Status200OK)]
@@ -116,7 +129,6 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid teamId, Guid projectId, UpdateTeamProjectCommand command) {
             if(teamId != command.TeamId) {
                 return BadRequest(new UpdateTeamProjectCommandResponse {

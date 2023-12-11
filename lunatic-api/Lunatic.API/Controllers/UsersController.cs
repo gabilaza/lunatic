@@ -23,7 +23,6 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<UpdateUserCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateUserCommandResponse>(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType<UpdateUserCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid userId, UpdateUserCommand command) {
             if(userId != command.UserId) {
                 return BadRequest(new UpdateUserCommandResponse {
