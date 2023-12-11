@@ -23,6 +23,7 @@ namespace Lunatic.API.Controllers {
         [HttpPut("{id}")]
         [Produces("application/json")]
         [ProducesResponseType<UpdateCommentEmoteCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<UpdateCommentEmoteCommandResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<UpdateCommentEmoteCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateCommentEmoteCommand command) {
             if(id != command.Id) {

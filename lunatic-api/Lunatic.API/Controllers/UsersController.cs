@@ -22,6 +22,7 @@ namespace Lunatic.API.Controllers {
         [HttpPut("{id}")]
         [Produces("application/json")]
         [ProducesResponseType<UpdateUserCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<UpdateUserCommandResponse>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<UpdateUserCommandResponse>(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid id, UpdateUserCommand command) {
             if(id != command.Id) {
@@ -33,7 +34,7 @@ namespace Lunatic.API.Controllers {
 
             var existsResult = await Mediator.Send(new GetByIdUserQuery(id));
             if(!existsResult.Success) {
-                return BadRequest(existsResult);
+                return NotFound(existsResult);
             }
 
             var result = await Mediator.Send(command);
