@@ -1,44 +1,57 @@
 ﻿@inherits LayoutComponentBase
 @using MudBlazor
+@inject NavigationManager NavigationManager
 
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
+@*color scheme not yet in place*@
 <MudLayout>
-	<MudPaper Elevation="20">
-		<MudToolBar> @*modifty navbar!*@
-			<MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" Class="mr-5" />
-			<MudIconButton Icon="@Icons.Material.Outlined.Add" />
-			<MudIconButton Icon="@Icons.Material.Outlined.Edit" />
-			<MudIconButton Icon="@Icons.Material.Outlined.Remove" Color="Color.Inherit" />
-			<MudIconButton Icon="@Icons.Material.Outlined.Settings" Color="Color.Inherit" />
-			<MudSpacer />
-			<MudIconButton Icon="@Icons.Material.Outlined.Notifications" />
-			<MudIconButton Icon="@Icons.Material.Outlined.PushPin" />
-			<MudIconButton Icon="@Icons.Material.Outlined.PeopleAlt" />
-			<MudIconButton Icon="@Icons.Material.Outlined.MoreVert" Color="Color.Inherit" />
-		</MudToolBar>
-	</MudPaper>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
+	<MudAppBar Color="Color.Dark" Fixed="false" Dense>
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+		<MudSpacer />
+		<MudBreadcrumbs Items="_items" MaxItems="4" Separator="/"> 
+			<SeparatorTemplate>
+				<MudIcon Icon="@Icons.Material.Filled.ArrowRight" Size="Size.Small" Color="Color.Secondary" />
+			</SeparatorTemplate>
+			<ItemTemplate Context="item">
+				<MudLink Href="@item.Href" Color="Color.Secondary">
+					@item.Text.ToUpper()
+				</MudLink>
+			</ItemTemplate>
+			
+		</MudBreadcrumbs>
+		<MudSpacer />
+
+		<MudIconButton Icon="@Icons.Material.Filled.Usb" Color="Color.Inherit" />
+
+	</MudAppBar>
+
+
+		@Body
+
 </MudLayout>
 
-@* <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+@code {
+	private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
+}
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
+@functions{
+	protected override void OnParametersSet() {
+		_items.Add(new BreadcrumbItem("Home", href: NavigationManager.BaseUri));
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+		string currentUrl = NavigationManager.Uri;
+		var currentPageUrl = currentUrl.Replace(NavigationManager.BaseUri, "");
+		
+		var path = currentPageUrl.Split('/');
 
+		foreach (var link in path) {
+			if (link == "") continue;
 
-</div> *@
+			var lastLink = _items.Last();
+			_items.Add(new BreadcrumbItem(link, href: $"{lastLink.Href}{link}"));
+		}
+		base.OnParametersSet();
+	}
+}
