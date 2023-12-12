@@ -4,6 +4,8 @@ using Lunatic.Application.Features.Teams.Commands.CreateTeamProject;
 using Lunatic.Application.Features.Teams.Commands.UpdateTeamProject;
 using Lunatic.Application.Features.Teams.Commands.DeleteTeamProject;
 using Lunatic.Application.Features.Teams.Commands.UpdateTeam;
+using Lunatic.Application.Features.Teams.Commands.AddTeamMember;
+using Lunatic.Application.Features.Teams.Commands.DeleteTeamMember;
 using Lunatic.Application.Features.Teams.Queries.GetAll;
 using Lunatic.Application.Features.Teams.Queries.GetAllProjects;
 using Lunatic.Application.Features.Teams.Queries.GetByIdProject;
@@ -165,7 +167,6 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-
         [HttpDelete("{teamId}/projects/{projectId}")]
         [Produces("application/json")]
         [ProducesResponseType<DeleteTeamProjectCommandResponse>(StatusCodes.Status200OK)]
@@ -178,6 +179,50 @@ namespace Lunatic.API.Controllers {
             var result = await Mediator.Send(deleteTeamProjectCommand);
             if(!result.Success) {
                 return NotFound(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("{teamId}/members")]
+        [Produces("application/json")]
+        [ProducesResponseType<AddTeamMemberCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<AddTeamMemberCommandResponse>(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> AddMember(Guid teamId, AddTeamMemberCommand command) {
+            if(teamId != command.TeamId) {
+                return BadRequest(new AddTeamMemberCommandResponse {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The team Id Path and team Id Body must be equal." }
+                });
+            }
+
+            var result = await Mediator.Send(command);
+            if(!result.Success) {
+                return BadRequest(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpPost("{teamId}/members/{userId}")]
+        [Produces("application/json")]
+        [ProducesResponseType<DeleteTeamMemberCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<DeleteTeamMemberCommandResponse>(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteMember(Guid teamId, Guid userId, DeleteTeamMemberCommand command) {
+            if(teamId != command.TeamId) {
+                return BadRequest(new DeleteTeamMemberCommandResponse {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The team Id Path and team Id Body must be equal." }
+                });
+            }
+            if(userId != command.UserId) {
+                return BadRequest(new DeleteTeamMemberCommandResponse {
+                        Success = false,
+                        ValidationErrors = new List<string> { "The user Id Path and user Id Body must be equal." }
+                });
+            }
+
+            var result = await Mediator.Send(command);
+            if(!result.Success) {
+                return BadRequest(result);
             }
             return Ok(result);
         }
