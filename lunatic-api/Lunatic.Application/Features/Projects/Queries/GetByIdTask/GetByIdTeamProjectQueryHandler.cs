@@ -30,7 +30,6 @@ namespace Lunatic.Application.Features.Projects.Queries.GetByIdTask {
 
             return new GetByIdProjectTaskQueryResponse {
                 Success = true,
-                ProjectId = request.ProjectId,
                 Task = new TaskDto {
                     TaskId = task.TaskId,
                     ProjectId = task.ProjectId,

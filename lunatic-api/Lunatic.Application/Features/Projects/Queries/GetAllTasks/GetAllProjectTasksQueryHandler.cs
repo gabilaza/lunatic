@@ -45,7 +45,6 @@ namespace Lunatic.Application.Features.Projects.Queries.GetAllTasks {
                 StartedDate = task.StartedDate,
                 EndedDate = task.EndedDate,
             }).ToList();
-            response.ProjectId = request.ProjectId;
             return response;
         }
     }

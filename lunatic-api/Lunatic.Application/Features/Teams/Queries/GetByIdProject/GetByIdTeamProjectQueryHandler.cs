@@ -30,7 +30,6 @@ namespace Lunatic.Application.Features.Teams.Queries.GetByIdProject {
 
             return new GetByIdTeamProjectQueryResponse {
                 Success = true,
-                TeamId = request.TeamId,
                 Project = new ProjectDto {
                     ProjectId = project.ProjectId,
                     TeamId = project.TeamId,

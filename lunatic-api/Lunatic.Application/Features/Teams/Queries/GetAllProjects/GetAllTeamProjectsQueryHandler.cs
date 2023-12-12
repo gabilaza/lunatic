@@ -38,7 +38,6 @@ namespace Lunatic.Application.Features.Teams.Queries.GetAllProjects {
 
                 TaskIds = project.TaskIds,
             }).ToList();
-            response.TeamId = request.TeamId;
             return response;
         }
     }
