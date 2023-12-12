@@ -110,7 +110,7 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<CreateTeamProjectCommandResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType<CreateTeamProjectCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateTeamProject(Guid teamId, CreateTeamProjectCommand command) {
+        public async Task<IActionResult> CreateProject(Guid teamId, CreateTeamProjectCommand command) {
             if(teamId != command.TeamId) {
                 return BadRequest(new CreateTeamProjectCommandResponse {
                         Success = false,
@@ -129,7 +129,7 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateTeamProjectCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(Guid teamId, Guid projectId, UpdateTeamProjectCommand command) {
+        public async Task<IActionResult> UpdateProject(Guid teamId, Guid projectId, UpdateTeamProjectCommand command) {
             if(teamId != command.TeamId) {
                 return BadRequest(new UpdateTeamProjectCommandResponse {
                         Success = false,
