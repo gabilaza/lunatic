@@ -6,6 +6,7 @@ using Lunatic.Application.Features.Teams.Commands.DeleteTeamProject;
 using Lunatic.Application.Features.Teams.Commands.UpdateTeam;
 using Lunatic.Application.Features.Teams.Queries.GetAll;
 using Lunatic.Application.Features.Teams.Queries.GetAllProjects;
+using Lunatic.Application.Features.Teams.Queries.GetByIdProject;
 using Lunatic.Application.Features.Teams.Queries.GetAllMembers;
 using Lunatic.Application.Features.Teams.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
@@ -86,7 +87,7 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<GetAllTeamMembersQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetAllTeamMembersQueryResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetMembers(Guid teamId) {
+        public async Task<IActionResult> GetAllMembers(Guid teamId) {
             var result = await Mediator.Send(new GetAllTeamMembersQuery(teamId));
             if(!result.Success) {
                 return NotFound(result);
@@ -98,8 +99,22 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<GetAllTeamProjectsQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetAllTeamProjectsQueryResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetProjects(Guid teamId) {
+        public async Task<IActionResult> GetAllProjects(Guid teamId) {
             var result = await Mediator.Send(new GetAllTeamProjectsQuery(teamId));
+            if(!result.Success) {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+
+        [HttpGet("{teamId}/projects/{projectId}")]
+        [Produces("application/json")]
+        [ProducesResponseType<GetByIdTeamProjectQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetByIdTeamProjectQueryResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetProject(Guid teamId, Guid projectId) {
+            var result = await Mediator.Send(new GetByIdTeamProjectQuery {
+                    TeamId = teamId,
+                    ProjectId = projectId});
             if(!result.Success) {
                 return NotFound(result);
             }

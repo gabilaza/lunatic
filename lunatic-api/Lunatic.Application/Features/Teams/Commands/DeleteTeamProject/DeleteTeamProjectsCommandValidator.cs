@@ -24,6 +24,12 @@ namespace Lunatic.Application.Features.Teams.Commands.DeleteTeamProject {
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MustAsync(async (projectId, cancellationToken) => await this.projectRepository.ExistsByIdAsync(projectId))
                 .WithMessage("{PropertyName} must exists.");
+
+            RuleFor(request => new {request.TeamId, request.ProjectId})
+                .MustAsync(async (req, cancellationToken) => {
+                        var team = (await this.teamRepository.FindByIdAsync(req.TeamId)).Value;
+                        return team.ProjectIds.Contains(req.ProjectId);})
+                .WithMessage("Team must include ProjectId.");
         }
     }
 }
