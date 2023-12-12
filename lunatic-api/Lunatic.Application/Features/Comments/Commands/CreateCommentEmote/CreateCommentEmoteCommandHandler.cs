@@ -5,18 +5,18 @@ using Lunatic.Application.Features.CommentEmotes.Payload;
 using MediatR;
 
 
-namespace Lunatic.Application.Features.CommentEmotes.Commands.CreateCommentEmote {
+namespace Lunatic.Application.Features.Comments.Commands.CreateCommentEmote {
     public class CreateCommentEmoteCommandHandler : IRequestHandler<CreateCommentEmoteCommand, CreateCommentEmoteCommandResponse> {
         private readonly ICommentEmoteRepository commentEmoteRepository;
 
-        private readonly IUserRepository userRepository;
-
         private readonly ICommentRepository commentRepository;
 
-        public CreateCommentEmoteCommandHandler(ICommentEmoteRepository commentEmoteRepository, IUserRepository userRepository, ICommentRepository commentRepository) {
+        private readonly IUserRepository userRepository;
+
+        public CreateCommentEmoteCommandHandler(ICommentEmoteRepository commentEmoteRepository, ICommentRepository commentRepository, IUserRepository userRepository) {
             this.commentEmoteRepository = commentEmoteRepository;
-            this.userRepository = userRepository;
             this.commentRepository = commentRepository;
+            this.userRepository = userRepository;
         }
 
         public async Task<CreateCommentEmoteCommandResponse> Handle(CreateCommentEmoteCommand request, CancellationToken cancellationToken) {
@@ -37,6 +37,10 @@ namespace Lunatic.Application.Features.CommentEmotes.Commands.CreateCommentEmote
                     ValidationErrors = new List<string> { commentEmoteResult.Error }
                 };
             }
+
+            var comment = (await this.commentRepository.FindByIdAsync(request.CommentId)).Value;
+            comment.AddEmote(commentEmoteResult.Value);
+            await this.commentRepository.UpdateAsync(comment);
 
             await this.commentEmoteRepository.AddAsync(commentEmoteResult.Value);
 

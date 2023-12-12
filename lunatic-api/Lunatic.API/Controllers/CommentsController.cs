@@ -1,42 +1,22 @@
-using Lunatic.Application.Features.Comments.Commands.CreateComment;
-using Lunatic.Application.Features.Comments.Commands.DeleteComment;
-using Lunatic.Application.Features.Comments.Commands.UpdateComment;
-using Lunatic.Application.Features.Comments.Queries.GetAll;
-using Lunatic.Application.Features.Comments.Queries.GetById;
+using Lunatic.Application.Features.Comments.Commands.CreateCommentEmote;
+using Lunatic.Application.Features.Comments.Commands.DeleteCommentEmote;
+using Lunatic.Application.Features.Comments.Queries.GetAllEmotes;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
     public class CommentsController : ApiControllerBase {
-        [HttpPost]
+        [HttpPost("{commentId}/emotes")]
         [Produces("application/json")]
-        [ProducesResponseType<CreateCommentCommandResponse>(StatusCodes.Status201Created)]
-        [ProducesResponseType<CreateCommentCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Create(CreateCommentCommand command) {
-            var result = await Mediator.Send(command);
-            if(!result.Success) {
-                return BadRequest(result);
-            }
-            return Ok(result);
-        }
-
-        [HttpPut("{commentId}")]
-        [Produces("application/json")]
-        [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status200OK)]
-        [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType<UpdateCommentCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(Guid commentId, UpdateCommentCommand command) {
+        [ProducesResponseType<CreateCommentEmoteCommandResponse>(StatusCodes.Status201Created)]
+        [ProducesResponseType<CreateCommentEmoteCommandResponse>(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateEmote(Guid commentId, CreateCommentEmoteCommand command) {
             if(commentId != command.CommentId) {
-                return BadRequest(new UpdateCommentCommandResponse {
+                return BadRequest(new CreateCommentEmoteCommandResponse {
                         Success = false,
-                        ValidationErrors = new List<string> { "The Id Path and Id Body must be equal." }
+                        ValidationErrors = new List<string> { "The comment Id Path and comment Id Body must be equal." }
                 });
             }
 
-            var existsResult = await Mediator.Send(new GetByIdCommentQuery(commentId));
-            if(!existsResult.Success) {
-                return NotFound(existsResult);
-            }
-
             var result = await Mediator.Send(command);
             if(!result.Success) {
                 return BadRequest(result);
@@ -44,33 +24,28 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpDelete("{commentId}")]
+        [HttpDelete("{commentId}/emotes/{emoteId}")]
         [Produces("application/json")]
-        [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status200OK)]
-        [ProducesResponseType<DeleteCommentCommandResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Delete(Guid commentId) {
-            var deleteCommentCommand = new DeleteCommentCommand() { CommentId = commentId };
-            var result = await Mediator.Send(deleteCommentCommand);
+        [ProducesResponseType<DeleteCommentEmoteCommandResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<DeleteCommentEmoteCommandResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteEmote(Guid commentId, Guid emoteId) {
+            var deleteCommentEmoteCommand = new DeleteCommentEmoteCommand() { 
+                CommentId = commentId,
+                CommentEmoteId = emoteId
+            };
+            var result = await Mediator.Send(deleteCommentEmoteCommand);
             if(!result.Success) {
                 return NotFound(result);
             }
             return Ok(result);
         }
 
-        [HttpGet]
+        [HttpGet("{commentId}/emotes")]
         [Produces("application/json")]
-        [ProducesResponseType<GetAllCommentsQueryResponse>(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll() {
-            var result = await Mediator.Send(new GetAllCommentsQuery());
-            return Ok(result);
-        }
-
-        [HttpGet("{commentId}")]
-        [Produces("application/json")]
-        [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status200OK)]
-        [ProducesResponseType<GetByIdCommentQueryResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Get(Guid commentId) {
-            var result = await Mediator.Send(new GetByIdCommentQuery(commentId));
+        [ProducesResponseType<GetAllCommentEmotesQueryResponse>(StatusCodes.Status200OK)]
+        [ProducesResponseType<GetAllCommentEmotesQueryResponse>(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAllEmotes(Guid taskId) {
+            var result = await Mediator.Send(new GetAllCommentEmotesQuery(taskId));
             if(!result.Success) {
                 return NotFound(result);
             }
