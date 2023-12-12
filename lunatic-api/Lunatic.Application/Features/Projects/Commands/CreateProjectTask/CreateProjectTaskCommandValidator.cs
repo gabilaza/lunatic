@@ -3,13 +3,13 @@ using Lunatic.Application.Persistence;
 using FluentValidation;
 
 
-namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
-    internal class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand> {
+namespace Lunatic.Application.Features.Projects.Commands.CreateProjectTask {
+    internal class CreateProjectTaskCommandValidator : AbstractValidator<CreateProjectTaskCommand> {
         private readonly IUserRepository userRepository;
 
         private readonly IProjectRepository projectRepository;
 
-        public CreateTaskCommandValidator(IUserRepository userRepository, IProjectRepository projectRepository) {
+        public CreateProjectTaskCommandValidator(IUserRepository userRepository, IProjectRepository projectRepository) {
             this.userRepository = userRepository;
             this.projectRepository = projectRepository;
 

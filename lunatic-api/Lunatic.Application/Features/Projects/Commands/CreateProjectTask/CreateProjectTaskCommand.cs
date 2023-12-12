@@ -3,8 +3,8 @@ using Lunatic.Domain.Entities;
 using MediatR;
 
 
-namespace Lunatic.Application.Features.Tasks.Commands.CreateTask {
-    public class CreateTaskCommand : IRequest<CreateTaskCommandResponse> {
+namespace Lunatic.Application.Features.Projects.Commands.CreateProjectTask {
+    public class CreateProjectTaskCommand : IRequest<CreateProjectTaskCommandResponse> {
         public Guid UserId { get; set; } = default!;
         public Guid ProjectId { get; set; } = default!;
 

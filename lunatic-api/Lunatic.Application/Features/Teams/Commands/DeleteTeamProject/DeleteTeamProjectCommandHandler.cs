@@ -26,7 +26,7 @@ namespace Lunatic.Application.Features.Teams.Commands.DeleteTeamProject {
             }
 
             var team = (await this.teamRepository.FindByIdAsync(request.TeamId)).Value;
-            team.RemoveMember(request.ProjectId);
+            team.RemoveProject(request.ProjectId);
             await this.teamRepository.UpdateAsync(team);
 
             var result = await this.projectRepository.DeleteAsync(request.ProjectId);
