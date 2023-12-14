@@ -1,6 +1,12 @@
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
+using Lunatic.UI.Contracts;
+using Lunatic.UI.Auth;
+using Lunatic.UI.Services;
 
 namespace Lunatic.UI {
     public class Program {
@@ -8,7 +14,23 @@ namespace Lunatic.UI {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
-
+            builder.Services.AddAuthorizationCore();
+            builder.Services.AddBlazoredLocalStorage(config =>
+            {
+                config.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                config.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                config.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+                config.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                config.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                config.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                config.JsonSerializerOptions.WriteIndented = false;
+            });
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<CustomStateProvider>();
+            builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client =>
+            {
+                client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
+            });
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddMudServices();
 
