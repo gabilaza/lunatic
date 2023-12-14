@@ -1,0 +1,40 @@
+﻿@page "/login"
+@using Lunatic.UI.Auth
+@using Lunatic.UI.Models
+@using MudBlazor
+@inject NavigationManager navigationManager
+@inject CustomStateProvider authStateProvider
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudCard Width="fit-content" Class="mx-auto">
+        <MudCardContent>
+            <MudTextField Label="Username" @bind-Value="model.Username" For="@(() => model.Username)" />
+            <MudTextField Label="Password" @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">Login</MudButton>
+        </MudCardActions>
+    </MudCard>
+</EditForm>
+
+@code {
+    [Inject] ISnackbar? Snackbar { get; set; }
+    LoginModel model = new LoginModel();
+
+    string? error { get; set; }
+
+    async Task OnValidSubmit()
+    {
+        error = null;
+        try
+        {
+            await authStateProvider.Login(model);
+            navigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            error = e.Message;
+        }
+    }
+}
