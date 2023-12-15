@@ -1,4 +1,5 @@
 
+using Lunatic.Domain.Entities;
 using Lunatic.Application.Persistence;
 using Lunatic.Application.Features.CommentEmotes.Payload;
 using MediatR;
@@ -26,8 +27,12 @@ namespace Lunatic.Application.Features.Comments.Queries.GetAllEmotes {
 
             GetAllCommentEmotesQueryResponse response = new GetAllCommentEmotesQueryResponse();
             var emoteIds = commentResult.Value.EmoteIds;
-            var taskEmotes = emoteIds.Select(async (commentEmoteId) => (await this.commentEmoteRepository.FindByIdAsync(commentEmoteId)).Value).ToList();
-            var emotes = await Task.WhenAll(taskEmotes);
+            var emotes = new List<CommentEmote>();
+            foreach (var emoteId in emoteIds) {
+                var emote = (await this.commentEmoteRepository.FindByIdAsync(emoteId)).Value;
+                emotes.Add(emote);
+            }
+
 
             response.CommentEmotes = emotes.Select(commentEmote => new CommentEmoteDto {
                 CommentEmoteId = commentEmote.CommentEmoteId,

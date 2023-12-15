@@ -1,4 +1,5 @@
 
+using Lunatic.Domain.Entities;
 using Lunatic.Application.Persistence;
 using Lunatic.Application.Features.Users.Payload;
 using MediatR;
@@ -26,10 +27,13 @@ namespace Lunatic.Application.Features.Teams.Queries.GetAllMembers {
 
             GetAllTeamMembersQueryResponse response = new GetAllTeamMembersQueryResponse();
             var memberIds = teamResult.Value.MemberIds;
-            var taskMembers = memberIds.Select(async (memberId) => (await this.userRepository.FindByIdAsync(memberId)).Value).ToList();
-            var projects = await Task.WhenAll(taskMembers);
+            var members = new List<User>();
+            foreach (var memberId in memberIds) {
+                var member = (await this.userRepository.FindByIdAsync(memberId)).Value;
+                members.Add(member);
+            }
 
-            response.Members = projects.Select(member => new UserDto {
+            response.Members = members.Select(member => new UserDto {
                 UserId = member.UserId,
 
                 FirstName = member.FirstName,

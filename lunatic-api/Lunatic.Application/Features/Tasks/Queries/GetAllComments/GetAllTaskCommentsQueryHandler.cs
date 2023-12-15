@@ -1,4 +1,5 @@
 
+using Lunatic.Domain.Entities;
 using Lunatic.Application.Persistence;
 using Lunatic.Application.Features.Comments.Payload;
 using MediatR;
@@ -26,8 +27,11 @@ namespace Lunatic.Application.Features.Tasks.Queries.GetAllComments {
 
             GetAllTaskCommentsQueryResponse response = new GetAllTaskCommentsQueryResponse();
             var commentIds = taskResult.Value.CommentIds;
-            var taskComments = commentIds.Select(async (commentId) => (await this.commentRepository.FindByIdAsync(commentId)).Value).ToList();
-            var comments = await Task.WhenAll(taskComments);
+            var comments = new List<Comment>();
+            foreach (var commentId in commentIds) {
+                var comment = (await this.commentRepository.FindByIdAsync(commentId)).Value;
+                comments.Add(comment);
+            }
 
             response.Comments = comments.Select(comment => new CommentDto {
                 CommentId = comment.CommentId,

@@ -1,4 +1,5 @@
 
+using Lunatic.Domain.Entities;
 using Lunatic.Application.Persistence;
 using Lunatic.Application.Features.Projects.Payload;
 using MediatR;
@@ -26,8 +27,11 @@ namespace Lunatic.Application.Features.Teams.Queries.GetAllProjects {
 
             GetAllTeamProjectsQueryResponse response = new GetAllTeamProjectsQueryResponse();
             var projectIds = teamResult.Value.ProjectIds;
-            var taskProjects = projectIds.Select(async (projectId) => (await this.projectRepository.FindByIdAsync(projectId)).Value).ToList();
-            var projects = await Task.WhenAll(taskProjects);
+            var projects = new List<Project>();
+            foreach (var projectId in projectIds) {
+                var project = (await this.projectRepository.FindByIdAsync(projectId)).Value;
+                projects.Add(project);
+            }
 
             response.Projects = projects.Select(project => new ProjectDto {
                 ProjectId = project.ProjectId,
