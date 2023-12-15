@@ -7,5 +7,6 @@ namespace Lunatic.UI.Contracts {
 		Task<ApiResponse<TeamDto>> UpdateTeamAsync(TeamViewModel team);
 		Task<ApiResponse<TeamDto>> DeleteTeamAsync(Guid id);
 		Task<List<TeamDto>> GetUserTeamsAsync(Guid userId);
+		Task<TeamDto> GetTeamByIdAsync(string teamId);
 	}
 }

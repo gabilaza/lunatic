@@ -2,12 +2,10 @@
 using Lunatic.UI.Services.Responses;
 using Lunatic.UI.ViewModels;
 using System.Net.Http.Json;
-using System.Net.Http.Headers;
-using System.Text.Json;
 
 namespace Lunatic.UI.Services {
 	public class TeamDataService : ITeamDataService {
-		private const string RequestUri = "api/v1/teams";
+		private const string RequestUri = "api/v1/users";
 		private readonly HttpClient httpClient;
 		//private readonly ITokenService tokenService;
 
@@ -19,7 +17,7 @@ namespace Lunatic.UI.Services {
 		public async Task<ApiResponse<TeamDto>> CreateTeamAsync(TeamViewModel teamViewModel) {
 			//httpClient.DefaultRequestHeaders.Authorization
 			//	= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
-			var result = await httpClient.PostAsJsonAsync(RequestUri, teamViewModel);
+			var result = await httpClient.PostAsJsonAsync("api/v1/teams", teamViewModel);
 			result.EnsureSuccessStatusCode();
 			var response = await result.Content.ReadFromJsonAsync<ApiResponse<TeamDto>>();
 			response!.IsSuccess = result.IsSuccessStatusCode;
@@ -34,16 +32,38 @@ namespace Lunatic.UI.Services {
 		public Task<ApiResponse<TeamDto>> UpdateTeamAsync(TeamViewModel team) {
 			throw new NotImplementedException();
 		}
-		
+
 		public async Task<List<TeamDto>> GetUserTeamsAsync(Guid userId) {
-			var result = await httpClient.GetAsync($"{RequestUri}/user/{userId}", HttpCompletionOption.ResponseHeadersRead);
+			var result = await httpClient.GetAsync($"{RequestUri}/{userId}/teams", HttpCompletionOption.ResponseHeadersRead);
 			result.EnsureSuccessStatusCode();
-			var content = await result.Content.ReadAsStringAsync();
-			if (!result.IsSuccessStatusCode) {
-				throw new ApplicationException(content);
-			}
-			var teams = JsonSerializer.Deserialize<List<TeamDto>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-			return teams!;
+
+			//var content = await result.Content.ReadAsStringAsync();
+			//if (!result.IsSuccessStatusCode) {
+			//	throw new ApplicationException(content);
+			//}
+
+			var response = await result.Content.ReadFromJsonAsync<List<TeamDto>>();
+			//Debug.WriteLine($"response: {response}");
+			//response!.IsSuccess = result.IsSuccessStatusCode;
+			//return response.Data!;
+			return response;
+		}
+
+		public async Task<TeamDto> GetTeamByIdAsync(string teamId) {
+			var result = await httpClient.GetAsync($"api/v1/teams/{teamId}", HttpCompletionOption.ResponseHeadersRead);
+			result.EnsureSuccessStatusCode();
+
+			//var content = await result.Content.ReadAsStringAsync();
+			//if (!result.IsSuccessStatusCode) {
+			//	throw new ApplicationException(content);
+			//}
+
+			var response = await result.Content.ReadFromJsonAsync<TeamDto>();
+			//Debug.WriteLine($"response: {response}");
+			//response!.IsSuccess = result.IsSuccessStatusCode;
+			//return response.Data!;
+			return response!;
+
 		}
 	}
 }

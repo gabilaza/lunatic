@@ -14,18 +14,23 @@
 </div>
 
 <div class="d-flex justify-center">
+
 	<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0" MaxWidth="90vw">
-		@foreach (var teamDto in UserTeams) {
-			<TeamsPageTeamCard TeamId="@teamDto.Id.ToString()" TeamName="@teamDto.Name" TeamDescription="@teamDto.Description" />
+		@if (UserTeams != null && UserTeams.Any()) {
+			@foreach (var teamDto in UserTeams) {
+				<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" TeamDescription="@teamDto.Description" />
+			}
+		}
+		else {
+			<p>No teams available.</p>
 		}
 	</MudPaper>
-
 </div>
 
 @code {
-	private List<TeamDto> UserTeams { get; set; } = new();
+	private List<TeamDto> UserTeams { get; set; } = null;
 	[Inject] private ITeamDataService TeamsService { get; set; } = null!;
-	private Guid CurrentUserId { get; set; } = new Guid("e6bfe8f4-8daf-45d8-8036-376c4c13f749");
+	private Guid CurrentUserId { get; set; } = new Guid("63cfdfb0-1da3-421f-881a-e3ea1da43a60");
 }
 
 <style>
@@ -36,12 +41,18 @@
 
 @functions {
 
-	protected override async void OnParametersSet() {
-		base.OnParametersSet();
-		
-		UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+	// protected override async void OnParametersSet() {
+	// 	UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+
+	// 	base.OnParametersSet();
+	// }
+	protected override async Task OnInitializedAsync() {
+		await LoadUserTeams();
 	}
 
+	private async Task LoadUserTeams() {
+		UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+	}
 	private void OpenCreateTeamModal() {
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class" };
 		DialogService.Show<TeamsPageCreateTeamDialog>("Create new team", closeOnEscapeKey);

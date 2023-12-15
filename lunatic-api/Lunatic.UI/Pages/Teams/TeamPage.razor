@@ -33,8 +33,13 @@
 				</MudToolBar>
 				@* </MudPaper> *@
 				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1">
-					@foreach (var projectId in ProjectIds) {
-						<TeamPageProjectCard CardId="@projectId.ToString()" OnCardClick="GoToProjectPage" />
+					@if (ProjectIds != null && ProjectIds.Any()) {
+						@foreach (var projectId in ProjectIds) {
+							<TeamPageProjectCard CardId="@projectId.ToString()" OnCardClick="GoToProjectPage" />
+						}
+					}
+					else {
+						<p>No projects available.</p>
 					}
 				</MudPaper>
 			</MudPaper>
@@ -49,8 +54,10 @@
 					</MudToolBar>
 
 					<MudList Clickable="true">
-						@foreach (var memberId in MembersIds) {
-							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
+						@if (MembersIds != null && MembersIds.Any()) {
+							@foreach (var memberId in MembersIds) {
+								<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
+							}
 						}
 
 					</MudList>
@@ -67,9 +74,10 @@
 	public string? TeamId { get; set; }
 
 	public string TeamName { get; set; } = "";
-
-	private List<Guid> ProjectIds = new List<Guid>();
-	private List<Guid> MembersIds = new List<Guid>();
+	public string? TeamDescription { get; set; } = "";
+	public string ownerId { get; set; } = "";
+	public List<Guid>? MembersIds { get; set; } = null;
+	private List<Guid>? ProjectIds { get; set; } = null;
 
 	[Inject]
 	public ITeamDataService TeamDataService { get; set; } = null!;
@@ -80,12 +88,14 @@
 	protected override void OnParametersSet() {
 		base.OnParametersSet();
 
-		TeamId = "d";
-		TeamName = "Team D";
-		ProjectIds.Add(Guid.NewGuid());
-		ProjectIds.Add(Guid.NewGuid());
-		ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid());
-		MembersIds.Add(Guid.NewGuid());
+	}
+
+	protected override async Task OnInitializedAsync() {
+		var team = await TeamDataService.GetTeamByIdAsync(TeamId);
+		TeamName = team.Name;
+		TeamDescription = team.Description;
+		MembersIds = new List<Guid>(team.MemberIds);
+		ProjectIds = new List<Guid>(team.ProjectIds);
 	}
 
 	public void GoToProjectPage(string projectId) {

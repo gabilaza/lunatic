@@ -24,8 +24,6 @@
 
 	private TeamViewModel TeamViewModel { get; set; } = new TeamViewModel();
 
-	// private string TeamName { get; set; } = "";
-	// private string TeamDescription { get; set; } = "";
 }
 
 @functions {
@@ -35,6 +33,7 @@
 			return;
 		}
 
+		TeamViewModel.UserId= new Guid("63cfdfb0-1da3-421f-881a-e3ea1da43a60");
 		var result = await TeamDataService.CreateTeamAsync(TeamViewModel);
 		if (result.IsSuccess) {
 			Snackbar.Add("Team created successfully", Severity.Success);

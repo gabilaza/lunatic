@@ -2,7 +2,7 @@
 
 namespace Lunatic.UI.ViewModels {
 	public class TeamViewModel {
-		public Guid OwnerId { get; set; }
+		public Guid UserId { get; set; }
 
 		[Required(ErrorMessage = "Event name is required")]
 		[StringLength(50, ErrorMessage = "Event name is too long")]
