@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Lunatic.Application.Responses.Identity;
 
 
 namespace Lunatic.Identity.Services {
@@ -25,15 +26,21 @@ namespace Lunatic.Identity.Services {
             this.userRepository = userRepository;
         }
 
-        public async Task<(int, string)> Registeration(RegistrationModel model, string role) {
+        public async Task<RegisterResponse> Registeration(RegistrationModel model, string role) {
             var userExists = await userManager.FindByNameAsync(model.Username);
             if(userExists != null) {
-                return (0, "User already exists");
+                return new RegisterResponse {
+                    Success = false,
+                    ValidationErrors = new List<string> { "User already exists" }
+                };
             }
 
             var userDb = User.Create(model.FirstName, model.LastName, model.Email, model.Username, model.Password, Role.USER);
             if(!userDb.IsSuccess) {
-                return (0, "Can't create a user");
+                return new RegisterResponse {
+                    Success = false,
+                    ValidationErrors = new List<string> { "Can't create a user" }
+                };
             }
 
             ApplicationUser user = new ApplicationUser() {
@@ -45,7 +52,10 @@ namespace Lunatic.Identity.Services {
 
             var createUserResult = await userManager.CreateAsync(user, model.Password);
             if(!createUserResult.Succeeded) {
-                return (0, "User creation failed! Please check user details and try again.");
+                return new RegisterResponse {
+                    Success = false,
+                    ValidationErrors = new List<string> { "User creation failed! Please check user details and try again." }
+                };
             }
 
             if(!await roleManager.RoleExistsAsync(role)) {
@@ -58,15 +68,25 @@ namespace Lunatic.Identity.Services {
 
             await this.userRepository.AddAsync(userDb.Value);
 
-            return (1, user.Id);
+            return new RegisterResponse {
+                Success = true,
+            };
         }
 
-        public async Task<(int, string)> Login(LoginModel model) {
+        public async Task<LoginResponse> Login(LoginModel model) {
             var user = await userManager.FindByNameAsync(model.Username!);
-            if(user == null)
-                return (0, "Invalid username");
-            if(!await userManager.CheckPasswordAsync(user, model.Password!))
-                return (0, "Invalid password");
+            if(user == null) {
+                return new LoginResponse {
+                    Success = false,
+                    ValidationErrors = new List<string> { "Invalid username" }
+                };
+            }
+            if(!await userManager.CheckPasswordAsync(user, model.Password!)) {
+                return new LoginResponse {
+                    Success = false,
+                    ValidationErrors = new List<string> { "Invalid password" }
+                };
+            }
 
             var userRoles = await userManager.GetRolesAsync(user);
             var authClaims = new List<Claim> {
@@ -78,7 +98,11 @@ namespace Lunatic.Identity.Services {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
             }
             string token = GenerateToken(authClaims);
-            return (1, token);
+            return new LoginResponse {
+                Success = true,
+                Token = token,
+                UserId = user.Id
+            };
         }
 
         private string GenerateToken(IEnumerable<Claim> claims) {

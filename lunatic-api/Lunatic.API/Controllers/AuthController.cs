@@ -24,13 +24,13 @@ namespace Lunatic.API.Controllers {
                     return BadRequest("Invalid payload");
                 }
 
-                var (status, message) = await _authService.Login(model);
+                var response = await _authService.Login(model);
 
-                if(status == 0) {
-                    return BadRequest(message);
+                if(response.Success) {
+                    return BadRequest(response);
                 }
 
-                return Ok(message);
+                return Ok(response);
             }
             catch (Exception ex) {
                 _logger.LogError(ex.Message);
@@ -46,13 +46,13 @@ namespace Lunatic.API.Controllers {
                     return BadRequest("Invalid payload");
                 }
 
-                var (status, message) = await _authService.Registeration(model, UserRoles.User);
+                var response = await _authService.Registeration(model, UserRoles.User);
 
-                if(status == 0) {
-                    return BadRequest(message);
+                if(response.Success) {
+                    return BadRequest(response);
                 }
 
-                return Ok(message);
+                return Ok(response);
             }
             catch (Exception ex) {
                 _logger.LogError(ex.Message);

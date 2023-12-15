@@ -1,10 +1,11 @@
 
 using Lunatic.Application.Models.Identity;
+using Lunatic.Application.Responses.Identity;
 
 
 namespace Lunatic.Application.Contracts.Identity {
     public interface IAuthService {
-        Task<(int, string)> Registeration(RegistrationModel model, string role);
-        Task<(int, string)> Login(LoginModel model);
+        Task<RegisterResponse> Registeration(RegistrationModel model, string role);
+        Task<LoginResponse> Login(LoginModel model);
     }
 }
