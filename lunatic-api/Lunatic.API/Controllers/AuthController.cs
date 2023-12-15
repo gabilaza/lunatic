@@ -26,7 +26,7 @@ namespace Lunatic.API.Controllers {
 
                 var response = await _authService.Login(model);
 
-                if(response.Success) {
+                if(!response.Success) {
                     return BadRequest(response);
                 }
 
@@ -48,7 +48,7 @@ namespace Lunatic.API.Controllers {
 
                 var response = await _authService.Registeration(model, UserRoles.User);
 
-                if(response.Success) {
+                if(!response.Success) {
                     return BadRequest(response);
                 }
 
