@@ -1,7 +1,9 @@
 using Blazored.LocalStorage;
 using GlobalBuyTicket.App.Services;
+using Lunatic.UI.Auth;
 using Lunatic.UI.Contracts;
 using Lunatic.UI.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -29,14 +31,15 @@ namespace Lunatic.UI {
 
 
 			builder.Services.AddScoped<ITokenService, TokenService>();
-			//builder.Services.AddScoped<CustomStateProvider>();
+			builder.Services.AddScoped<CustomStateProvider>();
 			builder.Services.AddHttpClient<ITeamDataService, TeamDataService>(client => {
 				client.BaseAddress = new Uri("https://localhost:7555/");
 			});
-			//builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomStateProvider>());
-			//builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client => {
-			//	client.BaseAddress = new Uri("https://localhost:7165/");
-			//});
+			builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomStateProvider>());
+			builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client =>
+			{
+				client.BaseAddress = new Uri("https://localhost:7555/");
+			});
 
 			builder.Services.AddMudServices();
 

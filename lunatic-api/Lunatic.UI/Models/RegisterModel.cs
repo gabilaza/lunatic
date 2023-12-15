@@ -20,8 +20,8 @@ namespace Lunatic.UI.Models
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Confirm your password")]
-        [Compare(nameof(Password), ErrorMessage = "Passwords do not match")]
-        public string ConfirmPassword { get; set; }
+        //[Required(ErrorMessage = "Confirm your password")]
+        //[Compare(nameof(Password), ErrorMessage = "Passwords do not match")]
+        //public string ConfirmPassword { get; set; }
     }
 }

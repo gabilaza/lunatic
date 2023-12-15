@@ -18,7 +18,7 @@
             </MudCardContent>
             <MudCardContent Class="d-inline-flex gap-5">
                 <MudTextField Label="Password" HelperText="Choose a strong password" @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                <MudTextField Label="Confirm Password" HelperText="Confirm password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password" />
+                @* <MudTextField Label="Confirm Password" HelperText="Confirm password" @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password" /> *@
             </MudCardContent>
             <MudCardActions>
                 <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">Register</MudButton>
