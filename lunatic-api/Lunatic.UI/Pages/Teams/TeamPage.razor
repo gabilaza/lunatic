@@ -81,13 +81,13 @@
 
 	[Inject]
 	public ITeamDataService TeamDataService { get; set; } = null!;
+
 }
 
 
 @functions {
 	protected override void OnParametersSet() {
 		base.OnParametersSet();
-
 	}
 
 	protected override async Task OnInitializedAsync() {
@@ -96,6 +96,8 @@
 		TeamDescription = team.Description;
 		MembersIds = new List<Guid>(team.MemberIds);
 		ProjectIds = new List<Guid>(team.ProjectIds);
+
+		
 	}
 
 	public void GoToProjectPage(string projectId) {

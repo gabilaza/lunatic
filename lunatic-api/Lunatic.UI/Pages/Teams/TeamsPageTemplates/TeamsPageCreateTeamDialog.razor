@@ -2,6 +2,7 @@
 @using Lunatic.UI.ViewModels
 @using MudBlazor
 @inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <MudDialog DefaultFocus="DefaultFocus.FirstChild">
 	<DialogContent>
@@ -33,15 +34,14 @@
 			return;
 		}
 
-		TeamViewModel.UserId= new Guid("63cfdfb0-1da3-421f-881a-e3ea1da43a60");
+		TeamViewModel.UserId = new Guid(await localStorage.GetItemAsync<string>("userId"));
 		var result = await TeamDataService.CreateTeamAsync(TeamViewModel);
 		if (result.IsSuccess) {
 			Snackbar.Add("Team created successfully", Severity.Success);
-			// NavigationManager.NavigateTo("/teams");
+			MudDialog.Close(DialogResult.Ok(true));
+			NavigationManager.Refresh();
 		}
 
-
-		MudDialog.Close(DialogResult.Ok(true));
 	}
 	private void Cancel() => MudDialog.Cancel();
 }

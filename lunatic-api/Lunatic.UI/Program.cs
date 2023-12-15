@@ -35,9 +35,11 @@ namespace Lunatic.UI {
 			builder.Services.AddHttpClient<ITeamDataService, TeamDataService>(client => {
 				client.BaseAddress = new Uri("https://localhost:7555/");
 			});
+			builder.Services.AddHttpClient<IProjectDataService, ProjectDataService>(client => {
+				client.BaseAddress = new Uri("https://localhost:7555/");
+			});
 			builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<CustomStateProvider>());
-			builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client =>
-			{
+			builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client => {
 				client.BaseAddress = new Uri("https://localhost:7555/");
 			});
 

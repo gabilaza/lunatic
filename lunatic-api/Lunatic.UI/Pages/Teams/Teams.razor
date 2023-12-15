@@ -5,6 +5,7 @@
 @using Lunatic.UI.ViewModels
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="d-flex justify-center">
 	<h3 class="">Your teams</h3>
@@ -30,7 +31,7 @@
 @code {
 	private List<TeamDto> UserTeams { get; set; } = null;
 	[Inject] private ITeamDataService TeamsService { get; set; } = null!;
-	private Guid CurrentUserId { get; set; } = new Guid("63cfdfb0-1da3-421f-881a-e3ea1da43a60");
+	private Guid CurrentUserId { get; set; } = Guid.Empty;
 }
 
 <style>
@@ -47,6 +48,7 @@
 	// 	base.OnParametersSet();
 	// }
 	protected override async Task OnInitializedAsync() {
+		CurrentUserId = new Guid(await localStorage.GetItemAsync<string>("userId"));
 		await LoadUserTeams();
 	}
 

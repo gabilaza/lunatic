@@ -120,7 +120,7 @@ namespace Lunatic.API.Controllers {
 			if (!result.Success) {
 				return NotFound(result);
 			}
-			return Ok(result);
+			return Ok(result.Project);
 		}
 
 		[HttpPost("{teamId}/projects")]

@@ -1,24 +1,44 @@
 ﻿@using MudBlazor
+@using Lunatic.UI.Contracts
 @inject NavigationManager navigationManager
 
 <style>
 	.mud-card-hover {
 		cursor: pointer;
-		/* Add any additional styles for the hover effect */
 	}
 </style>
 
 <MudCard Class="mud-card-hover" @onclick="CardClicked">
 	<MudCardContent>
-		<MudText>Story of the day</MudText>
-		<MudText Typo="Typo.body2">The quick, brown fox jumps over a lazy dog.</MudText>
+		 @* @if (!string.IsNullOrEmpty(ProjectTitle)) {  *@
+		<MudText>
+			@ProjectTitle
+		</MudText>
+		 @* } *@
+		 @* @if (!string.IsNullOrEmpty(ProjectDescription)) { *@
+			<MudText Typo="Typo.body2" >
+			@ProjectDescription
+			</MudText>
+		@* } *@
 	</MudCardContent>
-
 </MudCard>
 
 @code {
 	[Parameter] public string CardId { get; set; }
 	[Parameter] public EventCallback<string> OnCardClick { get; set; }
+	public string ProjectTitle { get; set; } = "";
+	public string ProjectDescription { get; set; } = "";
+
+	[Inject] public IProjectDataService ProjectDataService { get; set; } = null!;
+}
+
+@functions {
+	protected override async Task OnInitializedAsync() {
+		var project = await ProjectDataService.GetProjectByIdAsync(CardId);
+		ProjectTitle = project.Title;
+		ProjectDescription = project.Description;
+
+	}
 
 	private async Task CardClicked() {
 		await OnCardClick.InvokeAsync(CardId);
