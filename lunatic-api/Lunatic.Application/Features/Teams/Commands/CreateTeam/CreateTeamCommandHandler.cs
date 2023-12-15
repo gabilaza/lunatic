@@ -36,8 +36,10 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
             }
 
             teamResult.Value.AddMember(request.UserId);
-
             await this.teamRepository.AddAsync(teamResult.Value);
+            var user = (await this.userRepository.FindByIdAsync(request.UserId)).Value;
+            user.AddTeam(teamResult.Value.TeamId);
+            await this.userRepository.UpdateAsync(user);
 
             return new CreateTeamCommandResponse {
                 Success = true,

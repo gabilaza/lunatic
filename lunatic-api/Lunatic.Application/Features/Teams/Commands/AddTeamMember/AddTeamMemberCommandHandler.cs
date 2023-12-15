@@ -28,6 +28,9 @@ namespace Lunatic.Application.Features.Teams.Commands.AddTeamMember {
 
             var team = (await this.teamRepository.FindByIdAsync(request.TeamId)).Value;
             team.AddMember(request.UserId);
+            var user = (await this.userRepository.FindByIdAsync(request.UserId)).Value;
+            user.AddTeam(request.TeamId);
+            await this.userRepository.UpdateAsync(user);
             var dbTeamResult = await this.teamRepository.UpdateAsync(team);
 
             return new AddTeamMemberCommandResponse {
