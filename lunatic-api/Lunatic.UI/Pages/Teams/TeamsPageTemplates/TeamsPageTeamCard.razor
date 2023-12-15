@@ -1,0 +1,27 @@
+﻿@using MudBlazor
+@inject NavigationManager navigationManager
+
+<MudContainer MaxWidth=MaxWidth.Small @onclick="CardClicked">
+	<MudCard>
+		<MudCardHeader>
+			<CardHeaderContent>
+				<MudText Typo="Typo.body1">@TeamName</MudText>
+				@* <MudText Typo="Typo.body2">Peninsula in Europe</MudText> *@
+			</CardHeaderContent>
+		</MudCardHeader>
+		<MudCardMedia Image="images/dog.jpg" Height="250" />
+		<MudCardContent>
+			<MudText Typo="Typo.body2" Class="overflow-scroll">@TeamDescription</MudText>
+		</MudCardContent>
+	</MudCard>
+</MudContainer>
+
+@code {
+	[Parameter] public string TeamId { get; set; } = "";
+	[Parameter] public string TeamName { get; set; } = "";
+	[Parameter] public string TeamDescription { get; set; } = "";
+
+	private void CardClicked() {
+		navigationManager.NavigateTo("/team/" + TeamId);
+	}
+}

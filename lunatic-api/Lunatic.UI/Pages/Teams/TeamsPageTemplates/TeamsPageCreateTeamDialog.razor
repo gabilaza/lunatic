@@ -1,0 +1,48 @@
+﻿@using Lunatic.UI.Contracts
+@using Lunatic.UI.ViewModels
+@using MudBlazor
+@inject ISnackbar Snackbar
+
+<MudDialog DefaultFocus="DefaultFocus.FirstChild">
+	<DialogContent>
+		<MudTextField Label="Team Name" @bind-Value="TeamViewModel.Name" Required="true" />
+		<MudTextField Label="Team Description" @bind-Value="TeamViewModel.Description" Lines="4" />
+		<br />
+		<MudText Typo="Typo.caption">*You can add the members once the team is created</MudText>
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="Cancel">Cancel</MudButton>
+		<MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+	</DialogActions>
+
+</MudDialog>
+
+@code {
+	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+	[Inject] ITeamDataService TeamDataService { get; set; } = null!;
+	[Inject] NavigationManager NavigationManager { get; set; } = null!;
+
+	private TeamViewModel TeamViewModel { get; set; } = new TeamViewModel();
+
+	// private string TeamName { get; set; } = "";
+	// private string TeamDescription { get; set; } = "";
+}
+
+@functions {
+	private async Task Submit() {
+		if (string.IsNullOrWhiteSpace(TeamViewModel.Name)) {
+			Snackbar.Add("Team name cannot be empty", Severity.Error);
+			return;
+		}
+
+		var result = await TeamDataService.CreateTeamAsync(TeamViewModel);
+		if (result.IsSuccess) {
+			Snackbar.Add("Team created successfully", Severity.Success);
+			// NavigationManager.NavigateTo("/teams");
+		}
+
+
+		MudDialog.Close(DialogResult.Ok(true));
+	}
+	private void Cancel() => MudDialog.Cancel();
+}

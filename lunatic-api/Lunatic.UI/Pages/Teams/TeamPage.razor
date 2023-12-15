@@ -1,0 +1,98 @@
+﻿@page "/team/{teamId}"
+@using Lunatic.UI.Contracts
+@using MudBlazor
+@using Lunatic.UI.Pages.Teams.TeamPageTemplates
+@inject NavigationManager navigationManager
+
+<style>
+	.custom-toolbar {
+		background-color: #3498db;
+		color: #ffffff;
+	}
+</style>
+
+<MudPaper Height="100%" Class="pa-1 ma-2" Elevation="0">
+	<MudGrid Spacing="1">
+
+		<MudItem xs="12" md="9">
+			<MudPaper Elevation="1">
+				@* <MudPaper> *@
+				<MudToolBar Class="custom-toolbar" Dense="true">
+					<MudText>
+						@TeamName
+					</MudText>
+					<MudSpacer />
+					@* @if (ownerId==currentUserId) *@
+					<MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+						<MudMenuItem>
+							@* OnClick="func" *@
+							Delete team
+						</MudMenuItem>
+					</MudMenu>
+
+				</MudToolBar>
+				@* </MudPaper> *@
+				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1">
+					@foreach (var projectId in ProjectIds) {
+						<TeamPageProjectCard CardId="@projectId.ToString()" OnCardClick="GoToProjectPage" />
+					}
+				</MudPaper>
+			</MudPaper>
+		</MudItem>
+		<MudItem xs="12" md="3">
+			<MudPaper Height="100%">
+				<MudPaper>
+					<MudToolBar Class="custom-toolbar" Dense="true">
+						<MudText>Members</MudText>
+						<MudSpacer />
+						<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" />
+					</MudToolBar>
+
+					<MudList Clickable="true">
+						@foreach (var memberId in MembersIds) {
+							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
+						}
+
+					</MudList>
+				</MudPaper>
+			</MudPaper>
+		</MudItem>
+	</MudGrid>
+
+</MudPaper>
+
+
+@code {
+	[Parameter]
+	public string? TeamId { get; set; }
+
+	public string TeamName { get; set; } = "";
+
+	private List<Guid> ProjectIds = new List<Guid>();
+	private List<Guid> MembersIds = new List<Guid>();
+
+	[Inject]
+	public ITeamDataService TeamDataService { get; set; } = null!;
+}
+
+
+@functions {
+	protected override void OnParametersSet() {
+		base.OnParametersSet();
+
+		TeamId = "d";
+		TeamName = "Team D";
+		ProjectIds.Add(Guid.NewGuid());
+		ProjectIds.Add(Guid.NewGuid());
+		ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid());
+		MembersIds.Add(Guid.NewGuid());
+	}
+
+	public void GoToProjectPage(string projectId) {
+		navigationManager.NavigateTo("/project/" + projectId);
+	}
+	public void GoToUserPage(string userId) {
+		navigationManager.NavigateTo("/user/" + userId);
+	}
+
+}
