@@ -3,6 +3,7 @@ using Lunatic.Application.Features.Users.Commands.DeleteUser;
 using Lunatic.Application.Features.Users.Commands.UpdateUser;
 using Lunatic.Application.Features.Users.Queries.GetById;
 using Lunatic.Application.Features.Users.Queries.GetAllTeams;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lunatic.API.Controllers {
@@ -11,6 +12,7 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<CreateUserCommandResponse>(StatusCodes.Status201Created)]
         [ProducesResponseType<CreateUserCommandResponse>(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Create(CreateUserCommand command) {
             var result = await Mediator.Send(command);
             if(!result.Success) {

@@ -7,5 +7,5 @@ WORKDIR /migrator
 
 COPY . ./
 
-CMD cd ./Lunatic.Infrastructure && dotnet ef database update -s ../Lunatic.API
+CMD cd /migrator/Lunatic.Infrastructure && dotnet ef database update -s ../Lunatic.API --context LunaticContext && cd /migrator/Lunatic.Identity && dotnet ef database update -s ../Lunatic.API --context LunaticUserContext
 

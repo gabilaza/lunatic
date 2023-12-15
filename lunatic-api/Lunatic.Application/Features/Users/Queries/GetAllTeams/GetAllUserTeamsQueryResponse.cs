@@ -7,7 +7,6 @@ namespace Lunatic.Application.Features.Users.Queries.GetAllTeams {
     public class GetAllUserTeamsQueryResponse : ResponseBase {
         public GetAllUserTeamsQueryResponse() : base() {}
 
-        public Guid UserId { get; set; } = default!;
         public List<TeamDto> Teams { get; set; } = default!;
     }
 }
