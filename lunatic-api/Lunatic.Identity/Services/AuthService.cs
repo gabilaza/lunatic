@@ -1,5 +1,7 @@
 using Lunatic.Application.Contracts.Identity;
 using Lunatic.Application.Models.Identity;
+using Lunatic.Application.Persistence;
+using Lunatic.Domain.Entities;
 using Lunatic.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -14,11 +16,13 @@ namespace Lunatic.Identity.Services {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly IConfiguration configuration;
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration) {
+        private readonly IUserRepository userRepository;
+
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUserRepository userRepository) {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
-
+            this.userRepository = userRepository;
         }
 
         public async Task<(int, string)> Registeration(RegistrationModel model, string role) {
@@ -27,11 +31,16 @@ namespace Lunatic.Identity.Services {
                 return (0, "User already exists");
             }
 
+            var userDb = User.Create(model.FirstName, model.LastName, model.Email, model.Username, model.Password, Role.USER);
+            if(!userDb.IsSuccess) {
+                return (0, "Can't create a user");
+            }
+
             ApplicationUser user = new ApplicationUser() {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                Id = userDb.Value.UserId.ToString(),
                 UserName = model.Username,
-                Name = model.Name
             };
 
             var createUserResult = await userManager.CreateAsync(user, model.Password);
@@ -47,7 +56,9 @@ namespace Lunatic.Identity.Services {
                 await userManager.AddToRoleAsync(user, role);
             }
 
-            return (1, "User created successfully!");
+            await this.userRepository.AddAsync(userDb.Value);
+
+            return (1, user.Id);
         }
 
         public async Task<(int, string)> Login(LoginModel model) {

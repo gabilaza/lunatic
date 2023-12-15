@@ -52,7 +52,7 @@ namespace Lunatic.API.Controllers {
                     return BadRequest(message);
                 }
 
-                return CreatedAtAction(nameof(Register), model);
+                return Ok(message);
             }
             catch (Exception ex) {
                 _logger.LogError(ex.Message);
