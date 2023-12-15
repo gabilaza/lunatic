@@ -67,7 +67,7 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpGet("{projectId}/projects")]
+        [HttpGet("{projectId}/tasks")]
         [Produces("application/json")]
         [ProducesResponseType<GetAllProjectTasksQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetAllProjectTasksQueryResponse>(StatusCodes.Status404NotFound)]
