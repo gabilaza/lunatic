@@ -109,13 +109,12 @@ namespace Lunatic.API.Controllers {
 			return Ok(result);
 		}
 
-		[HttpGet("{teamId}/projects/{projectId}")]
+		[HttpGet("projects/{projectId}")]
 		[Produces("application/json")]
 		[ProducesResponseType<GetByIdTeamProjectQueryResponse>(StatusCodes.Status200OK)]
 		[ProducesResponseType<GetByIdTeamProjectQueryResponse>(StatusCodes.Status404NotFound)]
-		public async Task<IActionResult> GetProject(Guid teamId, Guid projectId) {
+		public async Task<IActionResult> GetProject(Guid projectId) {
 			var result = await Mediator.Send(new GetByIdTeamProjectQuery {
-				TeamId = teamId,
 				ProjectId = projectId
 			});
 			if (!result.Success) {
