@@ -1,6 +1,8 @@
-﻿using Lunatic.UI.Contracts;
+﻿using Blazored.LocalStorage;
+using Lunatic.UI.Contracts;
 using Lunatic.UI.Models;
 using System.Net.Http.Json;
+using System.Text.Json.Nodes;
 
 namespace Lunatic.UI.Services
 {
@@ -8,11 +10,13 @@ namespace Lunatic.UI.Services
     {
         private readonly HttpClient httpClient;
         private readonly ITokenService tokenService;
+        private readonly ILocalStorageService localStorageService;
 
-        public AuthenticationService(HttpClient httpClient, ITokenService tokenService)
+        public AuthenticationService(HttpClient httpClient, ITokenService tokenService, ILocalStorageService localStorageService)
         {
             this.httpClient = httpClient;
             this.tokenService = tokenService;
+            this.localStorageService = localStorageService;
         }
 
         public async Task Login(LoginModel loginRequest)
@@ -23,8 +27,13 @@ namespace Lunatic.UI.Services
                 throw new Exception(await response.Content.ReadAsStringAsync());
             }
             response.EnsureSuccessStatusCode();
-            var token = await response.Content.ReadAsStringAsync();
-            await tokenService.SetTokenAsync(token);
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonObject.Parse(json);
+            var token = result!["token"];
+            var userId = result!["userId"];
+
+            await tokenService.SetTokenAsync(token.ToString());
+            await localStorageService.SetItemAsync("userId", userId);
         }
 
         public async Task Logout()
