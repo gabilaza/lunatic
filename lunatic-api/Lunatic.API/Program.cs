@@ -62,7 +62,7 @@ var app = builder.Build();
 // }
 
 app.UseHttpsRedirection();
-
+app.UseCors("Open");
 app.UseAuthorization();
 
 app.MapControllers();
