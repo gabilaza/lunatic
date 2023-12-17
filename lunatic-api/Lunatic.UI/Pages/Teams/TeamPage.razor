@@ -1,8 +1,9 @@
 ﻿@page "/team/{teamId}"
-@using Lunatic.UI.Contracts
 @using MudBlazor
+@using Lunatic.UI.Contracts
 @using Lunatic.UI.Pages.Teams.TeamPageTemplates
 @inject NavigationManager navigationManager
+@inject IDialogService DialogService
 
 <style>
 	.custom-toolbar {
@@ -11,12 +12,11 @@
 	}
 </style>
 
-<MudPaper Height="100%" Class="pa-1 ma-2" Elevation="0">
-	<MudGrid Spacing="1">
+<MudPaper Height="100%" Elevation="0">
+	<MudGrid Spacing="1" style="height:100%;">
 
 		<MudItem xs="12" md="9">
 			<MudPaper Elevation="1">
-				@* <MudPaper> *@
 				<MudToolBar Class="custom-toolbar" Dense="true">
 					<MudText>
 						@TeamName
@@ -31,35 +31,55 @@
 					</MudMenu>
 
 				</MudToolBar>
-				@* </MudPaper> *@
+
 				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1">
-					@if (ProjectIds != null && ProjectIds.Any()) {
-						@foreach (var projectId in ProjectIds) {
-							<TeamPageProjectCard CardId="@projectId.ToString()" OnCardClick="GoToProjectPage" />
+					@if (ProjectIds != null) {
+						@if (ProjectIds.Any()) {
+							@foreach (var projectId in ProjectIds) {
+								<TeamPageProjectCard CardId="@projectId.ToString()" OnCardClick="GoToProjectPage" />
+							}
 						}
+						else {
+							<MudCard>
+								<MudCardContent>
+									<MudText Typo="Typo.body2">No projects yet</MudText>
+								</MudCardContent>
+							</MudCard>
+						}
+
 					}
 					else {
-						<p>No projects available.</p>
+						<MudCard>
+							<MudCardContent>
+								<MudSkeleton Width="150px" Height="40px" />
+								<MudSkeleton />
+							</MudCardContent>
+						</MudCard>
 					}
 				</MudPaper>
 			</MudPaper>
 		</MudItem>
-		<MudItem xs="12" md="3">
+		<MudItem xs="12" md="3" style="flex: 1; display: flex; flex-direction: column;">
 			<MudPaper Height="100%">
 				<MudPaper>
 					<MudToolBar Class="custom-toolbar" Dense="true">
 						<MudText>Members</MudText>
 						<MudSpacer />
-						<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" />
+						<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" OnClick="LaunchAddMemberModal" />
 					</MudToolBar>
 
 					<MudList Clickable="true">
-						@if (MembersIds != null && MembersIds.Any()) {
-							@foreach (var memberId in MembersIds) {
-								<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
-							}
+						@foreach (var memberId in MembersIds) {
+							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
 						}
-
+						else {
+						<MudListItem>
+							<MudPaper Elevation="0" Class="d-flex flex-row">
+								<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+								<MudSkeleton Width="150px" Height="40px" />
+							</MudPaper>
+						</MudListItem>
+						}
 					</MudList>
 				</MudPaper>
 			</MudPaper>
@@ -70,34 +90,28 @@
 
 
 @code {
-	[Parameter]
-	public string? TeamId { get; set; }
+	[Parameter] public string? TeamId { get; set; }
 
 	public string TeamName { get; set; } = "";
 	public string? TeamDescription { get; set; } = "";
-	public string ownerId { get; set; } = "";
+	public string? OwnerId { get; set; } = "";
 	public List<Guid>? MembersIds { get; set; } = null;
 	private List<Guid>? ProjectIds { get; set; } = null;
 
-	[Inject]
-	public ITeamDataService TeamDataService { get; set; } = null!;
-
+	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
 }
 
 
 @functions {
 	protected override void OnParametersSet() {
 		base.OnParametersSet();
-	}
 
-	protected override async Task OnInitializedAsync() {
-		var team = await TeamDataService.GetTeamByIdAsync(TeamId);
-		TeamName = team.Name;
-		TeamDescription = team.Description;
-		MembersIds = new List<Guid>(team.MemberIds);
-		ProjectIds = new List<Guid>(team.ProjectIds);
-
-		
+		TeamId = "d";
+		TeamName = "Team D";
+		ProjectIds.Add(Guid.NewGuid());
+		ProjectIds.Add(Guid.NewGuid());
+		ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid()); ProjectIds.Add(Guid.NewGuid());
+		MembersIds.Add(Guid.NewGuid());
 	}
 
 	public void GoToProjectPage(string projectId) {
@@ -107,4 +121,11 @@
 		navigationManager.NavigateTo("/user/" + userId);
 	}
 
+	public void LaunchAddMemberModal() {
+		DialogParameters parameters = new DialogParameters();
+		parameters.Add("OwnerId", OwnerId);
+		parameters.Add("MembersIds", MembersIds);
+		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
+		DialogService.Show<TeamPageManageMembersModal>(null, parameters, closeOnEscapeKey);
+	}
 }

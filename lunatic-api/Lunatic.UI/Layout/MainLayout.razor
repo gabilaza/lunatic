@@ -8,67 +8,28 @@
 
 @*color scheme not yet in place*@
 <MudLayout>
-	<MudAppBar Color="Color.Dark" Fixed="false" Dense>
+	<MudAppBar Color="Color.Dark" Fixed="true" Dense>
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
 		<MudButton Color="Color.Inherit" OnClick="GoToTeams"> My Teams</MudButton>
 		<MudSpacer />
-		@* the oversight involved is too much to be usable in any context *@
-		@* <MudBreadcrumbs Items="_items" MaxItems="4" Separator="/">
-			<SeparatorTemplate>
-				<MudIcon Icon="@Icons.Material.Filled.ArrowRight" Size="Size.Small" Color="Color.Secondary" />
-			</SeparatorTemplate>
-			<ItemTemplate Context="item">
-				<MudLink Href="@item.Href" Color="Color.Secondary">
-					@item.Text.ToUpper()
-				</MudLink>
-			</ItemTemplate>
-
-		</MudBreadcrumbs> *@
-		<MudSpacer />
-
 		<MudIconButton Icon="@Icons.Material.Filled.Usb" Color="Color.Inherit" />
 
 	</MudAppBar>
 
-
-	@Body
+@* 	 <div class="mud-main-content" style="height:100vh; overflow-y:scroll; overflow-x:hidden;">
+		@Body
+	 </div> *@
+	<MudMainContent style="height:100vh; overflow-y:scroll; overflow-x:hidden;">
+		@Body
+	</MudMainContent>
 
 </MudLayout>
 
 @code {
-	// private List<BreadcrumbItem> _items = new List<BreadcrumbItem>();
-	//private string lastUrl = ""; //working with PWAs means there is no page refresh on page change
+	
 }
 
 @functions {
-
-	// protected async Task SetBreadcrumbs() {
-	// 	if(lastUrl == NavigationManager.Uri) return;
-
-	// 	_items.Clear();
-
-	// 	_items.Add(new BreadcrumbItem("Home", href: NavigationManager.BaseUri));
-
-	// 	string currentUrl = NavigationManager.Uri;
-	// 	var currentPageUrl = currentUrl.Replace(NavigationManager.BaseUri, "");
-
-	// 	var path = currentPageUrl.Split('/');
-
-	// 	foreach (var link in path) {
-	// 		if (link == "") continue;
-
-	// 		var lastLink = _items.Last().Href.TrimEnd('/');
-	// 		_items.Add(new BreadcrumbItem(link, href: $"{lastLink}/{link}"));
-	// 	}
-
-	// 	lastUrl = currentUrl;
-	// }
-
-	protected override void OnParametersSet() {
-		// SetBreadcrumbs();
-		base.OnParametersSet();
-	}
-
 	public void GoToTeams() {
 		NavigationManager.NavigateTo("/teams");
 	}

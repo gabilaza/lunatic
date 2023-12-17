@@ -1,0 +1,74 @@
+﻿@using MudBlazor
+@inject ISnackbar Snackbar
+@* @inject Blazored.LocalStorage.ILocalStorageService localStorage *@
+
+<style>
+	.member-management-toolbar {
+		background-color: #9271bd;
+		color: #ffffff;
+	}
+
+	.member-management-toolbar1 {
+		background-color: #ebc8a9;
+		color: #ffffff;
+	}
+
+	.member-management-toolbar2 {
+		background-color: #ebd5a9;
+		color: #ffffff;
+	}
+</style>
+
+<MudPaper Width="80vw" Height="80vh">
+	<MudPaper class="d-flex flex-column" style="height:100%;">
+		<MudToolBar Class="member-management-toolbar" Dense="true">
+			<MudText Typo="Typo.subtitle1">Manage members</MudText>
+			<MudSpacer />
+			<MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="() => MudDialog.Cancel()" />
+		</MudToolBar>
+
+		<MudGrid Spacing="0" style="height:100%;">
+			<MudItem xs="12" sm="3">
+				<MudPaper style="height:100%;">
+					<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
+					<MudAutocomplete T="string" Label="Search users by username" @bind-Value="searchValue" SearchFunc="@SearchUser"
+									 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary">
+						<ProgressIndicatorTemplate>
+							<MudProgressLinear Size="Size.Small" Indeterminate="true" Color="SelectedColor" />
+						</ProgressIndicatorTemplate>
+					</MudAutocomplete>
+
+				</MudPaper>
+			</MudItem>
+
+			<MudItem xs="12" sm="9">
+				<MudPaper style="height:100%;">
+					<MudToolBar Class="member-management-toolbar2" Dense>Manage members</MudToolBar>
+				</MudPaper>
+			</MudItem>
+		</MudGrid>
+	</MudPaper>
+</MudPaper>
+
+@code {
+	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+	[Parameter] public string OwnerId { get; set; } = "";
+	[Parameter] public List<Guid>? MembersIds { get; set; } = null;
+
+	private string searchValue = "";
+	private List<string> EmptyList = new List<string>();
+}
+
+
+@functions {
+	protected override void OnInitialized() {
+
+	}
+
+	public async Task<IEnumerable<string>> SearchUser() {
+
+		//now process and add to the picker
+
+		return EmptyList;
+	}
+}

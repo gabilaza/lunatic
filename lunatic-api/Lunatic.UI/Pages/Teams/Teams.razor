@@ -23,13 +23,21 @@
 			}
 		}
 		else {
-			<p>No teams available.</p>
+			<MudCard>
+				<MudCardContent>
+					<MudSkeleton Width="100px" Height="40px"/>
+					<br />
+					<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="150px" />
+					<br />
+					<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="50px" />
+				</MudCardContent>
+			</MudCard>
 		}
 	</MudPaper>
 </div>
 
 @code {
-	private List<TeamDto> UserTeams { get; set; } = null;
+	private List<TeamDto>? UserTeams { get; set; } = null;
 	[Inject] private ITeamDataService TeamsService { get; set; } = null!;
 	private Guid CurrentUserId { get; set; } = Guid.Empty;
 }
