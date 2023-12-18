@@ -4,6 +4,7 @@
 @using MudBlazor
 @inject NavigationManager navigationManager
 @inject CustomStateProvider authStateProvider
+@inject ISnackbar Snackbar
 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 <DataAnnotationsValidator/>
@@ -38,7 +39,8 @@
         try
         {
             await authStateProvider.Register(model);
-            navigationManager.NavigateTo("/");
+			Snackbar.Add("Account created successfully", Severity.Success);
+            navigationManager.NavigateTo("/login");
         }
         catch (Exception e)
         {

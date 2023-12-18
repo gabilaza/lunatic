@@ -34,7 +34,7 @@
 					<MudAutocomplete T="string" Label="Search users by username" @bind-Value="searchValue" SearchFunc="@SearchUser"
 									 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary">
 						<ProgressIndicatorTemplate>
-							<MudProgressLinear Size="Size.Small" Indeterminate="true" Color="SelectedColor" />
+							<MudProgressLinear Size="Size.Small" Indeterminate="true" Color="Color.Error" />
 						</ProgressIndicatorTemplate>
 					</MudAutocomplete>
 
@@ -65,7 +65,7 @@
 
 	}
 
-	public async Task<IEnumerable<string>> SearchUser() {
+	public async Task<IEnumerable<string>> SearchUser(string s) {
 
 		//now process and add to the picker
 

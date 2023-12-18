@@ -5,6 +5,7 @@
 @using Lunatic.UI.ViewModels
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <div class="d-flex justify-center">
@@ -17,21 +18,30 @@
 <div class="d-flex justify-center">
 
 	<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0" MaxWidth="90vw">
-		@if (UserTeams != null && UserTeams.Any()) {
-			@foreach (var teamDto in UserTeams) {
-				<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" TeamDescription="@teamDto.Description" />
+		@if (UserTeams != null) {
+			@if (UserTeams.Any()) {
+				@foreach (var teamDto in UserTeams) {
+					<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" TeamDescription="@teamDto.Description" />
+				}
+			}
+			else {
+				<MudCard>
+					<MudCardContent>
+						<MudText Typo="Typo.body2">No teams to show!</MudText>
+					</MudCardContent>
+				</MudCard>
 			}
 		}
 		else {
-			<MudCard>
-				<MudCardContent>
-					<MudSkeleton Width="100px" Height="40px"/>
-					<br />
-					<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="150px" />
-					<br />
-					<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="50px" />
-				</MudCardContent>
-			</MudCard>
+		<MudCard>
+			<MudCardContent>
+				<MudSkeleton Width="100px" Height="40px" />
+				<br />
+				<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="150px" />
+				<br />
+				<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="50px" />
+			</MudCardContent>
+		</MudCard>
 		}
 	</MudPaper>
 </div>
@@ -62,6 +72,7 @@
 
 	private async Task LoadUserTeams() {
 		UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+		Snackbar.Add("Teams loaded!"+UserTeams.ToString(), Severity.Success);
 	}
 	private void OpenCreateTeamModal() {
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class" };

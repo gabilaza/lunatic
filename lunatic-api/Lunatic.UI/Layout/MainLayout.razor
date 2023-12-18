@@ -1,6 +1,13 @@
 ﻿@inherits LayoutComponentBase
+@using Blazored.LocalStorage
+@using Lunatic.UI.Contracts
+@using Lunatic.UI.Auth
 @using MudBlazor
 @inject NavigationManager NavigationManager
+@* @inject CustomStateProvider AuthStateProvider *@
+@inject ITokenService TokenService
+@inject ILocalStorageService LocalStorageService
+@inject ISnackbar Snackbar
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -12,13 +19,34 @@
 		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
 		<MudButton Color="Color.Inherit" OnClick="GoToTeams"> My Teams</MudButton>
 		<MudSpacer />
-		<MudIconButton Icon="@Icons.Material.Filled.Usb" Color="Color.Inherit" />
-
+		@if (@LoggedIn) {
+			<MudMenu FullWidth="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+				<ActivatorContent>
+					<MudChip Size="Size.Large">
+						<AvatarContent>
+							<MudAvatar>
+								<MudImage Src="images/dog.jpg"></MudImage>
+							</MudAvatar>
+						</AvatarContent>
+						<ChildContent>
+							<MudText Typo="Typo.body2" Color="Color.Info">@Username</MudText>
+						</ChildContent>
+					</MudChip>
+				</ActivatorContent>
+				<ChildContent>
+					<MudMenuItem>Profile</MudMenuItem>
+					@* <MudMenuItem>Theme</MudMenuItem> *@
+					@* <MudMenuItem>Usage</MudMenuItem> *@
+					<MudMenuItem>Sign Out</MudMenuItem>
+				</ChildContent>
+			</MudMenu>
+		}
+@* 		else {
+			<MudButton Color="Color.Inherit" OnClick="GoToLogin">Login</MudButton>
+		} *@
 	</MudAppBar>
 
-@* 	 <div class="mud-main-content" style="height:100vh; overflow-y:scroll; overflow-x:hidden;">
-		@Body
-	 </div> *@
+
 	<MudMainContent style="height:100vh; overflow-y:scroll; overflow-x:hidden;">
 		@Body
 	</MudMainContent>
@@ -26,11 +54,74 @@
 </MudLayout>
 
 @code {
-	
+	private bool LoggedIn { get; set; } = false;
+	private string? RegisterUri { get; set; }
+	private string? LoginUri { get; set; }
+	private string? Token { get; set; }
+
+	private bool UserDataLoadedFlag { get; set; } = false;
+	private string? Username { get; set; }
+	private string? UserId { get; set; }
+
+	[Inject] IUserDataService UserDataService { get; set; } = null!;
 }
 
 @functions {
+
+	private async Task DisplayUserChip() {
+
+		if (!UserDataLoadedFlag) {
+			UserId = await LocalStorageService.GetItemAsync<string>("userId");
+
+			var response = await UserDataService.GetUserByIdAsync(UserId);
+
+			if (!response.Success) {
+				Snackbar.Add(response.Message, Severity.Error);
+				return;
+			}
+
+			var userData = response.GetValue("user");
+			Console.WriteLine(userData);
+			Username = userData.Username;
+			//user image, get from cache or make request
+
+			UserDataLoadedFlag = true;
+		}
+	}
+
+	//https://learn.microsoft.com/en-us/aspnet/core/blazor/components/lifecycle?view=aspnetcore-8.0
+	//OnInitializedAsync is called after OnParametersSetAsync
+	protected override async Task OnInitializedAsync() {
+
+		await DisplayUserChip();
+	}
+
+	protected override async Task OnParametersSetAsync() {
+		if (Token == null)
+			Token = await TokenService.GetTokenAsync();
+
+		if (RegisterUri == null)
+			RegisterUri = NavigationManager.ToAbsoluteUri("/register").ToString();
+		if (LoginUri == null)
+			LoginUri = NavigationManager.ToAbsoluteUri("/login").ToString();
+
+		string uri = NavigationManager.Uri;
+
+		if (Token == null) {
+			LoggedIn = false;
+			if (!uri.Equals(RegisterUri, StringComparison.OrdinalIgnoreCase) &&
+				!uri.Equals(LoginUri, StringComparison.OrdinalIgnoreCase))
+				NavigationManager.NavigateTo("/login");
+		}
+		else {
+			LoggedIn = true;
+		}
+	}
+
 	public void GoToTeams() {
 		NavigationManager.NavigateTo("/teams");
+	}
+	public void GoToLogin() {
+		NavigationManager.NavigateTo("/login");
 	}
 }

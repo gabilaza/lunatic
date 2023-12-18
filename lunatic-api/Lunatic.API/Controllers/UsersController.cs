@@ -70,10 +70,10 @@ namespace Lunatic.API.Controllers {
 		[ProducesResponseType<GetAllUserTeamsQueryResponse>(StatusCodes.Status404NotFound)]
 		public async Task<IActionResult> GetTeams(Guid userId) {
 			var result = await Mediator.Send(new GetAllUserTeamsQuery(userId));
-			//if(!result.Success) {
-			//    return NotFound(result);
-			//}
-			return Ok(result.Teams);
+            if (!result.Success) {
+                return NotFound(result);
+            }
+            return Ok(result);
 		}
 	}
 }

@@ -42,6 +42,9 @@ namespace Lunatic.UI {
 			builder.Services.AddHttpClient<IAuthenticationService, AuthenticationService>(client => {
 				client.BaseAddress = new Uri("https://localhost:7555/");
 			});
+			builder.Services.AddHttpClient<IUserDataService, UserDataService>(client => {
+				client.BaseAddress = new Uri("https://localhost:7555/");
+			});
 
 			builder.Services.AddMudServices();
 
