@@ -72,7 +72,6 @@
 
 	private async Task LoadUserTeams() {
 		UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
-		Snackbar.Add("Teams loaded!"+UserTeams.ToString(), Severity.Success);
 	}
 	private void OpenCreateTeamModal() {
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class" };
