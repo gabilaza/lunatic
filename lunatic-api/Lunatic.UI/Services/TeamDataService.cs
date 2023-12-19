@@ -37,12 +37,13 @@ namespace Lunatic.UI.Services {
 			var result = await httpClient.GetAsync($"api/v1/users/{userId}/teams", HttpCompletionOption.ResponseHeadersRead);
 			//result.EnsureSuccessStatusCode();
 			var teams = await result.Content.ReadFromJsonAsync<ApiResponse<List<TeamDto>>>();
-			Console.Out.WriteLine(teams);
 			return teams!.GetValue("teams");
 		}
 
-		public Task<TeamDto> GetTeamByIdAsync(Guid teamId) {
-			throw new NotImplementedException();
+		public async Task<TeamDto> GetTeamByIdAsync(string teamId) {
+			var result = await httpClient.GetAsync($"{RequestUri}/{teamId}", HttpCompletionOption.ResponseHeadersRead);
+			var team = await result.Content.ReadFromJsonAsync<TeamDto>();
+			return team!;
 		}
 	}
 }

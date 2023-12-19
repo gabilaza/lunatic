@@ -15,6 +15,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Pages\Teams\TeamPageTemplates\TeamPageManageMembersModal.razor.css" />
+    <None Remove="Pages\Teams\TeamPageTemplates\TeamPageProjectCard.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\Teams\TeamPageTemplates\TeamPageManageMembersModal.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
@@ -29,6 +38,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Pages\Teams\TeamPageTemplates\TeamPageProjectCard.razor.css" />
   </ItemGroup>
 
 </Project>

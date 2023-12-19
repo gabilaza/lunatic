@@ -4,5 +4,7 @@ using Lunatic.UI.ViewModels;
 namespace Lunatic.UI.Contracts {
 	public interface IUserDataService {
 		Task<ApiResponse<UserDto>> GetUserByIdAsync(string id);
+		Task<List<UserDto>> GetUsersByUsernameAsync(string usernameMatch);
+		Task<ApiResponse<bool>> RemoveUserFromTeamAsync(string memberId, string teamId);
 	}
 }

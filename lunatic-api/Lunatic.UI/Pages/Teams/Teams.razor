@@ -1,4 +1,5 @@
 ﻿@page "/teams"
+
 @using MudBlazor
 @using Lunatic.UI.Pages.Teams.TeamsPageTemplates
 @using Lunatic.UI.Contracts
@@ -7,6 +8,8 @@
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+
 
 <div class="d-flex justify-center">
 	<h3 class="">Your teams</h3>
@@ -21,7 +24,7 @@
 		@if (UserTeams != null) {
 			@if (UserTeams.Any()) {
 				@foreach (var teamDto in UserTeams) {
-					<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" TeamDescription="@teamDto.Description" />
+					<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" />@*  TeamDescription="@teamDto.Description" *@
 				}
 			}
 			else {

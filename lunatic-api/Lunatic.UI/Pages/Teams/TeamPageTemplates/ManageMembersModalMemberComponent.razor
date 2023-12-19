@@ -1,0 +1,46 @@
+﻿@using MudBlazor
+@using Lunatic.UI.Contracts
+
+<MudPaper Class="@ItemClasses">
+	<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+	<MudText>
+		Username
+	</MudText>
+	<MudSpacer />
+	<MudButton OnClick="RemoveMember">
+		Remove
+	</MudButton>
+</MudPaper>
+
+@code {
+	[Parameter] public string TeamId { get; set; } = null!;
+	[Parameter] public string MemberId { get; set; } = null!;
+	// [Parameter] public EventCallback<string> OnRemoveMember { get; set; }
+	public string Username { get; set; } = "";
+	public string ItemClasses = "d-flex flex-row";
+
+	[Inject] public IUserDataService UserDataService { get; set; } = null!;
+	[Parameter] public bool IsVisible { get; set; }
+
+}
+
+@functions {
+
+	protected override async Task OnInitializedAsync() {
+
+		var result = await UserDataService.GetUserByIdAsync(MemberId.ToString());
+
+		var user = result.GetValue("user");
+
+		Username = user.Username;
+
+	}
+
+	private async Task RemoveMember() {
+		var result = await UserDataService.RemoveUserFromTeamAsync(MemberId, TeamId);
+	}
+	private void MarkInvisible() {
+		ItemClasses = "invisible d-flex flex-row";
+	}
+
+}

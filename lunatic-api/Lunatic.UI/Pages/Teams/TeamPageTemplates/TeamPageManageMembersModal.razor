@@ -1,6 +1,9 @@
 ﻿@using MudBlazor
 @inject ISnackbar Snackbar
-@* @inject Blazored.LocalStorage.ILocalStorageService localStorage *@
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using Microsoft.AspNetCore.Components
+@using Lunatic.UI.Contracts
+@using System.Text.Json
 
 <style>
 	.member-management-toolbar {
@@ -20,54 +23,150 @@
 </style>
 
 <MudPaper Width="80vw" Height="80vh">
-	<MudPaper class="d-flex flex-column" style="height:100%;">
+	<MudPaper class="d-flex flex-column" style="height:100%">
 		<MudToolBar Class="member-management-toolbar" Dense="true">
 			<MudText Typo="Typo.subtitle1">Manage members</MudText>
 			<MudSpacer />
 			<MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="() => MudDialog.Cancel()" />
 		</MudToolBar>
 
+		@* 	<MudDropContainer T="UserItem" Items="userItems" ItemsSelector="@((item,dropzone) => item.DropzoneIdentifier == dropzone)" ItemDropped="TaskUpdated" @ref="MudDropContainerRef">
+		<ChildContent> *@
+
 		<MudGrid Spacing="0" style="height:100%;">
 			<MudItem xs="12" sm="3">
-				<MudPaper style="height:100%;">
+				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
 					<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
-					<MudAutocomplete T="string" Label="Search users by username" @bind-Value="searchValue" SearchFunc="@SearchUser"
+					<MudAutocomplete T="string" Label="Search users by username" @bind-Value="searchValue" SearchFunc="SearchUsers"
 									 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary">
 						<ProgressIndicatorTemplate>
 							<MudProgressLinear Size="Size.Small" Indeterminate="true" Color="Color.Error" />
 						</ProgressIndicatorTemplate>
 					</MudAutocomplete>
 
+					@* <MudDropZone T="UserItem" Identifier="search" Style="background-color:red;" CanDrop="@((item) => item.DropzoneIdentifier != DropzoneIdentifier.Search)">
+					<MudText Typo="Typo.h6" Class="mb-4">Drop Zone 1</MudText>
+					</MudDropZone> *@
+
+					<MudPaper>
+						@* @if (userItems != null)
+						{ *@
+							@foreach (var searchResult in userItems)
+							{
+								<MudPaper>
+									<MudText>@searchResult.Username</MudText>
+									</MudPaper>
+							}
+						@* } *@
+					</MudPaper>
 				</MudPaper>
 			</MudItem>
 
 			<MudItem xs="12" sm="9">
-				<MudPaper style="height:100%;">
+				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
 					<MudToolBar Class="member-management-toolbar2" Dense>Manage members</MudToolBar>
+
+					@* <MudDropZone T="UserItem" Identifier="members">
+					<MudText Typo="Typo.h6" Class="mb-4">Drop Zone 2</MudText>
+					</MudDropZone> *@
+
+					<MudPaper style="max-height:100%; overflow-y:scroll; overflow-x:hidden;">
+						@* TODO: scroll issues *@
+						<MudPaper>  @* TODO: componenta cu callback *@
+							@foreach (var memberId in MembersIds) {
+								<ManageMembersModalMemberComponent MemberId="@memberId.ToString()"/>
+							}
+						</MudPaper>
+					</MudPaper>
 				</MudPaper>
 			</MudItem>
 		</MudGrid>
+		@* </ChildContent>
+		<ItemRenderer>
+		<MudPaper Elevation="0" Class="d-flex flex-row p-1">
+		<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+		<MudText>
+		@context.Username
+		</MudText>
+		</MudPaper>
+		</ItemRenderer>
+		</MudDropContainer> *@
 	</MudPaper>
+
 </MudPaper>
 
 @code {
 	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
-	[Parameter] public string OwnerId { get; set; } = "";
-	[Parameter] public List<Guid>? MembersIds { get; set; } = null;
+	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
+	[Parameter] public List<Guid> MembersIds { get; set; } = null;
+
+	private List<UserItem>? userItems = new() { new UserItem("dd", "ff")};
 
 	private string searchValue = "";
 	private List<string> EmptyList = new List<string>();
+
+	private MudList MList { get; set; } = null!;
+
+	// public MudDropContainer<UserItem> MudDropContainerRef { get; set; } = null!;
+
+	// public class DropzoneIdentifier {
+	// 	public const string Search = "search";
+	// 	public const string Members = "members";
+	// }
+
+	public class UserItem {
+
+		public string UserId { get; init; }
+		public string Username { get; init; }
+
+		// public string Avatar { get; init; }
+
+		public UserItem(string userId, string username) {
+			UserId = userId;
+			Username = username;
+		}
+	}
+	// public List<UserItem> userItems = new() { new UserItem("ee", "ee", "search") };
+
+	[Inject] IUserDataService UserDataService { get; set; } = null!;
 }
 
 
 @functions {
-	protected override void OnInitialized() {
+	protected override async Task OnInitializedAsync() {
+		var currentUserId = await localStorage.GetItemAsync<string>("userId");
 
+		if (currentUserId != OwnerId) {
+			Snackbar.Add("You are not the owner of this team", Severity.Error);
+			MudDialog.Cancel();
+		}
+
+		foreach (var memberId in MembersIds) {
+			var user = await UserDataService.GetUserByIdAsync(memberId.ToString());
+		}
 	}
+	// private void TaskUpdated(MudItemDropInfo<UserItem> userItem) {
+	// 	userItem.Item.DropzoneIdentifier = userItem.DropzoneIdentifier;
+	// }
 
-	public async Task<IEnumerable<string>> SearchUser(string s) {
 
-		//now process and add to the picker
+
+	public async Task<IEnumerable<string>> SearchUsers(string s) {
+		// userItems = null;
+		if (s.Length < 3) {
+			return EmptyList;
+		}
+
+		var result = await UserDataService.GetUsersByUsernameAsync(s);
+		Console.WriteLine(result);
+		if (result != null) {
+			// userItems = new List<UserItem>();
+			userItems.Clear();
+			foreach (var user in result) {
+				userItems.Add(new UserItem(user.UserId.ToString(), user.Username));
+			}
+		}
+		Console.WriteLine(JsonSerializer.Serialize(userItems));
 
 		return EmptyList;
 	}

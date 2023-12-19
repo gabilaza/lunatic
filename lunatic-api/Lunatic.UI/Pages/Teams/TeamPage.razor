@@ -2,8 +2,10 @@
 @using MudBlazor
 @using Lunatic.UI.Contracts
 @using Lunatic.UI.Pages.Teams.TeamPageTemplates
+ @* @using System.Text.Json *@
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <style>
 	.custom-toolbar {
@@ -69,16 +71,18 @@
 					</MudToolBar>
 
 					<MudList Clickable="true">
-						@foreach (var memberId in MembersIds) {
-							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
+						@if (MembersIds != null) {
+							@foreach (var memberId in MembersIds) {
+								<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
+							}
 						}
 						else {
-						<MudListItem>
-							<MudPaper Elevation="0" Class="d-flex flex-row">
-								<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
-								<MudSkeleton Width="150px" Height="40px" />
-							</MudPaper>
-						</MudListItem>
+							<MudListItem>
+								<MudPaper Elevation="0" Class="d-flex flex-row">
+									<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+									<MudSkeleton Width="150px" Height="40px" />
+								</MudPaper>
+							</MudListItem>
 						}
 					</MudList>
 				</MudPaper>
@@ -93,8 +97,8 @@
 	[Parameter] public string? TeamId { get; set; }
 
 	public string TeamName { get; set; } = "";
-	public string? TeamDescription { get; set; } = "";
-	public string? OwnerId { get; set; } = "";
+	public string TeamDescription { get; set; } = "";
+	public string OwnerId { get; set; } = "";
 	public List<Guid>? MembersIds { get; set; } = null;
 	private List<Guid>? ProjectIds { get; set; } = null;
 
@@ -103,8 +107,19 @@
 
 
 @functions {
-	protected override void OnParametersSet() {
-		base.OnParametersSet();
+	// protected override async void OnParametersSet() {
+	// 	base.OnParametersSet();
+	// }
+	protected override async Task OnParametersSetAsync() {
+
+		var team = await TeamDataService.GetTeamByIdAsync(TeamId);
+		// Console.WriteLine(JsonSerializer.Serialize(team));
+		TeamName = team.Name;
+		TeamDescription = team.Description;
+		OwnerId = team.OwnerId;
+		MembersIds = team.MemberIds;
+		ProjectIds = team.ProjectIds;
+
 
 	}
 
@@ -117,6 +132,7 @@
 
 	public void LaunchAddMemberModal() {
 		DialogParameters parameters = new DialogParameters();
+		Console.WriteLine(OwnerId);
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("MembersIds", MembersIds);
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };

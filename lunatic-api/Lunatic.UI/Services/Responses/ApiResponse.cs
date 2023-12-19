@@ -17,7 +17,6 @@ namespace Lunatic.UI.Services.Responses {
 			}
 
 			return Data[propertyName].Deserialize<T>(options)!;
-
 		}
 
 		public override string ToString() {
