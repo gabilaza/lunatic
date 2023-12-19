@@ -29,20 +29,20 @@
 							</MudAvatar>
 						</AvatarContent>
 						<ChildContent>
-							<MudText Typo="Typo.body2" Color="Color.Info">@Username</MudText>
+							<MudText Typo="Typo.body2" Color="Color.Info">
+								@Username
+							</MudText>
 						</ChildContent>
 					</MudChip>
 				</ActivatorContent>
 				<ChildContent>
-					<MudMenuItem>Profile</MudMenuItem>
-					@* <MudMenuItem>Theme</MudMenuItem> *@
-					@* <MudMenuItem>Usage</MudMenuItem> *@
-					<MudMenuItem>Sign Out</MudMenuItem>
+					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{Username}"))">Profile</MudMenuItem>
+					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem>
 				</ChildContent>
 			</MudMenu>
 		}
-@* 		else {
-			<MudButton Color="Color.Inherit" OnClick="GoToLogin">Login</MudButton>
+		@* 		else {
+		<MudButton Color="Color.Inherit" OnClick="GoToLogin">Login</MudButton>
 		} *@
 	</MudAppBar>
 
