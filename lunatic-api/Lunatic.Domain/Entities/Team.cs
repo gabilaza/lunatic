@@ -13,7 +13,6 @@ namespace Lunatic.Domain.Entities {
         public Guid TeamId { get; private set; }
 
         public string Name { get; private set; }
-
         public string Description { get; private set; }
 
         public List<Guid> MemberIds { get; private set; } = new List<Guid>();
