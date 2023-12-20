@@ -21,6 +21,7 @@ namespace Lunatic.Application.Features.Teams.Queries.GetAll {
                     TeamId = team.TeamId,
 
                     Name = team.Name,
+                    Description = team.Description,
 
                     MemberIds = team.MemberIds,
                     ProjectIds = team.ProjectIds,

@@ -36,6 +36,7 @@ namespace Lunatic.Application.Features.Teams.Commands.DeleteTeamMember {
                     TeamId = dbTeamResult.Value.TeamId,
 
                     Name = dbTeamResult.Value.Name,
+                    Description = dbTeamResult.Value.Description,
 
                     MemberIds = dbTeamResult.Value.MemberIds,
                     ProjectIds = dbTeamResult.Value.ProjectIds,

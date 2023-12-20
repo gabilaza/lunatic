@@ -7,5 +7,6 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
         public Guid UserId { get; set; } = default!;
 
         public string Name { get; set; } = default!;
+        public string Description { get; set; } = default!;
     }
 }

@@ -27,6 +27,7 @@ namespace Lunatic.Application.Features.Teams.Queries.GetById {
                     TeamId = teamResult.Value.TeamId,
 
                     Name = teamResult.Value.Name,
+                    Description = teamResult.Value.Description,
 
                     MemberIds = teamResult.Value.MemberIds,
                     ProjectIds = teamResult.Value.ProjectIds,

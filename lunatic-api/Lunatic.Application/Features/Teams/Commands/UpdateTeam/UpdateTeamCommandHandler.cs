@@ -31,7 +31,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
                 };
             }
 
-            teamResult.Value.Update(request.Name);
+            teamResult.Value.Update(request.Name, request.Description);
 
             var dbTeamResult = await this.teamRepository.UpdateAsync(teamResult.Value);
 
@@ -41,6 +41,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
                     TeamId = dbTeamResult.Value.TeamId,
 
                     Name = dbTeamResult.Value.Name,
+                    Description = dbTeamResult.Value.Description,
 
                     MemberIds = dbTeamResult.Value.MemberIds,
                     ProjectIds = dbTeamResult.Value.ProjectIds,
