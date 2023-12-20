@@ -26,17 +26,11 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpPut("{projectId}/tasks/{taskId}")]
+        [HttpPut("tasks/{taskId}")]
         [Produces("application/json")]
         [ProducesResponseType<UpdateProjectTaskCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<UpdateProjectTaskCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, UpdateProjectTaskCommand command) {
-            if(projectId != command.ProjectId) {
-                return BadRequest(new UpdateProjectTaskCommandResponse {
-                        Success = false,
-                        ValidationErrors = new List<string> { "The project Id Path and project Id Body must be equal." }
-                });
-            }
+        public async Task<IActionResult> UpdateTask(Guid taskId, UpdateProjectTaskCommand command) {
             if(taskId != command.TaskId) {
                 return BadRequest(new UpdateProjectTaskCommandResponse {
                         Success = false,
@@ -79,13 +73,12 @@ namespace Lunatic.API.Controllers {
             return Ok(result);
         }
 
-        [HttpGet("{projectId}/tasks/{taskId}")]
+        [HttpGet("tasks/{taskId}")]
         [Produces("application/json")]
         [ProducesResponseType<GetByIdProjectTaskQueryResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<GetByIdProjectTaskQueryResponse>(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByIdTask(Guid projectId, Guid taskId) {
+        public async Task<IActionResult> GetByIdTask(Guid taskId) {
             var result = await Mediator.Send(new GetByIdProjectTaskQuery {
-                    ProjectId = projectId,
                     TaskId = taskId});
             if(!result.Success) {
                 return NotFound(result);

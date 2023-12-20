@@ -5,19 +5,10 @@ using FluentValidation;
 
 namespace Lunatic.Application.Features.Teams.Commands.UpdateTeamProject {
     internal class UpdateTeamProjectCommandValidator : AbstractValidator<UpdateTeamProjectCommand> {
-        private readonly ITeamRepository teamRepository;
-
         private readonly IProjectRepository projectRepository;
 
-        public UpdateTeamProjectCommandValidator(ITeamRepository teamRepository, IProjectRepository projectRepository) {
-            this.teamRepository = teamRepository;
+        public UpdateTeamProjectCommandValidator(IProjectRepository projectRepository) {
             this.projectRepository = projectRepository;
-
-            RuleFor(request => request.TeamId)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.")
-                .MustAsync(async (teamId, cancellationToken) => await this.teamRepository.ExistsByIdAsync(teamId))
-                .WithMessage("{PropertyName} must exists.");
 
             RuleFor(request => request.ProjectId)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
@@ -34,12 +25,6 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeamProject {
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
                 .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
-
-            RuleFor(request => new {request.TeamId, request.ProjectId})
-                .MustAsync(async (req, cancellationToken) => {
-                        var team = (await this.teamRepository.FindByIdAsync(req.TeamId)).Value;
-                        return team.ProjectIds.Contains(req.ProjectId);})
-                .WithMessage("Team must include ProjectId.");
         }
     }
 }

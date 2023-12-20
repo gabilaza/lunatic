@@ -6,17 +6,14 @@ using MediatR;
 
 namespace Lunatic.Application.Features.Tasks.Queries.GetByIdComment {
     public class GetByIdTaskCommentQueryHandler : IRequestHandler<GetByIdTaskCommentQuery, GetByIdTaskCommentQueryResponse> {
-        private readonly ITaskRepository taskRepository;
-
         private readonly ICommentRepository commentRepository;
 
-        public GetByIdTaskCommentQueryHandler(ITaskRepository taskRepository, ICommentRepository commentRepository) {
-            this.taskRepository = taskRepository;
+        public GetByIdTaskCommentQueryHandler(ICommentRepository commentRepository) {
             this.commentRepository = commentRepository;
         }
 
         public async Task<GetByIdTaskCommentQueryResponse> Handle(GetByIdTaskCommentQuery request, CancellationToken cancellationToken) {
-            var validator = new GetByIdTaskCommentQueryValidator(this.taskRepository, this.commentRepository);
+            var validator = new GetByIdTaskCommentQueryValidator(this.commentRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {

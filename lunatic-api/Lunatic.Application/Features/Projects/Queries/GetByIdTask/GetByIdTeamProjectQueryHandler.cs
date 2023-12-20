@@ -6,17 +6,14 @@ using MediatR;
 
 namespace Lunatic.Application.Features.Projects.Queries.GetByIdTask {
     public class GetByIdProjectTaskQueryHandler : IRequestHandler<GetByIdProjectTaskQuery, GetByIdProjectTaskQueryResponse> {
-        private readonly IProjectRepository projectRepository;
-
         private readonly ITaskRepository taskRepository;
 
-        public GetByIdProjectTaskQueryHandler(IProjectRepository projectRepository, ITaskRepository taskRepository) {
-            this.projectRepository = projectRepository;
+        public GetByIdProjectTaskQueryHandler(ITaskRepository taskRepository) {
             this.taskRepository = taskRepository;
         }
 
         public async Task<GetByIdProjectTaskQueryResponse> Handle(GetByIdProjectTaskQuery request, CancellationToken cancellationToken) {
-            var validator = new GetByIdProjectTaskQueryValidator(this.projectRepository, this.taskRepository);
+            var validator = new GetByIdProjectTaskQueryValidator(this.taskRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {

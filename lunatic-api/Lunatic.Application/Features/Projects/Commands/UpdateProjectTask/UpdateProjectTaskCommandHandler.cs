@@ -6,17 +6,14 @@ using MediatR;
 
 namespace Lunatic.Application.Features.Projects.Commands.UpdateProjectTask {
     public class UpdateProjectTaskCommandHandler : IRequestHandler<UpdateProjectTaskCommand, UpdateProjectTaskCommandResponse> {
-        private readonly IProjectRepository projectRepository;
-
         private readonly ITaskRepository taskRepository;
 
-        public UpdateProjectTaskCommandHandler(IProjectRepository projectRepository, ITaskRepository taskRepository) {
-            this.projectRepository = projectRepository;
+        public UpdateProjectTaskCommandHandler(ITaskRepository taskRepository) {
             this.taskRepository = taskRepository;
         }
 
         public async Task<UpdateProjectTaskCommandResponse> Handle(UpdateProjectTaskCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateProjectTaskCommandValidator(this.projectRepository, this.taskRepository);
+            var validator = new UpdateProjectTaskCommandValidator(this.taskRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
