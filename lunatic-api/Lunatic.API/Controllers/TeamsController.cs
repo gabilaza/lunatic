@@ -200,21 +200,12 @@ namespace Lunatic.API.Controllers {
         [Produces("application/json")]
         [ProducesResponseType<DeleteTeamMemberCommandResponse>(StatusCodes.Status200OK)]
         [ProducesResponseType<DeleteTeamMemberCommandResponse>(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> DeleteMember(Guid teamId, Guid userId, DeleteTeamMemberCommand command) {
-            if(teamId != command.TeamId) {
-                return BadRequest(new DeleteTeamMemberCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { "The team Id Path and team Id Body must be equal." }
-                });
-            }
-            if(userId != command.UserId) {
-                return BadRequest(new DeleteTeamMemberCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { "The user Id Path and user Id Body must be equal." }
-                });
-            }
-
-            var result = await Mediator.Send(command);
+        public async Task<IActionResult> DeleteMember(Guid teamId, Guid userId) {
+            var deleteTeamMemberCommand = new DeleteTeamMemberCommand() {
+                TeamId = teamId,
+                UserId = userId
+            };
+            var result = await Mediator.Send(deleteTeamMemberCommand);
             if(!result.Success) {
                 return BadRequest(result);
             }
