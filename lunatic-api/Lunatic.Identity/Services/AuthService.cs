@@ -27,7 +27,7 @@ namespace Lunatic.Identity.Services {
         }
 
         public async Task<RegisterResponse> Registeration(RegistrationModel model, string role) {
-            var userExists = await userManager.FindByNameAsync(model.Username!);
+            var userExists = await userManager.FindByNameAsync(model.Username);
             if(userExists != null) {
                 return new RegisterResponse {
                     Success = false,
@@ -35,7 +35,7 @@ namespace Lunatic.Identity.Services {
                 };
             }
 
-            var userDb = User.Create(model.FirstName!, model.LastName!, model.Email!, model.Username!, model.Password!, Role.USER);
+            var userDb = User.Create(model.FirstName, model.LastName, model.Email, model.Username, model.Password, Role.USER);
             if(!userDb.IsSuccess) {
                 return new RegisterResponse {
                     Success = false,
@@ -50,7 +50,7 @@ namespace Lunatic.Identity.Services {
                 UserName = model.Username,
             };
 
-            var createUserResult = await userManager.CreateAsync(user, model.Password!);
+            var createUserResult = await userManager.CreateAsync(user, model.Password);
             if(!createUserResult.Succeeded) {
                 return new RegisterResponse {
                     Success = false,
@@ -74,14 +74,14 @@ namespace Lunatic.Identity.Services {
         }
 
         public async Task<LoginResponse> Login(LoginModel model) {
-            var user = await userManager.FindByNameAsync(model.Username!);
+            var user = await userManager.FindByNameAsync(model.Username);
             if(user == null) {
                 return new LoginResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Invalid username" }
                 };
             }
-            if(!await userManager.CheckPasswordAsync(user, model.Password!)) {
+            if(!await userManager.CheckPasswordAsync(user, model.Password)) {
                 return new LoginResponse {
                     Success = false,
                     ValidationErrors = new List<string> { "Invalid password" }
