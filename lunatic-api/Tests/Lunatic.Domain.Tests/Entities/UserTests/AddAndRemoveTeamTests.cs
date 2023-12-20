@@ -4,21 +4,21 @@ using Lunatic.Domain.Entities;
 
 namespace Lunatic.Domain.Tests.Entities.UserTests {
     public class AddAndRemoveTeamTests {
-        public const string FirstName = "Gabriel";
-        public const string LastName = "Laza";
-        public const string Email = "glaza@gmail.com";
-        public const string Username = "glaza";
-        public const string Password = "String123#";
-        public const Role MockRole = Role.USER;
+        public const string UserFirstName = "Gabriel";
+        public const string UserLastName = "Laza";
+        public const string UserEmail = "glaza@gmail.com";
+        public const string UserUsername = "glaza";
+        public const string UserPassword = "String123#";
+        public const Role UserRole = Role.USER;
 
-        public const string Name = "Lunatic";
-        public const string Description = "Lunatic Description";
+        public const string TeamName = "Lunatic";
+        public const string TeamDescription = "Lunatic Description";
 
         [Fact]
         public void GivenUserWithTeams_WhenAddAndRemoveTeam_ThenTeamAddedAndRemovedSuccessfully() {
             // given
-            var user = User.Create(FirstName, LastName, Email, Username, Password, MockRole).Value;
-            var team = Team.Create(Guid.NewGuid(), Name, Description).Value;
+            var user = User.Create(UserFirstName, UserLastName, UserEmail, UserUsername, UserPassword, UserRole).Value;
+            var team = Team.Create(Guid.NewGuid(), TeamName, TeamDescription).Value;
             var teamId = Guid.NewGuid();
 
             // when
