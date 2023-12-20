@@ -4,7 +4,7 @@ services:
     image: postgres:latest
     container_name: lunatic-db
     ports:
-     - 9090:5432
+     - 5432:5432
     environment:
       POSTGRES_DB: LunaticDB
       POSTGRES_USER: lunatic
@@ -20,7 +20,7 @@ services:
     image: postgres:latest
     container_name: lunatic-user-db
     ports:
-     - 9091:5432
+     - 5433:5432
     environment:
       POSTGRES_DB: LunaticUserDB
       POSTGRES_USER: lunatic
@@ -49,12 +49,13 @@ services:
   api:
     build:
       context: ./lunatic-api
-      dockerfile: ./Dockerfile
+      dockerfile: ./Lunatic.API.Dockerfile
     container_name: lunatic-api
     ports:
       - 8080:8080
     networks:
       - db_conn
+      - api_conn
     depends_on:
       db:
         condition: service_healthy
@@ -62,8 +63,27 @@ services:
         condition: service_healthy
       migrator:
         condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/test"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  ui:
+    build:
+      context: ./lunatic-api
+      dockerfile: ./Lunatic.UI.Dockerfile
+    container_name: lunatic-ui
+    ports:
+      - 9090:9090
+    networks:
+      - api_conn
+    depends_on:
+      api:
+        condition: service_healthy
 
 networks:
   db_conn:
+    driver: bridge
+  api_conn:
     driver: bridge
 
