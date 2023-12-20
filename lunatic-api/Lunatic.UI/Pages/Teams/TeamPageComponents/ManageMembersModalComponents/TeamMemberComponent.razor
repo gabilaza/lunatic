@@ -18,6 +18,7 @@
 	[Parameter] public string MemberId { get; set; } = null!;
 	[Parameter] public string TeamOwnerId { get; set; } = null!;
 	[Parameter] public List<Guid> MembersIdsRef { get; set; } = null!;
+
 	[Parameter] public EventCallback UpdateMemberList { get; set; }
 
 	public bool IsOwner { get; set; } = false;
@@ -50,7 +51,7 @@
 		if (result) {
 			Snackbar.Add("Member removed from team.", Severity.Success);
 			MembersIdsRef.Remove(Guid.Parse(MemberId));
-			UpdateMemberList.InvokeAsync();
+			Task.Run(async () => await UpdateMemberList.InvokeAsync());
 		}
 		else
 			Snackbar.Add($"Failed to remove member from team.", Severity.Error);

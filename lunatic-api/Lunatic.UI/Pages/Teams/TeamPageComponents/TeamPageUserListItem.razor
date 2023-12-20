@@ -1,4 +1,5 @@
 ﻿@using MudBlazor
+@using Lunatic.UI.Contracts
 @inject NavigationManager navigationManager
 
 <MudListItem Class="p-0 m-0">
@@ -16,9 +17,14 @@
 	[Parameter] public EventCallback<string> OnCardClick { get; set; }
 	[Parameter] public string Username { get; set; }
 	//user image, maybe cached! TODO
+	[Inject] public IUserDataService UserDataService { get; set; } = null!;
+}
 
+@functions{
 	protected override async Task OnInitializedAsync() {
-		//get user image
+		var response = await UserDataService.GetUserByIdAsync(UserId);
+		var user = response.GetValue("user");
+		Username = user.Username;
 		return;
 	}
 

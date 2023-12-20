@@ -1,5 +1,6 @@
 ﻿@using MudBlazor
 @using Lunatic.UI.Contracts
+@using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @inject ISnackbar Snackbar
 
 <MudPaper Class="@ItemClasses">
@@ -20,7 +21,7 @@
 	[Parameter] public bool IsOwner { get; set; } = false;
 	[Parameter] public List<Guid> MembersIdsRef { get; set; } = null!;
 	[Parameter] public EventCallback UpdateMemberList { get; set; }
-
+	[Parameter] public List<UserItem> UserItems { get; set; } = null!; // update list when adding
 	[Parameter] public string Username { get; set; } = "";
 	public string ItemClasses = "d-flex flex-row";
 
@@ -46,7 +47,7 @@
 		if (result.Success) {
 			Snackbar.Add($"{Username} added to team.", Severity.Success);
 			MembersIdsRef.Add(Guid.Parse(MemberId));
-			UpdateMemberList.InvokeAsync();
+			Task.Run(async () => await UpdateMemberList.InvokeAsync());
 		}
 		else
 			Snackbar.Add($"Failed to add {Username} to team: {result.Message}", Severity.Error);

@@ -20,12 +20,17 @@
 		<MudItem xs="12" md="9">
 			<MudPaper Elevation="1">
 				<MudToolBar Class="custom-toolbar" Dense="true">
+
 					<MudText>
 						@TeamName
 					</MudText>
+
 					<MudSpacer />
 					@* @if (ownerId==currentUserId) *@
 					<MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+						<MudMenuItem OnClick="LaunchEditTeamInfoModal">
+							Edit team info
+						</MudMenuItem>
 						<MudMenuItem>
 							@* OnClick="func" *@
 							Delete team
@@ -73,7 +78,7 @@
 					<MudList Clickable="true">
 						@if (MembersIds != null) {
 							@foreach (var memberId in MembersIds) {
-								<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" Username="User" />
+								<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" />
 							}
 						}
 						else {
@@ -135,8 +140,16 @@
 		Console.WriteLine(OwnerId);
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("MembersIds", MembersIds);
-		parameters.Add("TeamId", TeamId);
+		parameters.Add("TeamId", TeamId); //todo dropshadow
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
 		DialogService.Show<TeamPageManageMembersModal>(null, parameters, closeOnEscapeKey);
+	}
+	public void LaunchEditTeamInfoModal() {
+		DialogParameters parameters = new DialogParameters();
+		Console.WriteLine(OwnerId);
+		parameters.Add("OwnerId", OwnerId);
+		parameters.Add("TeamId", TeamId);
+		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
+		DialogService.Show<TeamPageEditInfoModal>(null, parameters, closeOnEscapeKey);
 	}
 }

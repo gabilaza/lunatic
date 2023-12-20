@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Components
 @using Lunatic.UI.Contracts
 @using System.Text.Json
-@* @using System.Threading.Tasks *@
+@using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
 
 <style>
@@ -47,7 +47,8 @@
 												 Username="@searchResult.Username"
 												 TeamId="@TeamId"
 												 MembersIdsRef="@MembersIds" 
-												 UpdateMemberList="@StateHasChanged" />
+												 UpdateMemberList="@StateHasChanged"
+												 />
 						}
 					</MudPaper>
 				</MudPaper>
@@ -90,16 +91,7 @@
 	private string searchValue2 = "";
 	private List<string> EmptyList = new List<string>();
 
-	public class UserItem {
-		public string UserId { get; init; }
-		public string Username { get; init; }
-		// public string Avatar { get; init; }
 
-		public UserItem(string userId, string username) {
-			UserId = userId;
-			Username = username;
-		}
-	}
 
 
 	[Inject] IUserDataService UserDataService { get; set; } = null!;
@@ -120,7 +112,7 @@
 			var user = await UserDataService.GetUserByIdAsync(memberId.ToString());
 		}
 	}
-	int i = 2;
+
 	public async Task<IEnumerable<string>> SearchUsers(string s) {
 
 		if (s.Length < 3) {
