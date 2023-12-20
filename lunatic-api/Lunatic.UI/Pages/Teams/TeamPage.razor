@@ -1,8 +1,8 @@
 ﻿@page "/team/{teamId}"
 @using MudBlazor
 @using Lunatic.UI.Contracts
-@using Lunatic.UI.Pages.Teams.TeamPageTemplates
- @* @using System.Text.Json *@
+@using Lunatic.UI.Pages.Teams.TeamPageComponents
+@* @using System.Text.Json *@
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
@@ -135,6 +135,7 @@
 		Console.WriteLine(OwnerId);
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("MembersIds", MembersIds);
+		parameters.Add("TeamId", TeamId);
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
 		DialogService.Show<TeamPageManageMembersModal>(null, parameters, closeOnEscapeKey);
 	}

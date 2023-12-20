@@ -202,11 +202,15 @@ namespace Lunatic.API.Controllers {
 			return Ok(result);
 		}
 
-		[HttpPost("{teamId}/members/{userId}")]
+		[HttpDelete("{teamId}/members/{userId}")]
 		[Produces("application/json")]
 		[ProducesResponseType<DeleteTeamMemberCommandResponse>(StatusCodes.Status200OK)]
 		[ProducesResponseType<DeleteTeamMemberCommandResponse>(StatusCodes.Status400BadRequest)]
-		public async Task<IActionResult> DeleteMember(Guid teamId, Guid userId, DeleteTeamMemberCommand command) {
+		public async Task<IActionResult> DeleteMember(Guid teamId, Guid userId) {
+			var command = new DeleteTeamMemberCommand() {
+				TeamId = teamId,
+				UserId = userId
+			};
 			if (teamId != command.TeamId) {
 				return BadRequest(new DeleteTeamMemberCommandResponse {
 					Success = false,

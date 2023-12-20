@@ -45,5 +45,24 @@ namespace Lunatic.UI.Services {
 			var team = await result.Content.ReadFromJsonAsync<TeamDto>();
 			return team!;
 		}
+
+		public async Task<bool> RemoveMemberFromTeamAsync(string memberId, string teamId) {
+			var result = await httpClient.DeleteAsync($"{RequestUri}/{teamId}/members/{memberId}");
+			return result.IsSuccessStatusCode;
+		}
+
+		public async Task<ApiResponse<TeamDto>> AddMemberToTeamAsync(string memberId, string teamId) {
+			httpClient.DefaultRequestHeaders.Authorization
+				= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
+			var result = await httpClient.PostAsJsonAsync($"{RequestUri}/{teamId}/members/",
+				new AddTeamMemberViewModel() {
+					UserId = memberId,
+					TeamId = teamId
+				});
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse<TeamDto>>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
+		}
+
 	}
 }

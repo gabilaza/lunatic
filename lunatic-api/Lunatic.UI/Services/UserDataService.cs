@@ -43,9 +43,14 @@ namespace Lunatic.UI.Services {
 			return response;
 		}
 
-		public Task<ApiResponse<bool>> RemoveUserFromTeamAsync(string memberId, string teamId) {
+		//public async Task<ApiResponse<bool>> RemoveUserFromTeamAsync(string memberId, string teamId) {
+		//	httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await tokenService.GetTokenAsync());
 
-		}
+		//	var response = await JsonSerializer.DeserializeAsync<List<UserDto>>(
+		//		await httpClient.GetStreamAsync($"{RequestUri}/usernames/{usernameMatch}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true }
+		//		);
+
+		//}
 
 		//public async Task UpdateUserAsync(UserDto user) {
 		//	httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await tokenService.GetTokenAsync());

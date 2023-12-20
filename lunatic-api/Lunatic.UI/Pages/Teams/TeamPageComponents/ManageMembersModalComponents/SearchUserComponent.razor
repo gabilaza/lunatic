@@ -1,0 +1,55 @@
+﻿@using MudBlazor
+@using Lunatic.UI.Contracts
+@inject ISnackbar Snackbar
+
+<MudPaper Class="@ItemClasses">
+	<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+	<MudText>
+		@Username
+	</MudText>
+	<MudSpacer />
+	<MudButton OnClick="SendJoinTeamRequest" Disabled="@IsOwner">
+		Add
+	</MudButton>
+</MudPaper>
+
+@code {
+	[Parameter] public string TeamId { get; set; } = null!;
+	[Parameter] public string MemberId { get; set; } = null!;
+	[Parameter] public string TeamOwnerId { get; set; } = null!;
+	[Parameter] public bool IsOwner { get; set; } = false;
+	[Parameter] public List<Guid> MembersIdsRef { get; set; } = null!;
+	[Parameter] public EventCallback UpdateMemberList { get; set; }
+
+	[Parameter] public string Username { get; set; } = "";
+	public string ItemClasses = "d-flex flex-row";
+
+	[Inject] public IUserDataService UserDataService { get; set; } = null!;
+	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
+	// [Parameter] public bool IsVisible { get; set; }
+
+}
+
+@functions {
+
+	protected override async Task OnInitializedAsync() {
+
+		// var result = await UserDataService.GetUserByIdAsync(MemberId.ToString());
+		// var user = result.GetValue("user");
+		//get the avatar
+
+		IsOwner = TeamOwnerId == MemberId;
+	}
+
+	private async Task SendJoinTeamRequest() {
+		var result = await TeamDataService.AddMemberToTeamAsync(MemberId, TeamId);
+		if (result.Success) {
+			Snackbar.Add($"{Username} added to team.", Severity.Success);
+			MembersIdsRef.Add(Guid.Parse(MemberId));
+			UpdateMemberList.InvokeAsync();
+		}
+		else
+			Snackbar.Add($"Failed to add {Username} to team: {result.Message}", Severity.Error);
+	}
+
+}
