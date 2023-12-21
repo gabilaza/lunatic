@@ -46,7 +46,8 @@
 		var result = await TeamDataService.AddMemberToTeamAsync(MemberId, TeamId);
 		if (result.Success) {
 			Snackbar.Add($"{Username} added to team.", Severity.Success);
-			MembersIdsRef.Add(Guid.Parse(MemberId));
+
+			MembersIdsRef.Add(Guid.Parse(MemberId));	//visual update for not to make another request
 			Task.Run(async () => await UpdateMemberList.InvokeAsync());
 		}
 		else

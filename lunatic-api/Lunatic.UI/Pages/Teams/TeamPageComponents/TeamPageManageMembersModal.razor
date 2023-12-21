@@ -6,6 +6,8 @@
 @using System.Text.Json
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
+@using System.Timers
+@inject IJSRuntime JSRuntime
 
 <style>
 	.member-management-toolbar {
@@ -24,7 +26,9 @@
 	}
 </style>
 
-<MudPaper Width="80vw" Height="80vh">
+@* <MudDialog DefaultFocus="DefaultFocus.LastChild">
+	<DialogContent> *@
+<MudPaper Width="80vw" Height="80vh" Class="m-0">
 	<MudPaper class="d-flex flex-column" style="height:100%">
 		<MudToolBar Class="member-management-toolbar" Dense="true">
 			<MudText Typo="Typo.subtitle1">Manage members</MudText>
@@ -36,9 +40,14 @@
 			<MudItem xs="12" sm="3">
 				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
 					<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
-					<MudAutocomplete T="string" Label="Search users by username" SearchFunc="SearchUsers" Text="@searchValue2"
-									 AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary">
-					</MudAutocomplete>
+					@* <MudAutocomplete T="string" Label="Search users by username"
+					SearchFunc="SearchUsers" Text="@searchValue2"
+					AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary"
+					AutoFocus="false" /> *@
+					<MudTextField Class="pt-1 m-1" @bind-Value="@searchValue" OnKeyUp="OnKeyUpSearchBar"
+								  Variant="Variant.Outlined" Margin="Margin.Dense"
+								  Label="Search your team mates by username">
+					</MudTextField>
 
 					<MudPaper>
 						@foreach (var searchResult in userItems) {
@@ -46,9 +55,8 @@
 												 TeamOwnerId="@OwnerId"
 												 Username="@searchResult.Username"
 												 TeamId="@TeamId"
-												 MembersIdsRef="@MembersIds" 
-												 UpdateMemberList="@StateHasChanged"
-												 />
+												 MembersIdsRef="@MembersIds"
+												 UpdateMemberList="@StateHasChanged" />
 						}
 					</MudPaper>
 				</MudPaper>
@@ -63,10 +71,10 @@
 						<MudPaper>
 							@foreach (var memberId in MembersIds) {
 								<TeamMemberComponent MemberId="@memberId.ToString()"
-													 TeamOwnerId="@OwnerId" 
+													 TeamOwnerId="@OwnerId"
 													 TeamId="@TeamId"
 													 MembersIdsRef="@MembersIds"
-													 UpdateMemberList="@StateHasChanged"/>
+													 UpdateMemberList="@StateHasChanged" />
 							}
 						</MudPaper>
 					</MudPaper>
@@ -78,21 +86,26 @@
 
 </MudPaper>
 
+<script>
+	window.triggerClick = function (element) {
+		element.click();
+	}
+
+</script>
+
 @code {
 	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
 	[Parameter] public string TeamId { get; set; } = null!;
 	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
 	[Parameter] public List<Guid> MembersIds { get; set; } = null;
 
-
 	private List<UserItem>? userItems = new();
 
+	// private string searchValue = "";
 	private string searchValue = "";
-	private string searchValue2 = "";
 	private List<string> EmptyList = new List<string>();
-
-
-
+	private Timer? timer;
+	private bool timerActive = false;
 
 	[Inject] IUserDataService UserDataService { get; set; } = null!;
 }
@@ -113,24 +126,35 @@
 		}
 	}
 
-	public async Task<IEnumerable<string>> SearchUsers(string s) {
+	public void OnKeyUpSearchBar(KeyboardEventArgs e) {
+		if (e.Key.Length > 1)
+			return;
 
-		if (s.Length < 3) {
-			return EmptyList;
+		if (timer == null) {
+			timer = new Timer();
+			timer.Interval = 250;
+			timer.Elapsed += new ElapsedEventHandler(SearchUsers);
+			timer.AutoReset = false;
+			timer.Start();
 		}
+		else {
+			timer.Stop();
+			timer.Start();
+		}
+	}
 
-		var result = await UserDataService.GetUsersByUsernameAsync(s);
+	public async void SearchUsers(object? sender, ElapsedEventArgs e) {
+		if (searchValue.Length < 3)
+			return;
+
+		var result = await UserDataService.GetUsersByUsernameAsync(searchValue);
 
 		if (result != null) {
 			userItems.Clear();
 			foreach (var user in result) {
 				userItems.Add(new UserItem(user.UserId.ToString(), user.Username));
 				StateHasChanged();
-				searchValue2 = s;
 			}
-
 		}
-
-		return EmptyList;
 	}
 }

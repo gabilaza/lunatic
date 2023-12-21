@@ -5,7 +5,7 @@ namespace Lunatic.UI.Services.Responses {
 	public class ApiResponse<T> {
 		public string Message { get; set; } = string.Empty;
 		public bool Success { get; set; }
-		public string? ValidationErrors { get; set; }
+		public List<string>? ValidationErrors { get; set; }
 
 		[JsonExtensionData]
 		public IDictionary<string, JsonElement>? Data { get; set; }
@@ -20,7 +20,7 @@ namespace Lunatic.UI.Services.Responses {
 		}
 
 		public override string ToString() {
-			return $"ApiResponse(Message: {Message}, Success: {Success}, ValidationErrors: {ValidationErrors}, Data: {string.Join(Environment.NewLine, Data)})";
+			return $"ApiResponse(Message: {Message}, Success: {Success}, ValidationErrors: {string.Join(Environment.NewLine, ValidationErrors)}, Data: {string.Join(Environment.NewLine, Data)})";
 		}
 	}
 }

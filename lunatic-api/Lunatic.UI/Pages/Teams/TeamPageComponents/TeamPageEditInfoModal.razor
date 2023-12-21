@@ -41,6 +41,8 @@
 	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
 	[Parameter] public string TeamName { get; set; } = "";
 	[Parameter] public string TeamDescription { get; set; } = "";
+
+	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
 }
 
 
@@ -56,7 +58,9 @@
 
 	}
 
-	private void SaveTeamInfo() {
+	private async void SaveTeamInfo() {
+		// var result = await TeamDataService.UpdateTeamInfo(TeamId, );
+
 	}
 
 }

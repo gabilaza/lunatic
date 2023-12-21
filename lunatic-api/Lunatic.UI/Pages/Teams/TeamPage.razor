@@ -27,13 +27,15 @@
 
 					<MudSpacer />
 					@* @if (ownerId==currentUserId) *@
+					<MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="LaunchAddNewProjectModal">
+						NEW PROJECT
+					</MudButton>
 					<MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
 						<MudMenuItem OnClick="LaunchEditTeamInfoModal">
 							Edit team info
 						</MudMenuItem>
 						<MudMenuItem>
-							@* OnClick="func" *@
-							Delete team
+							Delete team  @* leave team if non owner *@
 						</MudMenuItem>
 					</MudMenu>
 
@@ -109,7 +111,11 @@
 
 	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
 }
-
+<style>
+	.my-custom-class {
+		backdrop-filter: blur(10px);
+	}
+</style>
 
 @functions {
 	// protected override async void OnParametersSet() {
@@ -141,7 +147,7 @@
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("MembersIds", MembersIds);
 		parameters.Add("TeamId", TeamId); //todo dropshadow
-		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
+		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge, DisableBackdropClick = true };
 		DialogService.Show<TeamPageManageMembersModal>(null, parameters, closeOnEscapeKey);
 	}
 	public void LaunchEditTeamInfoModal() {
@@ -151,5 +157,15 @@
 		parameters.Add("TeamId", TeamId);
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
 		DialogService.Show<TeamPageEditInfoModal>(null, parameters, closeOnEscapeKey);
+	}
+	public void LaunchAddNewProjectModal() {
+		DialogParameters parameters = new DialogParameters();
+		Console.WriteLine(OwnerId);
+		parameters.Add("OwnerId", OwnerId);
+		parameters.Add("TeamId", TeamId);
+		parameters.Add("ProjectIds", ProjectIds);
+		// parameters.Add("UpdateProjectList", );
+		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.Large };
+		DialogService.Show<TeamPageAddNewProjectModal>(null, parameters, closeOnEscapeKey);
 	}
 }

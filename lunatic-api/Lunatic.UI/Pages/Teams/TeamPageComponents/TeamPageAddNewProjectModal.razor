@@ -1,0 +1,75 @@
+﻿@using MudBlazor
+@inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using Microsoft.AspNetCore.Components
+@using Lunatic.UI.Contracts
+@using System.Text.Json
+@using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
+@using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
+@using Lunatic.UI.ViewModels
+
+<style>
+	.edit-info-toolbar {
+		background-color: #9271bd;
+		color: #ffffff;
+	}
+</style>
+
+
+<MudPaper Width="50em" Height="26em" Class="m-0">
+	<MudToolBar Dense="true" Class="edit-info-toolbar">
+		<MudText Typo="Typo.subtitle1">Add new project</MudText>
+		<MudSpacer />
+		<MudButtonGroup>
+			<MudButton Color="Color.Primary" OnClick="Submit">SUBMIT</MudButton>
+			<MudButton OnClick="Cancel">CANCEL</MudButton>
+		</MudButtonGroup>
+	</MudToolBar>
+	<MudPaper Class="p-2">
+		<MudTextField Label="Project Name" @bind-Value="ProjectViewModel.Title" Required="true" />
+		<MudTextField Label="Project Description" @bind-Value="ProjectViewModel.Description" Lines="10" />
+	</MudPaper>
+
+</MudPaper>
+
+@code {
+	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+	[Parameter] public string TeamId { get; set; } = null!;
+	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
+	[Parameter] public List<Guid> ProjectIds { get; set; } = null!;
+// [Parameter] public EventCallback UpdateProjectList { get; set; }
+
+	private ProjectViewModel ProjectViewModel { get; set; } = new ProjectViewModel();
+
+	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
+}
+
+@functions {
+
+	protected override async Task OnInitializedAsync() {
+		var currentUserId = await localStorage.GetItemAsync<string>("userId");
+
+		if (currentUserId != OwnerId) {
+			Snackbar.Add("You are not the owner of this team", Severity.Error);
+			MudDialog.Cancel();
+		}
+		ProjectViewModel.UserId = OwnerId;
+		ProjectViewModel.TeamId = TeamId;
+	}
+	public void Cancel() {
+		MudDialog.Cancel();
+	}
+	public async Task Submit() {
+
+		var result = await TeamDataService.AddProjectToTeamAsync(TeamId, ProjectViewModel);
+		if (result.Success) {
+			Snackbar.Add("Project created successfully", Severity.Success);
+			MudDialog.Close(DialogResult.Ok(true));
+			ProjectIds = result.GetValue("projects").ProjectIds;
+		}
+		else {
+			Snackbar.Add($"Project creation failed {result.Message}", Severity.Error);
+		}
+
+	}
+}

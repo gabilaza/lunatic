@@ -64,5 +64,13 @@ namespace Lunatic.UI.Services {
 			return response!;
 		}
 
+		public async Task<ApiResponse<ProjectDto>> AddProjectToTeamAsync(string teamId, ProjectViewModel projectViewModel) {
+			httpClient.DefaultRequestHeaders.Authorization
+				= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
+			var result = await httpClient.PostAsJsonAsync($"{RequestUri}/{teamId}/projects/", projectViewModel);
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse<ProjectDto>>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
+		}
 	}
 }

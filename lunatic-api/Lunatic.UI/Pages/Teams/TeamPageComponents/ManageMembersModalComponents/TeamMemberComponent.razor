@@ -49,12 +49,12 @@
 	private async Task RemoveMember() {
 		var result = await TeamDataService.RemoveMemberFromTeamAsync(MemberId, TeamId);
 		if (result) {
-			Snackbar.Add("Member removed from team.", Severity.Success);
+			Snackbar.Add($"Member {Username} removed from team.", Severity.Success);
 			MembersIdsRef.Remove(Guid.Parse(MemberId));
 			Task.Run(async () => await UpdateMemberList.InvokeAsync());
 		}
 		else
-			Snackbar.Add($"Failed to remove member from team.", Severity.Error);
+			Snackbar.Add($"Failed to remove member {Username} from team.", Severity.Error);
 	}
 	// private void MarkInvisible() {
 	// 	ItemClasses = "invisible d-flex flex-row";
