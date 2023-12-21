@@ -6,7 +6,7 @@ using Lunatic.Application.Features.Users.Queries.GetAllTeams;
 using NSubstitute;
 
 
-namespace Tests.Lunatic.Application.Features.Users.Commands {
+namespace Tests.Lunatic.Application.Features.Users.Queries {
     public class GetAllTeamsTests {
         [Fact]
         public async void GivenGetAllUserTeamsComamnd_WhenGetAllUserTeams_ThenFailureResponse() {
@@ -15,12 +15,12 @@ namespace Tests.Lunatic.Application.Features.Users.Commands {
             var userId = Guid.NewGuid();
             userRepository.FindByIdAsync(userId).Returns(Result<User>.Failure("Lunatic Entity Not Found"));
             var teamRepository = Substitute.For<ITeamRepository>();
-            var command = new GetAllUserTeamsQuery(userId);
-            var commandHandler = new GetAllUserTeamsQueryHandler(userRepository, teamRepository);
+            var query = new GetAllUserTeamsQuery(userId);
+            var queryHandler = new GetAllUserTeamsQueryHandler(userRepository, teamRepository);
             var source = new CancellationTokenSource();
 
             // when
-            var response = await commandHandler.Handle(command, source.Token);
+            var response = await queryHandler.Handle(query, source.Token);
 
             // then
             Assert.False(response.Success);
