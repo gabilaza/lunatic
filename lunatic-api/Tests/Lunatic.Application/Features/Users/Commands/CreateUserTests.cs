@@ -15,7 +15,7 @@ namespace Tests.Lunatic.Application.Features.Users.Commands {
         public const Role MockRole = Role.USER;
 
         [Fact]
-        public async void GivenCreateUserComamnd_WhenCreate_ThenSuccessResult() {
+        public async void GivenCreateUserComamnd_WhenCreate_ThenSuccessResponse() {
             // given
             var userRepository = Substitute.For<IUserRepository>();
             var command = new CreateUserCommand {
@@ -36,6 +36,41 @@ namespace Tests.Lunatic.Application.Features.Users.Commands {
             Assert.True(response.Success);
             Assert.NotNull(response.User);
             Assert.Null(response.ValidationErrors);
+        }
+
+        [Theory]
+        [InlineData(null, LastName, Email, Username, Password, MockRole)]
+        [InlineData("", LastName, Email, Username, Password, MockRole)]
+        [InlineData(FirstName, null, Email, Username, Password, MockRole)]
+        [InlineData(FirstName, "", Email, Username, Password, MockRole)]
+        [InlineData(FirstName, LastName, null, Username, Password, MockRole)]
+        [InlineData(FirstName, LastName, "", Username, Password, MockRole)]
+        [InlineData(FirstName, LastName, Email, null, Password, MockRole)]
+        [InlineData(FirstName, LastName, Email, "", Password, MockRole)]
+        [InlineData(FirstName, LastName, Email, Username, null, MockRole)]
+        [InlineData(FirstName, LastName, Email, Username, "", MockRole)]
+        public async void GivenInvalidCreateUserComamnd_WhenCreate_ThenFailureResponse(
+                string firstName, string lastName, string email, string username, string password, Role role) {
+            // given
+            var userRepository = Substitute.For<IUserRepository>();
+            var command = new CreateUserCommand {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                Username = username,
+                Password = password,
+                Role = role
+            };
+            var commandHandler = new CreateUserCommandHandler(userRepository);
+            var source = new CancellationTokenSource();
+
+            // when
+            var response = await commandHandler.Handle(command, source.Token);
+
+            // then
+            Assert.False(response.Success);
+            Assert.Null(response.User);
+            Assert.NotNull(response.ValidationErrors);
         }
     }
 }

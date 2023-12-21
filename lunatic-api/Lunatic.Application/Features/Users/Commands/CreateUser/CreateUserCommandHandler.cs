@@ -24,29 +24,23 @@ namespace Lunatic.Application.Features.Users.Commands.CreateUser {
                 };
             }
 
-            var user = User.Create(request.FirstName, request.LastName, request.Email, request.Username, request.Password, request.Role);
-            if(!user.IsSuccess) {
-                return new CreateUserCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { user.Error }
-                };
-            }
+            var user = User.Create(request.FirstName, request.LastName, request.Email, request.Username, request.Password, request.Role).Value;
 
-            await this.userRepository.AddAsync(user.Value);
+            await this.userRepository.AddAsync(user);
 
             return new CreateUserCommandResponse {
                 Success = true,
                 User = new UserDto {
-                    UserId = user.Value.UserId,
+                    UserId = user.UserId,
 
-                    FirstName = user.Value.FirstName,
-                    LastName = user.Value.LastName,
-                    Email = user.Value.Email,
-                    Username = user.Value.Username,
-                    Password = user.Value.Password,
-                    Role = user.Value.Role,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    Username = user.Username,
+                    Password = user.Password,
+                    Role = user.Role,
 
-                    TeamIds = user.Value.TeamIds
+                    TeamIds = user.TeamIds
                 }
             };
         }

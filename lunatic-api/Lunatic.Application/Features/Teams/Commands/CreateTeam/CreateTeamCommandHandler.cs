@@ -27,30 +27,24 @@ namespace Lunatic.Application.Features.Teams.Commands.CreateTeam {
                 };
             }
 
-            var teamResult = Team.Create(request.UserId, request.Name, request.Description);
-            if(!teamResult.IsSuccess) {
-                return new CreateTeamCommandResponse {
-                    Success = false,
-                    ValidationErrors = new List<string> { teamResult.Error }
-                };
-            }
+            var team = Team.Create(request.UserId, request.Name, request.Description).Value;
 
-            teamResult.Value.AddMember(request.UserId);
-            await this.teamRepository.AddAsync(teamResult.Value);
+            team.AddMember(request.UserId);
+            await this.teamRepository.AddAsync(team);
             var user = (await this.userRepository.FindByIdAsync(request.UserId)).Value;
-            user.AddTeam(teamResult.Value.TeamId);
+            user.AddTeam(team.TeamId);
             await this.userRepository.UpdateAsync(user);
 
             return new CreateTeamCommandResponse {
                 Success = true,
                 Team = new TeamDto {
-                    TeamId = teamResult.Value.TeamId,
+                    TeamId = team.TeamId,
 
-                    Name = teamResult.Value.Name,
-                    Description = teamResult.Value.Description,
+                    Name = team.Name,
+                    Description = team.Description,
 
-                    MemberIds = teamResult.Value.MemberIds,
-                    ProjectIds = teamResult.Value.ProjectIds,
+                    MemberIds = team.MemberIds,
+                    ProjectIds = team.ProjectIds,
                 }
             };
         }
