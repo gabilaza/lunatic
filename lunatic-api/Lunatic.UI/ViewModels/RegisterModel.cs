@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Lunatic.UI.Models
+namespace Lunatic.UI.ViewModels
 {
     public class RegisterModel
     {
