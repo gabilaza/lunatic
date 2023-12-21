@@ -13,7 +13,7 @@ namespace Lunatic.Application.Features.Teams.Commands.UpdateTeam {
         }
 
         public async Task<UpdateTeamCommandResponse> Handle(UpdateTeamCommand request, CancellationToken cancellationToken) {
-            var validator = new UpdateTeamCommandValidator();
+            var validator = new UpdateTeamCommandValidator(this.teamRepository);
             var validatorResult = await validator.ValidateAsync(request, cancellationToken);
 
             if(!validatorResult.IsValid) {
