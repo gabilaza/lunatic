@@ -34,18 +34,11 @@ jobs:
     - name: Make Coverage
       run: dotnet test --collect:"XPlat Code Coverage" --results-directory TestsResults
 
-    - name: test sometthing
-      run: pwd
-
-    - name: test sometthing
-      run: mv -n  /home/runner/work/lunatic/lunatic/lunatic-api/TestsResults/**/*.xml  /home/runner/work/lunatic/lunatic/lunatic-api/TestsResults
-
-
     - name: Upload to Coveralls
       uses: coverallsapp/github-action@v2.2.3
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         format: cobertura
-        file: /home/runner/work/lunatic/lunatic/lunatic-api/TestsResults/coverage.cobertura.xml
+        file: /home/runner/work/lunatic/lunatic/lunatic-api/TestsResults/**/*.xml
         debug: true
 
