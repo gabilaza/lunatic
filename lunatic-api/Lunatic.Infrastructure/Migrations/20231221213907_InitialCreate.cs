@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Lunatic.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class M1 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -94,6 +94,7 @@ namespace Lunatic.Infrastructure.Migrations
                 {
                     TeamId = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
                     MemberIds = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
                     ProjectIds = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
                     CreatedByUserId = table.Column<Guid>(type: "uuid", nullable: false),

@@ -185,6 +185,10 @@ namespace Lunatic.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid>("LastModifiedByUserId")
                         .HasColumnType("uuid");
 
