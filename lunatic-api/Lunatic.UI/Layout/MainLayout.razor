@@ -8,6 +8,7 @@
 @inject ITokenService TokenService
 @inject ILocalStorageService LocalStorageService
 @inject ISnackbar Snackbar
+@inject CustomStateProvider authStateProvider
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -36,8 +37,9 @@
 					</MudChip>
 				</ActivatorContent>
 				<ChildContent>
-					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{Username}"))">Profile</MudMenuItem>
-					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem>
+					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{UserId}"))">Profile</MudMenuItem>
+					@* <MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem> *@
+					<MudMenuItem OnAction="@(()=>Logout())">Sign Out</MudMenuItem>
 				</ChildContent>
 			</MudMenu>
 		}
@@ -72,6 +74,8 @@
 
 		if (!UserDataLoadedFlag) {
 			UserId = await LocalStorageService.GetItemAsync<string>("userId");
+
+			if (string.IsNullOrEmpty(UserId)) return;
 
 			var response = await UserDataService.GetUserByIdAsync(UserId);
 
@@ -123,5 +127,17 @@
 	}
 	public void GoToLogin() {
 		NavigationManager.NavigateTo("/login");
+	}
+	public async void Logout() {
+		string error = "";
+		try
+		{
+			await authStateProvider.Logout();
+			NavigationManager.NavigateTo("/login");
+		}
+		catch (Exception e)
+		{
+			error = e.Message;
+		}
 	}
 }

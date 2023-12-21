@@ -16,14 +16,16 @@ namespace Lunatic.Identity.Services {
     public class AuthService : IAuthService {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
         private readonly IUserRepository userRepository;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUserRepository userRepository) {
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUserRepository userRepository, SignInManager<ApplicationUser> signInManager) {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
             this.userRepository = userRepository;
+            this.signInManager = signInManager;
         }
 
         public async Task<RegisterResponse> Registeration(RegistrationModel model, string role) {
@@ -104,8 +106,13 @@ namespace Lunatic.Identity.Services {
                 UserId = user.Id
             };
         }
+		public async Task<(int, string)> Logout()
+		{
+			await signInManager.SignOutAsync();
+			return (1, "User logged out successfully!");
+		}
 
-        private string GenerateToken(IEnumerable<Claim> claims) {
+		private string GenerateToken(IEnumerable<Claim> claims) {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!));
 
             var tokenDescriptor = new SecurityTokenDescriptor {
