@@ -1,9 +1,7 @@
 
 namespace Lunatic.Domain.Entities {
     public class InvalidActionException: Exception {
-        public InvalidActionException() { }
         public InvalidActionException(string message) : base(message) { }
-        public InvalidActionException(string message, Exception inner) : base(message, inner) { }
     }
 
     public enum TaskStatus {
@@ -12,7 +10,7 @@ namespace Lunatic.Domain.Entities {
         DONE = 3,
     }
 
-    static class TaskStatusMethods {
+    public static class TaskStatusMethods {
         public static bool IsCreated(this TaskStatus status) {
             return status == TaskStatus.CREATED;
         }
