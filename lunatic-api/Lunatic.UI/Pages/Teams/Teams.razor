@@ -1,11 +1,15 @@
 ﻿@page "/teams"
+
 @using MudBlazor
 @using Lunatic.UI.Pages.Teams.TeamsPageTemplates
 @using Lunatic.UI.Contracts
 @using Lunatic.UI.ViewModels
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+
 
 <div class="d-flex justify-center">
 	<h3 class="">Your teams</h3>
@@ -17,19 +21,36 @@
 <div class="d-flex justify-center">
 
 	<MudPaper Class="d-flex justify-center flex-wrap flex-grow-1 gap-4" Elevation="0" MaxWidth="90vw">
-		@if (UserTeams != null && UserTeams.Any()) {
-			@foreach (var teamDto in UserTeams) {
-				<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" TeamDescription="@teamDto.Description" />
+		@if (UserTeams != null) {
+			@if (UserTeams.Any()) {
+				@foreach (var teamDto in UserTeams) {
+					<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" />@*  TeamDescription="@teamDto.Description" *@
+				}
+			}
+			else {
+				<MudCard>
+					<MudCardContent>
+						<MudText Typo="Typo.body2">No teams to show!</MudText>
+					</MudCardContent>
+				</MudCard>
 			}
 		}
 		else {
-			<p>No teams available.</p>
+		<MudCard>
+			<MudCardContent>
+				<MudSkeleton Width="100px" Height="40px" />
+				<br />
+				<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="150px" />
+				<br />
+				<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="50px" />
+			</MudCardContent>
+		</MudCard>
 		}
 	</MudPaper>
 </div>
 
 @code {
-	private List<TeamDto> UserTeams { get; set; } = null;
+	private List<TeamDto>? UserTeams { get; set; } = null;
 	[Inject] private ITeamDataService TeamsService { get; set; } = null!;
 	private Guid CurrentUserId { get; set; } = Guid.Empty;
 }

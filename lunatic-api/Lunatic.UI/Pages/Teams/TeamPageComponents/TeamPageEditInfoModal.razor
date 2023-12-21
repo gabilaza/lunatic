@@ -1,0 +1,66 @@
+﻿@using MudBlazor
+@inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@using Microsoft.AspNetCore.Components
+@using Lunatic.UI.Contracts
+@using System.Text.Json
+@using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
+@using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
+
+<style>
+	.edit-info-toolbar {
+		background-color: #9271bd;
+		color: #ffffff;
+	}
+</style>
+
+<MudPaper Width="80vw" Height="80vh">
+	<MudPaper class="d-flex flex-column" style="height:100%">
+		<MudToolBar Class="edit-info-toolbar" Dense="true">
+			<MudText Typo="Typo.subtitle1">Edit team info</MudText>
+			<MudSpacer />
+			<MudButtonGroup Color="Color.Primary" Variant="Variant.Filled">
+				<MudButton OnClick="SaveTeamInfo">SAVE</MudButton>
+				<MudButton OnClick="() => MudDialog.Cancel()">CANCEL</MudButton>
+			</MudButtonGroup>
+
+		</MudToolBar>
+		<MudPaper Class="d-flex flex-column p-2">
+			<MudTextField @bind-Value="TeamName" Label="Team name" Variant="Variant.Text"></MudTextField>
+			<MudTextField T="string" Label="Team description" Variant="Variant.Filled" Text="@TeamDescription" Lines="6" />
+		</MudPaper>
+
+
+	</MudPaper>
+
+</MudPaper>
+
+@code {
+	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+	[Parameter] public string TeamId { get; set; } = null!;
+	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
+	[Parameter] public string TeamName { get; set; } = "";
+	[Parameter] public string TeamDescription { get; set; } = "";
+
+	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
+}
+
+
+@functions {
+
+	protected override async Task OnInitializedAsync() {
+		var currentUserId = await localStorage.GetItemAsync<string>("userId");
+
+		if (currentUserId != OwnerId) {
+			Snackbar.Add("You are not the owner of this team", Severity.Error);
+			MudDialog.Cancel();
+		}
+
+	}
+
+	private async void SaveTeamInfo() {
+		// var result = await TeamDataService.UpdateTeamInfo(TeamId, );
+
+	}
+
+}

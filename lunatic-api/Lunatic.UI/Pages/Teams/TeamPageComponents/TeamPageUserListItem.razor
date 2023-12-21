@@ -1,0 +1,34 @@
+﻿@using MudBlazor
+@using Lunatic.UI.Contracts
+@inject NavigationManager navigationManager
+
+<MudListItem Class="p-0 m-0">
+	<MudPaper Elevation="0" Class="d-flex flex-row p-1">
+		<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+		<MudText>
+			@Username
+		</MudText>
+	</MudPaper>
+</MudListItem>
+@* <MudListItem Avatar="@Icons.Material.Filled.VerifiedUser" OnClick="ItemClicked">@UserId</MudListItem> *@
+
+@code {
+	[Parameter] public string UserId { get; set; }
+	[Parameter] public EventCallback<string> OnCardClick { get; set; }
+	[Parameter] public string Username { get; set; }
+	//user image, maybe cached! TODO
+	[Inject] public IUserDataService UserDataService { get; set; } = null!;
+}
+
+@functions{
+	protected override async Task OnInitializedAsync() {
+		var response = await UserDataService.GetUserByIdAsync(UserId);
+		var user = response.GetValue("user");
+		Username = user.Username;
+		return;
+	}
+
+	private async Task ItemClicked() {
+		await OnCardClick.InvokeAsync(UserId);
+	}
+}

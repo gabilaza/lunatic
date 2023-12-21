@@ -15,7 +15,6 @@
 		<MudButton OnClick="Cancel">Cancel</MudButton>
 		<MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
 	</DialogActions>
-
 </MudDialog>
 
 @code {
@@ -36,10 +35,13 @@
 
 		TeamViewModel.UserId = new Guid(await localStorage.GetItemAsync<string>("userId"));
 		var result = await TeamDataService.CreateTeamAsync(TeamViewModel);
-		if (result.IsSuccess) {
+		if (result.Success) {
 			Snackbar.Add("Team created successfully", Severity.Success);
 			MudDialog.Close(DialogResult.Ok(true));
 			NavigationManager.Refresh();
+		}
+		else {
+			Snackbar.Add($"Team creation failed {result.Message}", Severity.Error);
 		}
 
 	}

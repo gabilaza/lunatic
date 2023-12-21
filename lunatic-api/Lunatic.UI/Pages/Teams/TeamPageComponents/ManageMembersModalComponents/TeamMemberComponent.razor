@@ -1,0 +1,62 @@
+﻿@using MudBlazor
+@using Lunatic.UI.Contracts
+@inject ISnackbar Snackbar
+
+<MudPaper Class="@ItemClasses">
+	<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
+	<MudText>
+		@Username
+	</MudText>
+	<MudSpacer />
+	<MudButton OnClick="RemoveMember" Disabled="@IsOwner">
+		Remove
+	</MudButton>
+</MudPaper>
+
+@code {
+	[Parameter] public string TeamId { get; set; } = null!;
+	[Parameter] public string MemberId { get; set; } = null!;
+	[Parameter] public string TeamOwnerId { get; set; } = null!;
+	[Parameter] public List<Guid> MembersIdsRef { get; set; } = null!;
+
+	[Parameter] public EventCallback UpdateMemberList { get; set; }
+
+	public bool IsOwner { get; set; } = false;
+	// [Parameter] public EventCallback<string> OnRemoveMember { get; set; }
+	public string Username { get; set; } = "";
+	public string ItemClasses = "d-flex flex-row";
+
+	[Inject] public IUserDataService UserDataService { get; set; } = null!;
+	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
+	[Parameter] public bool IsVisible { get; set; }
+
+}
+
+@functions {
+
+	protected override async Task OnInitializedAsync() {
+
+		var result = await UserDataService.GetUserByIdAsync(MemberId.ToString());
+
+		var user = result.GetValue("user");
+
+		Username = user.Username;
+
+		IsOwner = TeamOwnerId == MemberId;
+
+	}
+
+	private async Task RemoveMember() {
+		var result = await TeamDataService.RemoveMemberFromTeamAsync(MemberId, TeamId);
+		if (result) {
+			Snackbar.Add($"Member {Username} removed from team.", Severity.Success);
+			MembersIdsRef.Remove(Guid.Parse(MemberId));
+			Task.Run(async () => await UpdateMemberList.InvokeAsync());
+		}
+		else
+			Snackbar.Add($"Failed to remove member {Username} from team.", Severity.Error);
+	}
+	// private void MarkInvisible() {
+	// 	ItemClasses = "invisible d-flex flex-row";
+		// }
+}
