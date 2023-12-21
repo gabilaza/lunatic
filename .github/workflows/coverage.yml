@@ -1,9 +1,8 @@
-name: Lunatic CI
+
+name: Lunatic Coverage
 
 on:
   push:
-    branches: [ "gbi-dev" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -25,12 +24,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
-
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-
     - name: Make Coverage
       run: dotnet test --collect:"XPlat Code Coverage" --results-directory TestsResults
 
@@ -40,5 +33,4 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         format: cobertura
         file: /home/runner/work/lunatic/lunatic/lunatic-api/TestsResults/**/*.xml
-        debug: true
 
