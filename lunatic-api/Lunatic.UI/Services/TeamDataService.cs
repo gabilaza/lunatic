@@ -40,9 +40,9 @@ namespace Lunatic.UI.Services {
 			return teams!.GetValue("teams");
 		}
 
-		public async Task<TeamDto> GetTeamByIdAsync(string teamId) {
+		public async Task<ApiResponse<TeamDto>> GetTeamByIdAsync(string teamId) {
 			var result = await httpClient.GetAsync($"{RequestUri}/{teamId}", HttpCompletionOption.ResponseHeadersRead);
-			var team = await result.Content.ReadFromJsonAsync<TeamDto>();
+			var team = await result.Content.ReadFromJsonAsync<ApiResponse<TeamDto>>();
 			return team!;
 		}
 

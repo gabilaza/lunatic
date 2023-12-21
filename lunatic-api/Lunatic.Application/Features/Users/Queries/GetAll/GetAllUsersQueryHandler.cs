@@ -5,15 +5,15 @@ using MediatR;
 
 
 namespace Lunatic.Application.Features.Users.Queries.GetAll {
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, GetAllUsersQueryResponse> {
+    public class GetUsernameMatchesQueryHandler : IRequestHandler<GetUsernameMatchesQuery, GetUsernameMatchesQueryResponse> {
         private readonly IUserRepository userRepository;
 
-        public GetAllUsersQueryHandler(IUserRepository userRepository) {
+        public GetUsernameMatchesQueryHandler(IUserRepository userRepository) {
             this.userRepository = userRepository;
         }
 
-        public async Task<GetAllUsersQueryResponse> Handle(GetAllUsersQuery request, CancellationToken cancellationToken) {
-            GetAllUsersQueryResponse response = new GetAllUsersQueryResponse();
+        public async Task<GetUsernameMatchesQueryResponse> Handle(GetUsernameMatchesQuery request, CancellationToken cancellationToken) {
+            GetUsernameMatchesQueryResponse response = new GetUsernameMatchesQueryResponse();
             var users = await this.userRepository.GetAllAsync();
 
             if(users.IsSuccess) {
