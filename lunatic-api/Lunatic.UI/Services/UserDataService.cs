@@ -52,10 +52,11 @@ namespace Lunatic.UI.Services {
 
 		//}
 
-		//public async Task UpdateUserAsync(UserDto user) {
-		//	httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await tokenService.GetTokenAsync());
-		//	var userJson = new StringContent(JsonSerializer.Serialize(user), Encoding.UTF8, "application/json");
-		//	await httpClient.PutAsync("api/users", userJson);
-		//}
+		public async Task UpdateUserAsync(UserDto user)
+		{
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await tokenService.GetTokenAsync());
+			var userJson = new StringContent(JsonSerializer.Serialize(user));
+			await httpClient.PutAsync(RequestUri, userJson);
+		}
 	}
 }
