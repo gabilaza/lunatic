@@ -3,7 +3,7 @@
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @inject ISnackbar Snackbar
 
-<MudPaper Class="@ItemClasses">
+<MudPaper Class="d-flex flex-row align-content-center">
 	<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
 	<MudText>
 		@Username
@@ -24,7 +24,6 @@
 	[Parameter] public List<UserItem> UserItems { get; set; } = null!; // update list when adding
 	// [Parameter] public EventCallback UpdateUserItems { get; set; }
 	[Parameter] public string Username { get; set; } = "";
-	public string ItemClasses = "d-flex flex-row";
 
 	[Inject] public IUserDataService UserDataService { get; set; } = null!;
 	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;

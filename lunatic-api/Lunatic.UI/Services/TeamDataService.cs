@@ -24,8 +24,13 @@ namespace Lunatic.UI.Services {
 			return response!;
 		}
 
-		public Task<ApiResponse<TeamDto>> DeleteTeamAsync(Guid id) {
-			throw new NotImplementedException();
+		public async Task<ApiResponse> DeleteTeamAsync(string teamId) {
+			httpClient.DefaultRequestHeaders.Authorization
+				= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
+			var result = await httpClient.DeleteAsync($"{RequestUri}/{teamId}");
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
 		}
 
 

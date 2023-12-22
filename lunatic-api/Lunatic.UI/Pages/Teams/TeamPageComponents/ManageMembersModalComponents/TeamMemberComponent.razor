@@ -2,7 +2,7 @@
 @using Lunatic.UI.Contracts
 @inject ISnackbar Snackbar
 
-<MudPaper Class="@ItemClasses">
+<MudPaper Class="d-flex flex-row align-content-center">
 	<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
 	<MudText>
 		@Username
@@ -24,7 +24,7 @@
 	public bool IsOwner { get; set; } = false;
 	// [Parameter] public EventCallback<string> OnRemoveMember { get; set; }
 	public string Username { get; set; } = "";
-	public string ItemClasses = "d-flex flex-row";
+
 
 	[Inject] public IUserDataService UserDataService { get; set; } = null!;
 	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
