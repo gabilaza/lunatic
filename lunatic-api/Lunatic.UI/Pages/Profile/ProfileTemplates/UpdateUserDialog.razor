@@ -11,7 +11,7 @@
 			<MudTextField Label="First Name" @bind-Value="UserModel.FirstName" />
 			<MudTextField Label="Last Name" @bind-Value="UserModel.LastName" />
 		</div>
-		<MudTextField Label="Username" @bind-Value="UserModel.Username" ReadOnly="true"/>
+		<MudTextField Label="Username" @bind-Value="UserModel.Username" ReadOnly="true" />
 		<MudTextField Label="Email" @bind-Value="UserModel.Email" ReadOnly="true" />
 	</DialogContent>
 	<DialogActions>
@@ -27,20 +27,24 @@
 	[Parameter] public UserDto UserModel { get; set; }
 	[Inject] NavigationManager NavigationManager { get; set; } = null!;
 
+	[Inject] private IUserDataService UserDataService { get; set; } = null!;
 }
 
 @functions {
-	// protected override void OnParametersSet()
-	// {
-
-	// 	base.OnParametersSet();
-	// }
-
 	private async Task Submit() {
-		// foreach (PropertyInfo prop in typeof(UserDto).GetProperties())
-		// {
-		// 	if (string.IsNullOrWhiteSpace(prop.GetValue(UserModel, null)))
-		// 	{
+		var result = await UserDataService.UpdateUserInfoAsync(new UserViewModel() {
+				UserId = UserModel.UserId,
+				FirstName = UserModel.FirstName,
+				LastName = UserModel.LastName,
+			});
+		if (result.Success) {
+			Snackbar.Add("User updated successfully.", Severity.Success);
+			await MudDialog.CloseAsync();
+			NavigationManager.NavigateTo("/profile");
+		}
+		else {
+			Snackbar.Add("Something went wrong.", Severity.Error);
+		}
 		return;
 	}
 	private void Cancel() => MudDialog.Cancel();
