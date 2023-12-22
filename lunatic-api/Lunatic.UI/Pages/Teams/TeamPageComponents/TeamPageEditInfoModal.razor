@@ -3,6 +3,7 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 @using Microsoft.AspNetCore.Components
 @using Lunatic.UI.Contracts
+@using Lunatic.UI.ViewModels
 @using System.Text.Json
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
@@ -26,8 +27,12 @@
 
 		</MudToolBar>
 		<MudPaper Class="d-flex flex-column p-2">
-			<MudTextField @bind-Value="TeamName" Label="Team name" Variant="Variant.Text"></MudTextField>
-			<MudTextField T="string" Label="Team description" Variant="Variant.Filled" Text="@TeamDescription" Lines="6" />
+			<MudTextField @bind-Value="TeamName" Label="Team name" Variant="Variant.Text">
+				@TeamName
+			</MudTextField>
+			<MudTextField @bind-Value="@TeamDescription" Label="Team description" Variant="Variant.Filled" Lines="6">
+				@TeamDescription
+			</MudTextField>
 		</MudPaper>
 
 
@@ -59,8 +64,18 @@
 	}
 
 	private async void SaveTeamInfo() {
-		// var result = await TeamDataService.UpdateTeamInfo(TeamId, );
+		var result = await TeamDataService.UpdateTeamInfoAsync(new UpdateTeamInfoViewModel {
+				TeamId = TeamId,
+				Name = TeamName,
+				Description = TeamDescription
+			});
 
+		if (result.Success) {
+			Snackbar.Add("Team info updated", Severity.Success);
+			MudDialog.Close(DialogResult.Ok(true));
+		}
+		else
+			Snackbar.Add($"Failed to update team info: {string.Join(Environment.NewLine, result.ValidationErrors)}", Severity.Error);
 	}
 
 }

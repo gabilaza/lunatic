@@ -35,7 +35,7 @@ namespace Lunatic.Application.Features.Users.Queries.GetAllTeams {
 
             response.Teams = teams.Select(team => new TeamDto {
                 TeamId = team.TeamId,
-
+				OwnerId = team.CreatedByUserId,
                 Name = team.Name,
                 Description = team.Description,
 

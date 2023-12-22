@@ -7,7 +7,7 @@
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
 @using Lunatic.UI.ViewModels
-
+@inject NavigationManager NavigationManager
 <style>
 	.edit-info-toolbar {
 		background-color: #9271bd;
@@ -37,7 +37,7 @@
 	[Parameter] public string TeamId { get; set; } = null!;
 	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
 	[Parameter] public List<Guid> ProjectIds { get; set; } = null!;
-// [Parameter] public EventCallback UpdateProjectList { get; set; }
+	// [Parameter] public EventCallback UpdateProjectList { get; set; }
 
 	private ProjectViewModel ProjectViewModel { get; set; } = new ProjectViewModel();
 
@@ -65,7 +65,9 @@
 		if (result.Success) {
 			Snackbar.Add("Project created successfully", Severity.Success);
 			MudDialog.Close(DialogResult.Ok(true));
-			ProjectIds = result.GetValue("projects").ProjectIds;
+
+			ProjectIds.Add(result.GetValue("project").ProjectId);
+			NavigationManager.NavigateTo(NavigationManager.Uri);
 		}
 		else {
 			Snackbar.Add($"Project creation failed {result.Message}", Severity.Error);

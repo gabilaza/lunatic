@@ -37,7 +37,7 @@
 		</MudToolBar>
 
 		<MudGrid Spacing="0" style="height:100%;">
-			<MudItem xs="12" sm="3">
+			<MudItem xs="12" sm="4">
 				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
 					<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
 					@* <MudAutocomplete T="string" Label="Search users by username"
@@ -46,23 +46,25 @@
 					AutoFocus="false" /> *@
 					<MudTextField Class="pt-1 m-1" @bind-Value="@searchValue" OnKeyUp="OnKeyUpSearchBar"
 								  Variant="Variant.Outlined" Margin="Margin.Dense"
-								  Label="Search your team mates by username">
+								  Label="Search your team mates by username"
+								  Immediate="true">
 					</MudTextField>
 
 					<MudPaper>
-						@foreach (var searchResult in userItems) {
+						@foreach (var searchResult in UserItems) {
 							<SearchUserComponent MemberId="@searchResult.UserId"
 												 TeamOwnerId="@OwnerId"
 												 Username="@searchResult.Username"
 												 TeamId="@TeamId"
 												 MembersIdsRef="@MembersIds"
-												 UpdateMemberList="@StateHasChanged" />
+												 UpdateMemberList="@StateHasChanged"
+												 UserItems="@UserItems" />
 						}
 					</MudPaper>
 				</MudPaper>
 			</MudItem>
 
-			<MudItem xs="12" sm="9">
+			<MudItem xs="12" sm="8">
 				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
 					<MudToolBar Class="member-management-toolbar2" Dense>Manage members</MudToolBar>
 					<MudPaper style="max-height:100%; overflow-y:scroll; overflow-x:hidden;">
@@ -99,7 +101,7 @@
 	[Parameter] public string OwnerId { get; set; } = ""; // can access this modal only if owner
 	[Parameter] public List<Guid> MembersIds { get; set; } = null;
 
-	private List<UserItem>? userItems = new();
+	private List<UserItem>? UserItems { get; set; } = new();
 
 	// private string searchValue = "";
 	private string searchValue = "";
@@ -127,6 +129,7 @@
 	}
 
 	public void OnKeyUpSearchBar(KeyboardEventArgs e) {
+
 		if (e.Key.Length > 1)
 			return;
 
@@ -144,15 +147,15 @@
 	}
 
 	public async void SearchUsers(object? sender, ElapsedEventArgs e) {
-		if (searchValue.Length < 3)
+		if (searchValue.Length <= 2)
 			return;
 
 		var result = await UserDataService.GetUsersByUsernameAsync(searchValue);
 
 		if (result != null) {
-			userItems.Clear();
+			UserItems.Clear();
 			foreach (var user in result) {
-				userItems.Add(new UserItem(user.UserId.ToString(), user.Username));
+				UserItems.Add(new UserItem(user.UserId.ToString(), user.Username));
 				StateHasChanged();
 			}
 		}

@@ -24,7 +24,10 @@
 		@if (UserTeams != null) {
 			@if (UserTeams.Any()) {
 				@foreach (var teamDto in UserTeams) {
-					<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()" TeamName="@teamDto.Name" />@*  TeamDescription="@teamDto.Description" *@
+					<TeamsPageTeamCard TeamId="@teamDto.TeamId.ToString()"
+									   TeamName="@teamDto.Name"
+									   TeamDescription="@teamDto.Description" />
+					@*  TeamDescription="@teamDto.Description" *@
 				}
 			}
 			else {
@@ -36,15 +39,15 @@
 			}
 		}
 		else {
-		<MudCard>
-			<MudCardContent>
-				<MudSkeleton Width="100px" Height="40px" />
-				<br />
-				<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="150px" />
-				<br />
-				<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="50px" />
-			</MudCardContent>
-		</MudCard>
+			<MudCard>
+				<MudCardContent>
+					<MudSkeleton Width="100px" Height="40px" />
+					<br />
+					<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="150px" />
+					<br />
+					<MudSkeleton SkeletonType="SkeletonType.Rectangle" Width="400px" Height="50px" />
+				</MudCardContent>
+			</MudCard>
 		}
 	</MudPaper>
 </div>
@@ -74,7 +77,9 @@
 	}
 
 	private async Task LoadUserTeams() {
-		UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+		var result = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+		var teams = result.GetValue("teams");
+		UserTeams = teams;
 	}
 	private void OpenCreateTeamModal() {
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class" };

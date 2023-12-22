@@ -5,6 +5,7 @@
 @* @using System.Text.Json *@
 @inject NavigationManager navigationManager
 @inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <style>
@@ -123,7 +124,12 @@
 	// }
 	protected override async Task OnParametersSetAsync() {
 
-		var team = await TeamDataService.GetTeamByIdAsync(TeamId);
+		var result = await TeamDataService.GetTeamByIdAsync(TeamId);
+		if(!result.Success) {
+			Snackbar.Add($"Error loading team: {result.Message}", Severity.Error);
+			navigationManager.NavigateTo("/teams");
+		}
+		var team = result.GetValue("team");
 		// Console.WriteLine(JsonSerializer.Serialize(team));
 		TeamName = team.Name;
 		TeamDescription = team.Description;

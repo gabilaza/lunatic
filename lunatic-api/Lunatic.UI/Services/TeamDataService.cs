@@ -29,20 +29,17 @@ namespace Lunatic.UI.Services {
 		}
 
 
-		public Task<ApiResponse<TeamDto>> UpdateTeamAsync(TeamViewModel team) {
-			throw new NotImplementedException();
-		}
-
-		public async Task<List<TeamDto>> GetUserTeamsAsync(Guid userId) {
+		public async Task<ApiResponse<List<TeamDto>>> GetUserTeamsAsync(Guid userId) {
 			var result = await httpClient.GetAsync($"api/v1/users/{userId}/teams", HttpCompletionOption.ResponseHeadersRead);
 			//result.EnsureSuccessStatusCode();
 			var teams = await result.Content.ReadFromJsonAsync<ApiResponse<List<TeamDto>>>();
-			return teams!.GetValue("teams");
+			teams.Success = result.IsSuccessStatusCode;
+			return teams!;
 		}
 
-		public async Task<TeamDto> GetTeamByIdAsync(string teamId) {
+		public async Task<ApiResponse<TeamDto>> GetTeamByIdAsync(string teamId) {
 			var result = await httpClient.GetAsync($"{RequestUri}/{teamId}", HttpCompletionOption.ResponseHeadersRead);
-			var team = await result.Content.ReadFromJsonAsync<TeamDto>();
+			var team = await result.Content.ReadFromJsonAsync<ApiResponse<TeamDto>>();
 			return team!;
 		}
 
@@ -69,6 +66,15 @@ namespace Lunatic.UI.Services {
 				= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
 			var result = await httpClient.PostAsJsonAsync($"{RequestUri}/{teamId}/projects/", projectViewModel);
 			var response = await result.Content.ReadFromJsonAsync<ApiResponse<ProjectDto>>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
+		}
+
+		public async Task<ApiResponse<TeamDto>> UpdateTeamInfoAsync(UpdateTeamInfoViewModel viewModel) {
+			httpClient.DefaultRequestHeaders.Authorization
+				= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
+			var result = await httpClient.PutAsJsonAsync($"{RequestUri}/{viewModel.TeamId}", viewModel);
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse<TeamDto>>();
 			response!.Success = result.IsSuccessStatusCode;
 			return response!;
 		}
