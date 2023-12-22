@@ -38,5 +38,92 @@ namespace Tests.Lunatic.Application.Features.Teams.Commands
             Assert.NotNull(response.Team);
             Assert.Null(response.ValidationErrors);
         }
-    }
+
+		[Fact]
+		public async void GivenInvalidUserId_WhenCreate_Then_FailureResponse()
+		{
+			// given
+			var userRepository = Substitute.For<IUserRepository>();
+			var teamRepository = Substitute.For<ITeamRepository>();
+
+			userRepository.FindByIdAsync(user.Value.UserId).Returns(user);
+			userRepository.ExistsByIdAsync(user.Value.UserId).Returns(true);
+
+			var command = new CreateTeamCommand
+			{
+				Name = "TeamName",
+				Description = "TeamDescription",
+				UserId = Guid.NewGuid()
+			};
+
+			var commandHandler = new CreateTeamCommandHandler(teamRepository, userRepository);
+			var source = new CancellationTokenSource();
+
+			// when
+			var response = await commandHandler.Handle(command, source.Token);
+
+			// then
+			Assert.False(response.Success);
+			Assert.Null(response.Team);
+			Assert.NotNull(response.ValidationErrors);
+		}
+
+		[Fact]
+		public async void GivenInvalidName_WhenCreate_Then_FailureResponse()
+		{
+			// given
+			var userRepository = Substitute.For<IUserRepository>();
+			var teamRepository = Substitute.For<ITeamRepository>();
+
+			userRepository.FindByIdAsync(user.Value.UserId).Returns(user);
+			userRepository.ExistsByIdAsync(user.Value.UserId).Returns(true);
+
+			var command = new CreateTeamCommand
+			{
+				Name = "",
+				Description = "TeamDescription",
+				UserId = user.Value.UserId
+			};
+
+			var commandHandler = new CreateTeamCommandHandler(teamRepository, userRepository);
+			var source = new CancellationTokenSource();
+
+			// when
+			var response = await commandHandler.Handle(command, source.Token);
+
+			// then
+			Assert.False(response.Success);
+			Assert.Null(response.Team);
+			Assert.NotNull(response.ValidationErrors);
+		}
+
+		[Fact]
+		public async void GivenInvalidDescription_WhenCreate_Then_FailureResponse()
+		{
+			// given
+			var userRepository = Substitute.For<IUserRepository>();
+			var teamRepository = Substitute.For<ITeamRepository>();
+
+			userRepository.FindByIdAsync(user.Value.UserId).Returns(user);
+			userRepository.ExistsByIdAsync(user.Value.UserId).Returns(true);
+
+			var command = new CreateTeamCommand
+			{
+				Name = "TeamName",
+				Description = "",
+				UserId = user.Value.UserId
+			};
+
+			var commandHandler = new CreateTeamCommandHandler(teamRepository, userRepository);
+			var source = new CancellationTokenSource();
+
+			// when
+			var response = await commandHandler.Handle(command, source.Token);
+
+			// then
+			Assert.False(response.Success);
+			Assert.Null(response.Team);
+			Assert.NotNull(response.ValidationErrors);
+		}
+	}
 }
