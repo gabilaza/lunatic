@@ -7,48 +7,43 @@
 @inject ISnackbar Snackbar
 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-<DataAnnotationsValidator/>
-    <MudCard Width="fit-content" Class="mx-auto">
-            <MudCardContent Class="d-inline-flex gap-5">
-                <MudTextField Label="First Name" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
-                <MudTextField Label="Last Name" @bind-Value="model.LastName" For="@(() => model.LastName)" />
-            </MudCardContent>
-            <MudCardContent>
-                <MudTextField Label="Username" @bind-Value="model.Username" For="@(() => model.Username)" />
-                <MudTextField Label="Email" @bind-Value="model.Email" For="@(() => model.Email)" />
-            </MudCardContent>
-            <MudCardContent Class="d-inline-flex gap-5">
-                <MudTextField Label="Password" HelperText="Choose a strong password" @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                 <MudTextField Label="Confirm Password" HelperText="Confirm password" @bind-Value="ConfirmPassword" For="@(() => ConfirmPassword)" InputType="InputType.Password" />
-            </MudCardContent>
-            <MudCardActions>
-                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">Register</MudButton>
-            </MudCardActions>
-    </MudCard>
+	<DataAnnotationsValidator />
+	<MudCard Width="fit-content" Class="mx-auto">
+		<MudCardContent Class="d-inline-flex gap-5">
+			<MudTextField Label="First Name" @bind-Value="model.FirstName" For="@(() => model.FirstName)" />
+			<MudTextField Label="Last Name" @bind-Value="model.LastName" For="@(() => model.LastName)" />
+		</MudCardContent>
+		<MudCardContent>
+			<MudTextField Label="Username" @bind-Value="model.Username" For="@(() => model.Username)" />
+			<MudTextField Label="Email" @bind-Value="model.Email" For="@(() => model.Email)" />
+		</MudCardContent>
+		<MudCardContent Class="d-inline-flex gap-5">
+			<MudTextField Label="Password" HelperText="Choose a strong password" @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+			<MudTextField Label="Confirm Password" HelperText="Confirm password" @bind-Value="ConfirmPassword" For="@(() => ConfirmPassword)" InputType="InputType.Password" />
+		</MudCardContent>
+		<MudCardActions>
+			<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="mx-auto">Register</MudButton>
+		</MudCardActions>
+	</MudCard>
 </EditForm>
 
 @code {
 	RegisterModel model = new RegisterModel();
-	private string ConfirmPassword { get; set; }
-	// string? error { get; set; }
+	private string ConfirmPassword { get; set; } = "";
 
-	async Task OnValidSubmit()
-	{
-		// error = null;
-		if(model.Password != ConfirmPassword) {
+	async Task OnValidSubmit() {
+		if (model.Password != ConfirmPassword) {
 			Snackbar.Add("Passwords do not match", Severity.Error);
 			return;
 		}
 
-        try
-        {
-            await authStateProvider.Register(model);
+		try {
+			await authStateProvider.Register(model);
 			Snackbar.Add("Account created successfully", Severity.Success);
-            navigationManager.NavigateTo("/login");
-        }
-        catch (Exception e)
-        {
-            // error = e.Message;
-        }
-    }
+			navigationManager.NavigateTo("/login");
+		}
+		catch (Exception e) {
+			Snackbar.Add($"Error creating account: {e.Message}", Severity.Error);
+		}
+	}
 }
