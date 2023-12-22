@@ -37,6 +37,7 @@ namespace Tests.Lunatic.Application.Features.Teams.Commands
             Assert.True(response.Success);
             Assert.NotNull(response.Team);
             Assert.Null(response.ValidationErrors);
+			Assert.NotNull(teamRepository.FindByIdAsync(response.Team.TeamId));
         }
 
 		[Fact]

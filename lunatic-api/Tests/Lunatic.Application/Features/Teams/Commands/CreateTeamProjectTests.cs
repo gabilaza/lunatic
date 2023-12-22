@@ -42,10 +42,9 @@ namespace Tests.Lunatic.Application.Features.Teams.Commands
             Assert.True(response.Success);
             Assert.NotNull(response.Project);
             Assert.Null(response.ValidationErrors);
+			Assert.NotNull(projectRepository.FindByIdAsync(response.Project.ProjectId));
         }
 
-        //[Theory]
-        //[InlineData(new[]("", team.Value.TeamId, "", ""))]
         [Fact]
         public async void GivenInvalidUserId_WhenCreate_ThenFailureResponse()
         {
