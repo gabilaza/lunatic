@@ -18,8 +18,10 @@
 @*color scheme not yet in place*@
 <MudLayout>
 	<MudAppBar Color="Color.Dark" Fixed="true" Dense>
-		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
-		<MudButton Color="Color.Inherit" OnClick="GoToTeams"> My Teams</MudButton>
+		@if (@LoggedIn) {
+			<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+			<MudButton Color="Color.Inherit" OnClick="GoToTeams"> My Teams</MudButton>
+		}
 		<MudSpacer />
 		@if (@LoggedIn) {
 			<MudMenu FullWidth="true" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
@@ -145,7 +147,7 @@
 	}
 	public async void Logout() {
 		try {
-			LoggedIn= false;
+			LoggedIn = false;
 			await authStateProvider.Logout();
 			NavigationManager.NavigateTo("/login");
 		}
