@@ -9,6 +9,7 @@
 @inject ILocalStorageService LocalStorageService
 @inject ISnackbar Snackbar
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorageService
+@inject CustomStateProvider authStateProvider
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -37,8 +38,9 @@
 					</MudChip>
 				</ActivatorContent>
 				<ChildContent>
-					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{Username}"))">Profile</MudMenuItem>
-					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem>
+					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{UserId}"))">Profile</MudMenuItem>
+					@* <MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem> *@
+					<MudMenuItem OnAction="@(()=>Logout())">Sign Out</MudMenuItem>
 				</ChildContent>
 			</MudMenu>
 		}
@@ -71,6 +73,8 @@
 
 	private async Task DisplayUserChip() {
 		if (!UserDataLoadedFlag && UserId!=null) {
+
+			if (string.IsNullOrEmpty(UserId)) return;
 
 			var response = await UserDataService.GetUserByIdAsync(UserId);
 			if (!response.Success) {
@@ -138,5 +142,17 @@
 	}
 	public void GoToLogin() {
 		NavigationManager.NavigateTo("/login");
+	}
+	public async void Logout() {
+		string error = "";
+		try
+		{
+			await authStateProvider.Logout();
+			NavigationManager.NavigateTo("/login");
+		}
+		catch (Exception e)
+		{
+			error = e.Message;
+		}
 	}
 }

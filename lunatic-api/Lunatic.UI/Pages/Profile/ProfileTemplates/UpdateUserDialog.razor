@@ -1,0 +1,51 @@
+﻿@using Lunatic.UI.Contracts
+@using Lunatic.UI.ViewModels
+@using MudBlazor
+@using System.Reflection
+@inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<MudDialog DefaultFocus="DefaultFocus.FirstChild">
+	<DialogContent>
+		<div class="d-inline-flex gap-3">
+			<MudTextField Label="First Name" @bind-Value="UserModel.FirstName" />
+			<MudTextField Label="Last Name" @bind-Value="UserModel.LastName" />
+		</div>
+		<MudTextField Label="Username" @bind-Value="UserModel.Username" ReadOnly="true" />
+		<MudTextField Label="Email" @bind-Value="UserModel.Email" ReadOnly="true" />
+	</DialogContent>
+	<DialogActions>
+		@* <MudButton Color="Color.Error">Delete account</MudButton> *@
+		<MudButton OnClick="Cancel">Cancel</MudButton>
+		<MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+	</DialogActions>
+
+</MudDialog>
+
+@code {
+	[CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+	[Parameter] public UserDto UserModel { get; set; }
+	[Inject] NavigationManager NavigationManager { get; set; } = null!;
+
+	[Inject] private IUserDataService UserDataService { get; set; } = null!;
+}
+
+@functions {
+	private async Task Submit() {
+		var result = await UserDataService.UpdateUserInfoAsync(new UserViewModel() {
+				UserId = UserModel.UserId,
+				FirstName = UserModel.FirstName,
+				LastName = UserModel.LastName,
+			});
+		if (result.Success) {
+			Snackbar.Add("User updated successfully.", Severity.Success);
+			await MudDialog.CloseAsync();
+			NavigationManager.NavigateTo("/profile");
+		}
+		else {
+			Snackbar.Add("Something went wrong.", Severity.Error);
+		}
+		return;
+	}
+	private void Cancel() => MudDialog.Cancel();
+}

@@ -1,9 +1,20 @@
-﻿namespace Lunatic.UI.ViewModels {
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Lunatic.UI.ViewModels {
 	public class UserDto {
 		public Guid UserId { get; set; } = default!;
+
+		[Required(ErrorMessage = "First Name is required")]
 		public string FirstName { get; set; } = default!;
+
+		[Required(ErrorMessage = "Last Name is required")]
 		public string LastName { get; set; } = default!;
+
+		[Required(ErrorMessage = "A valid email address is required")]
+		[EmailAddress(ErrorMessage = "A valid email address is required")]
 		public string Email { get; set; } = default!;
+
+		[Required(ErrorMessage = "Userame is required")]
 		public string Username { get; set; } = default!;
 		public string Password { get; set; } = default!;
 		public Role Role { get; set; } = default!;

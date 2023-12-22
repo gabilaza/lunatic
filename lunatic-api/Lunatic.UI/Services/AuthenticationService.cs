@@ -1,6 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Lunatic.UI.Contracts;
-using Lunatic.UI.Models;
+using Lunatic.UI.ViewModels;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 

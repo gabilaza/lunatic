@@ -3,6 +3,7 @@ using Lunatic.UI.Services.Responses;
 using Lunatic.UI.ViewModels;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Lunatic.UI.Services {
 	public class UserDataService : IUserDataService {
@@ -33,5 +34,14 @@ namespace Lunatic.UI.Services {
 			return response!;
 		}
 
+
+		public async Task<ApiResponse> UpdateUserInfoAsync(UserViewModel userViewModel) {
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", await tokenService.GetTokenAsync());
+			var result = await httpClient.PutAsJsonAsync($"{RequestUri}/{userViewModel.UserId}",
+								userViewModel);
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
+		}
 	}
 }
