@@ -16,15 +16,15 @@ namespace Tests.Lunatic.Domain.Entities.UserTests {
             var user = User.Create(FirstName, LastName, Email, Username, Password, Role.USER).Value;
 
             // when
-            user.Update("Update" + FirstName, "Update" + LastName, "Update" + Email, "Update" + Username, "Update" + Password, Role.ADMIN);
+            user.Update("Update" + FirstName, "Update" + LastName);
 
             // then
             Assert.Equal("Update" + FirstName, user.FirstName);
             Assert.Equal("Update" + LastName, user.LastName);
-            Assert.Equal("Update" + Email, user.Email);
-            Assert.Equal("Update" + Username, user.Username);
-            Assert.Equal("Update" + Password, user.Password);
-            Assert.Equal(Role.ADMIN, user.Role);
+            Assert.Equal(Email, user.Email);
+            Assert.Equal(Username, user.Username);
+            Assert.Equal(Password, user.Password);
+            Assert.Equal(Role.USER, user.Role);
         }
     }
 }
