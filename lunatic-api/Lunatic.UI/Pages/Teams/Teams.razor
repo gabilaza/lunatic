@@ -4,7 +4,7 @@
 @using Lunatic.UI.Pages.Teams.TeamsPageTemplates
 @using Lunatic.UI.Contracts
 @using Lunatic.UI.ViewModels
-@inject NavigationManager navigationManager
+@inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
@@ -66,15 +66,24 @@
 
 @functions {
 
-	// protected override async void OnParametersSet() {
-	// 	UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
+	protected override async Task OnParametersSetAsync() {
+		try {
+			CurrentUserId = new Guid(await localStorage.GetItemAsync<string>("userId"));
+		}
+		catch (Exception e) {
+			Snackbar.Add($"Error loading your user id from localstorage, it's not my fault! Error: {e.Message}", Severity.Error);
+			NavigationManager.NavigateTo("/login");
+		}
+		if (CurrentUserId == Guid.Empty)
+			return;
 
-	// 	base.OnParametersSet();
-	// }
-	protected override async Task OnInitializedAsync() {
-		CurrentUserId = new Guid(await localStorage.GetItemAsync<string>("userId"));
 		await LoadUserTeams();
 	}
+	// protected override async Task OnInitializedAsync() {
+	// 	if (CurrentUserId != Guid.Empty)
+	// 		return;
+	// 	await LoadUserTeams();
+	// }
 
 	private async Task LoadUserTeams() {
 		var result = await TeamsService.GetUserTeamsAsync(CurrentUserId);

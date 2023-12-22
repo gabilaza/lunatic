@@ -35,7 +35,7 @@
 						<MudMenuItem OnClick="LaunchEditTeamInfoModal">
 							Edit team info
 						</MudMenuItem>
-						<MudMenuItem>
+						<MudMenuItem OnClick="LaunchDeleteTeamModal">
 							Delete team  @* leave team if non owner *@
 						</MudMenuItem>
 					</MudMenu>
@@ -100,6 +100,16 @@
 
 </MudPaper>
 
+<MudDialog @bind-IsVisible="visible" Options="dialogOptions">
+	<TitleContent>Are you sure you want to delete this team?</TitleContent>
+	<DialogContent>
+
+	</DialogContent>
+	<DialogActions>
+		<MudButton OnClick="SubmitDeleteTeam" Color="Color.Primary">Yes</MudButton>
+		<MudButton OnClick="CancelDeleteTeam" Color="Color.Secondary">No</MudButton>
+	</DialogActions>
+</MudDialog>
 
 @code {
 	[Parameter] public string? TeamId { get; set; }
@@ -111,6 +121,10 @@
 	private List<Guid>? ProjectIds { get; set; } = null;
 
 	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
+
+	private bool visible;
+	private DialogOptions dialogOptions = new();
+
 }
 <style>
 	.my-custom-class {
@@ -119,13 +133,27 @@
 </style>
 
 @functions {
-	// protected override async void OnParametersSet() {
-	// 	base.OnParametersSet();
-	// }
+	private void LaunchDeleteTeamModal() {
+		visible = true;
+	}
+	private async Task SubmitDeleteTeam() {
+		var result = await TeamDataService.DeleteTeamAsync(TeamId);
+		if (result.Success) {
+			Snackbar.Add($"Team {TeamName} deleted successfuly", Severity.Success);
+			visible = false;
+			navigationManager.NavigateTo("/teams");
+		}
+		else {
+			Snackbar.Add($"Failed to delete team {result.Message}", Severity.Error);
+		}
+
+	}
+	private void CancelDeleteTeam() => visible = false;
+
 	protected override async Task OnParametersSetAsync() {
 
 		var result = await TeamDataService.GetTeamByIdAsync(TeamId);
-		if(!result.Success) {
+		if (!result.Success) {
 			Snackbar.Add($"Error loading team: {result.Message}", Severity.Error);
 			navigationManager.NavigateTo("/teams");
 		}
@@ -149,7 +177,6 @@
 
 	public void LaunchAddMemberModal() {
 		DialogParameters parameters = new DialogParameters();
-		Console.WriteLine(OwnerId);
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("MembersIds", MembersIds);
 		parameters.Add("TeamId", TeamId); //todo dropshadow
@@ -158,15 +185,15 @@
 	}
 	public void LaunchEditTeamInfoModal() {
 		DialogParameters parameters = new DialogParameters();
-		Console.WriteLine(OwnerId);
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("TeamId", TeamId);
+		parameters.Add("TeamName", TeamName);
+		parameters.Add("TeamDescription", TeamDescription);
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.ExtraExtraLarge };
 		DialogService.Show<TeamPageEditInfoModal>(null, parameters, closeOnEscapeKey);
 	}
 	public void LaunchAddNewProjectModal() {
 		DialogParameters parameters = new DialogParameters();
-		Console.WriteLine(OwnerId);
 		parameters.Add("OwnerId", OwnerId);
 		parameters.Add("TeamId", TeamId);
 		parameters.Add("ProjectIds", ProjectIds);
@@ -174,4 +201,11 @@
 		DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.Large };
 		DialogService.Show<TeamPageAddNewProjectModal>(null, parameters, closeOnEscapeKey);
 	}
+	// public void LaunchDeleteTeamModal() {
+	// 	DialogParameters parameters = new DialogParameters();
+	// 	parameters.Add("OwnerId", OwnerId);
+	// 	parameters.Add("TeamId", TeamId);
+	// 	DialogOptions closeOnEscapeKey = new DialogOptions() { CloseOnEscapeKey = true, ClassBackground = "my-custom-class", NoHeader = true, MaxWidth = MaxWidth.Small };
+	// 	DialogService.Show<TeamPageDeleteTeamModal>(null, parameters, closeOnEscapeKey);
+		// }
 }

@@ -31,24 +31,12 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
                 };
             }
 
-            userResult.Value.Update(request.FirstName, request.LastName, request.Email, request.Username, request.Password, request.Role);
+            userResult.Value.Update(request.FirstName, request.LastName);
 
             var dbUserResult = await this.userRepository.UpdateAsync(userResult.Value);
 
             return new UpdateUserCommandResponse {
-                Success = true,
-                User = new UserDto {
-                    UserId = dbUserResult.Value.UserId,
-
-                    FirstName = dbUserResult.Value.FirstName,
-                    LastName = dbUserResult.Value.LastName,
-                    Email = dbUserResult.Value.Email,
-                    Username = dbUserResult.Value.Username,
-                    Password = dbUserResult.Value.Password,
-                    Role = dbUserResult.Value.Role,
-
-                    TeamIds = dbUserResult.Value.TeamIds
-                }
+                Success = true
             };
 
 

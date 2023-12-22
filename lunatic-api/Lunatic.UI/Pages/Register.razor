@@ -1,6 +1,6 @@
 ﻿@page "/register"
 @using Lunatic.UI.Auth
-@using Lunatic.UI.Models
+@using Lunatic.UI.ViewModels
 @using MudBlazor
 @inject NavigationManager navigationManager
 @inject CustomStateProvider authStateProvider
@@ -28,7 +28,6 @@
 </EditForm>
 
 @code {
-    // [Inject] ISnackbar Snackbar { get; set; }
     RegisterModel model = new RegisterModel();
 
     string? error { get; set; }

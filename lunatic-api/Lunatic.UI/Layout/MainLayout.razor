@@ -8,6 +8,8 @@
 @inject ITokenService TokenService
 @inject ILocalStorageService LocalStorageService
 @inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorageService
+@inject CustomStateProvider authStateProvider
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -36,8 +38,9 @@
 					</MudChip>
 				</ActivatorContent>
 				<ChildContent>
-					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{Username}"))">Profile</MudMenuItem>
-					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem>
+					<MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo($"/profile/{UserId}"))">Profile</MudMenuItem>
+					@* <MudMenuItem OnAction="@(()=>NavigationManager.NavigateTo("/logout"))">Sign Out</MudMenuItem> *@
+					<MudMenuItem OnAction="@(()=>Logout())">Sign Out</MudMenuItem>
 				</ChildContent>
 			</MudMenu>
 		}
@@ -69,19 +72,18 @@
 @functions {
 
 	private async Task DisplayUserChip() {
+		if (!UserDataLoadedFlag && UserId != null) {
 
-		if (!UserDataLoadedFlag) {
-			UserId = await LocalStorageService.GetItemAsync<string>("userId");
+			if (string.IsNullOrEmpty(UserId)) return;
 
 			var response = await UserDataService.GetUserByIdAsync(UserId);
-
 			if (!response.Success) {
-				Snackbar.Add(response.Message, Severity.Error);
+				Snackbar.Add($"Couldn't load user data: {response.Message}", Severity.Error);
 				return;
 			}
 
 			var userData = response.GetValue("user");
-			// Console.WriteLine(userData);
+
 			Username = userData.Username;
 			//user image, get from cache or make request
 
@@ -91,14 +93,29 @@
 
 	//https://learn.microsoft.com/en-us/aspnet/core/blazor/components/lifecycle?view=aspnetcore-8.0
 	//OnInitializedAsync is called after OnParametersSetAsync
-	protected override async Task OnInitializedAsync() {
-
-		await DisplayUserChip();
-	}
+	// protected override async Task OnInitializedAsync() {
+	// }
 
 	protected override async Task OnParametersSetAsync() {
-		if (Token == null)
-			Token = await TokenService.GetTokenAsync();
+		if (Token == null) {
+			try {
+				Token = await TokenService.GetTokenAsync();
+			}
+			catch (Exception e) {
+				Snackbar.Add($"Error loading your JWT from localstorage, it's not my fault! Error: {e.Message}", Severity.Error);
+				// NavigationManager.NavigateTo("/login");
+			}
+
+		}
+		if (UserId == null) {
+			try {
+				UserId = await LocalStorageService.GetItemAsync<string>("userId");
+			}
+			catch (Exception e) {
+				Snackbar.Add($"Error loading your user id from localstorage, it's not my fault! Error: {e.Message}", Severity.Error);
+				// NavigationManager.NavigateTo("/login");
+			}
+		}
 
 		if (RegisterUri == null)
 			RegisterUri = NavigationManager.ToAbsoluteUri("/register").ToString();
@@ -107,7 +124,7 @@
 
 		string uri = NavigationManager.Uri;
 
-		if (Token == null) {
+		if (Token == null || UserId == null) {
 			LoggedIn = false;
 			if (!uri.Equals(RegisterUri, StringComparison.OrdinalIgnoreCase) &&
 				!uri.Equals(LoginUri, StringComparison.OrdinalIgnoreCase))
@@ -115,7 +132,9 @@
 		}
 		else {
 			LoggedIn = true;
+			await DisplayUserChip();
 		}
+
 	}
 
 	public void GoToTeams() {
@@ -123,5 +142,15 @@
 	}
 	public void GoToLogin() {
 		NavigationManager.NavigateTo("/login");
+	}
+	public async void Logout() {
+		try {
+			LoggedIn= false;
+			await authStateProvider.Logout();
+			NavigationManager.NavigateTo("/login");
+		}
+		catch (Exception e) {
+			Snackbar.Add($"Error logging out: {e.Message}", Severity.Error);
+		}
 	}
 }

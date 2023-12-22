@@ -21,6 +21,7 @@ namespace GlobalBuyTicket.App.Services {
 
 		public async Task RemoveTokenAsync() {
 			await localStorageService.RemoveItemAsync(TOKEN);
+			await localStorageService.RemoveItemAsync("userId");
 		}
 	}
 }

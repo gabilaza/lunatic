@@ -1,5 +1,4 @@
-﻿using Lunatic.UI.Services;
-using Lunatic.UI.Services.Responses;
+﻿using Lunatic.UI.Services.Responses;
 using Lunatic.UI.ViewModels;
 
 namespace Lunatic.UI.Contracts {
@@ -7,7 +6,7 @@ namespace Lunatic.UI.Contracts {
 		Task<ApiResponse<ProjectDto>> CreateProjectAsync(ProjectViewModel Project);
 		Task<ApiResponse<ProjectDto>> UpdateProjectAsync(ProjectViewModel Project);
 		Task<ApiResponse<ProjectDto>> DeleteProjectAsync(Guid id);
-		Task<ProjectDto> GetProjectByIdAsync(string teamId);
+		Task<ApiResponse<ProjectDto>> GetProjectByIdAsync(string teamId);
 	}
 }
 

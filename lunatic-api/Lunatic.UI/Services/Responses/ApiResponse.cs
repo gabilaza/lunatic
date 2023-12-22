@@ -23,4 +23,9 @@ namespace Lunatic.UI.Services.Responses {
 			return $"ApiResponse(Message: {Message}, Success: {Success}, ValidationErrors: {string.Join(Environment.NewLine, ValidationErrors)}, Data: {string.Join(Environment.NewLine, Data)})";
 		}
 	}
+	public class ApiResponse {
+		public string Message { get; set; } = string.Empty;
+		public bool Success { get; set; }
+		public List<string>? ValidationErrors { get; set; }
+	}
 }

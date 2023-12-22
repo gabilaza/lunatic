@@ -29,11 +29,11 @@ namespace Lunatic.UI.Services {
 			throw new NotImplementedException();
 		}
 
-		public async Task<ProjectDto> GetProjectByIdAsync(string teamId) {
+		public async Task<ApiResponse<ProjectDto>> GetProjectByIdAsync(string teamId) {
 			var result = await httpClient.GetAsync($"api/v1/teams/projects/{teamId}", HttpCompletionOption.ResponseHeadersRead);
-			result.EnsureSuccessStatusCode();
-			var response = await result.Content.ReadFromJsonAsync<ProjectDto>();
-			return response;
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse<ProjectDto>>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
 		}
 
 		public Task<ApiResponse<ProjectDto>> UpdateProjectAsync(ProjectViewModel Project) {
