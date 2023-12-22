@@ -2,23 +2,22 @@
 using Lunatic.Domain.Entities;
 using Lunatic.Domain.Utils;
 using Lunatic.Application.Persistence;
-using Lunatic.Application.Features.Users.Queries.GetAllTeams;
+using Lunatic.Application.Features.Users.Queries.GetById;
 using NSubstitute;
 
 
 namespace Tests.Lunatic.Application.Features.Users.Queries {
-    public class GetAllTeamsTests {
+    public class GetByIdTests {
         private Result<User> user = User.Create("firstName", "lastName", "email@email.com", "username", "password", Role.USER);
 
         [Fact]
-        public async void GivenGetAllUserTeamsComamnd_WhenGetAllUserTeams_ThenSuccessResponse() {
+        public async void GivenGetByIdUserQuery_WhenGetByIdUser_ThenSuccessResponse() {
             // given
             var userRepository = Substitute.For<IUserRepository>();
-            var teamRepository = Substitute.For<ITeamRepository>();
             userRepository.FindByIdAsync(user.Value.UserId).Returns(user);
 
-            var query = new GetAllUserTeamsQuery(user.Value.UserId);
-            var queryHandler = new GetAllUserTeamsQueryHandler(userRepository, teamRepository);
+            var query = new GetByIdUserQuery(user.Value.UserId);
+            var queryHandler = new GetByIdUserQueryHandler(userRepository);
             var source = new CancellationTokenSource();
 
             // when
@@ -26,7 +25,7 @@ namespace Tests.Lunatic.Application.Features.Users.Queries {
 
             // then
             Assert.True(response.Success);
-            Assert.NotNull(response.Teams);
+            Assert.NotNull(response.User);
             Assert.Null(response.ValidationErrors);
         }
 
@@ -34,11 +33,10 @@ namespace Tests.Lunatic.Application.Features.Users.Queries {
         public async void GivenGetAllUserTeamsComamnd_WhenGetAllUserTeams_ThenFailureResponse() {
             // given
             var userRepository = Substitute.For<IUserRepository>();
-            var userId = Guid.NewGuid();
-            userRepository.FindByIdAsync(userId).Returns(Result<User>.Failure("Lunatic Entity Not Found"));
-            var teamRepository = Substitute.For<ITeamRepository>();
-            var query = new GetAllUserTeamsQuery(userId);
-            var queryHandler = new GetAllUserTeamsQueryHandler(userRepository, teamRepository);
+            userRepository.FindByIdAsync(user.Value.UserId).Returns(Result<User>.Failure("Lunatic Entity Not Found"));
+
+            var query = new GetByIdUserQuery(user.Value.UserId);
+            var queryHandler = new GetByIdUserQueryHandler(userRepository);
             var source = new CancellationTokenSource();
 
             // when
@@ -46,7 +44,7 @@ namespace Tests.Lunatic.Application.Features.Users.Queries {
 
             // then
             Assert.False(response.Success);
-            Assert.Null(response.Teams);
+            Assert.Null(response.User);
             Assert.NotNull(response.ValidationErrors);
         }
     }
