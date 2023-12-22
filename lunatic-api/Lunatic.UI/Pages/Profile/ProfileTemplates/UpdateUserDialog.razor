@@ -33,16 +33,16 @@
 @functions {
 	private async Task Submit() {
 		var result = await UserDataService.UpdateUserInfoAsync(new UserViewModel() {
-				UserId = UserModel.UserId,
+				UserId = UserModel.UserId.ToString(),
 				FirstName = UserModel.FirstName,
 				LastName = UserModel.LastName,
 			});
 		if (result.Success) {
 			Snackbar.Add("User updated successfully.", Severity.Success);
-			await MudDialog.CloseAsync();
-			NavigationManager.NavigateTo("/profile");
+			MudDialog.Cancel();
+			NavigationManager.Refresh();
 		}
-		else {
+		else { //todo show validation errors, or treat them
 			Snackbar.Add("Something went wrong.", Severity.Error);
 		}
 		return;

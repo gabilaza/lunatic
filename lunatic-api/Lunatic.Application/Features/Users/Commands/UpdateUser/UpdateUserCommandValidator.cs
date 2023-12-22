@@ -1,30 +1,30 @@
 ﻿
-using Lunatic.Application.Persistence;
 using FluentValidation;
+using Lunatic.Application.Persistence;
 
 
 namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
-    internal class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand> {
-        private readonly IUserRepository userRepository;
+	internal class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand> {
+		private readonly IUserRepository userRepository;
 
-        public UpdateUserCommandValidator(IUserRepository userRepository) {
-            this.userRepository = userRepository;
+		public UpdateUserCommandValidator(IUserRepository userRepository) {
+			this.userRepository = userRepository;
 
-            RuleFor(request => request.UserId)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.")
-                .MustAsync(async (userId, cancellationToken) => !await this.userRepository.ExistsByIdAsync(userId))
-                .WithMessage("{PropertyName} must exists.");
+			RuleFor(request => request.UserId)
+				.NotEmpty().WithMessage("{PropertyName} is required.")
+				.NotNull().WithMessage("{PropertyName} is required.")
+				.MustAsync(async (userId, cancellationToken) => await this.userRepository.ExistsByIdAsync(userId))
+				.WithMessage("{PropertyName} must exist.");
 
-            RuleFor(request => request.FirstName)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+			RuleFor(request => request.FirstName)
+				.NotEmpty().WithMessage("{PropertyName} is required.")
+				.NotNull().WithMessage("{PropertyName} is required.")
+				.MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
-            RuleFor(request => request.LastName)
-                .NotEmpty().WithMessage("{PropertyName} is required.")
-                .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+			RuleFor(request => request.LastName)
+				.NotEmpty().WithMessage("{PropertyName} is required.")
+				.NotNull().WithMessage("{PropertyName} is required.")
+				.MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
 
 			//RuleFor(request => request.Email)
 			//	.NotEmpty().WithMessage("{PropertyName} is required.")
@@ -41,5 +41,5 @@ namespace Lunatic.Application.Features.Users.Commands.UpdateUser {
 			//    .MustAsync(async (username, cancellationToken) => !await this.userRepository.ExistsByUsernameAsync(username))
 			//    .WithMessage("{PropertyName} exists already.");
 		}
-    }
+	}
 }

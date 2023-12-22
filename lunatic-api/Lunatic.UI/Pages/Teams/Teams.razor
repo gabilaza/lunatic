@@ -66,12 +66,7 @@
 
 @functions {
 
-	// protected override async void OnParametersSet() {
-	// 	UserTeams = await TeamsService.GetUserTeamsAsync(CurrentUserId);
-
-	// 	base.OnParametersSet();
-	// }
-	protected override async Task OnInitializedAsync() {
+	protected override async Task OnParametersSetAsync() {
 		try {
 			CurrentUserId = new Guid(await localStorage.GetItemAsync<string>("userId"));
 		}
@@ -79,9 +74,16 @@
 			Snackbar.Add($"Error loading your user id from localstorage, it's not my fault! Error: {e.Message}", Severity.Error);
 			NavigationManager.NavigateTo("/login");
 		}
+		if (CurrentUserId == Guid.Empty)
+			return;
 
 		await LoadUserTeams();
 	}
+	// protected override async Task OnInitializedAsync() {
+	// 	if (CurrentUserId != Guid.Empty)
+	// 		return;
+	// 	await LoadUserTeams();
+	// }
 
 	private async Task LoadUserTeams() {
 		var result = await TeamsService.GetUserTeamsAsync(CurrentUserId);

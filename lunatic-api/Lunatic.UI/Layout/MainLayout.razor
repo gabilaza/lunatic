@@ -72,7 +72,7 @@
 @functions {
 
 	private async Task DisplayUserChip() {
-		if (!UserDataLoadedFlag && UserId!=null) {
+		if (!UserDataLoadedFlag && UserId != null) {
 
 			if (string.IsNullOrEmpty(UserId)) return;
 
@@ -97,7 +97,7 @@
 	// }
 
 	protected override async Task OnParametersSetAsync() {
-		if (Token == null){
+		if (Token == null) {
 			try {
 				Token = await TokenService.GetTokenAsync();
 			}
@@ -144,15 +144,13 @@
 		NavigationManager.NavigateTo("/login");
 	}
 	public async void Logout() {
-		string error = "";
-		try
-		{
+		try {
+			LoggedIn= false;
 			await authStateProvider.Logout();
 			NavigationManager.NavigateTo("/login");
 		}
-		catch (Exception e)
-		{
-			error = e.Message;
+		catch (Exception e) {
+			Snackbar.Add($"Error logging out: {e.Message}", Severity.Error);
 		}
 	}
 }

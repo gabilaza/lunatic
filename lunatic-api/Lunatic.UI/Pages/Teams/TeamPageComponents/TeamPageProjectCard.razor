@@ -1,7 +1,7 @@
 ﻿@using MudBlazor
 @using Lunatic.UI.Contracts
 @inject NavigationManager navigationManager
-
+@inject ISnackbar Snackbar
 <style>
 	.mud-card-hover {
 		cursor: pointer;
@@ -10,15 +10,15 @@
 
 <MudCard Class="mud-card-hover" @onclick="CardClicked">
 	<MudCardContent>
-		 @* @if (!string.IsNullOrEmpty(ProjectTitle)) {  *@
+		@* @if (!string.IsNullOrEmpty(ProjectTitle)) {  *@
 		<MudText>
 			@ProjectTitle
 		</MudText>
-		 @* } *@
-		 @* @if (!string.IsNullOrEmpty(ProjectDescription)) { *@
-			<MudText Typo="Typo.body2" >
+		@* } *@
+		@* @if (!string.IsNullOrEmpty(ProjectDescription)) { *@
+		<MudText Typo="Typo.body2">
 			@ProjectDescription
-			</MudText>
+		</MudText>
 		@* } *@
 	</MudCardContent>
 </MudCard>
@@ -34,7 +34,12 @@
 
 @functions {
 	protected override async Task OnInitializedAsync() {
-		var project = await ProjectDataService.GetProjectByIdAsync(CardId);
+		var response = await ProjectDataService.GetProjectByIdAsync(CardId);
+		if (!response.Success) {
+			Snackbar.Add($"Error loading project: {response.Message}", Severity.Error);
+			return;
+		}
+		var project = response.GetValue("project");
 		ProjectTitle = project.Title;
 		ProjectDescription = project.Description;
 
