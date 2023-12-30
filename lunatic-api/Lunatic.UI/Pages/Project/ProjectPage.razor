@@ -1,9 +1,23 @@
 ﻿@page "/project/{projectId}"
 @using MudBlazor
 
+<style>
+	.project-toolbar {
+		background-color: #9271bd;
+		color: #ffffff;
+	}
+</style>
 
 <MudPaper>
+	<MudToolBar Class="project-toolbar" Dense="true">
+		<MudText Typo="Typo.subtitle1">Manage members</MudText>
+		<MudSpacer />
+		 @* <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="() => MudDialog.Cancel()" /> *@
+		<MudButton>Settings</MudButton>
+	</MudToolBar>
+	<MudPaper>
 
+	</MudPaper>
 </MudPaper>
 
 @code {

@@ -18,17 +18,18 @@
 	}
 </style>
 
-<MudPaper Height="100%" Elevation="0">
-	<MudGrid Spacing="1" style="height:100%;">
+<MudPaper Height="100%" Class="p-2 mr-n2" Elevation="0">
+	 @* <MudPaper > *@
+
+	
+	<MudGrid Spacing="1" style="height:100%;" >
 
 		<MudItem xs="12" md="9">
 			<MudPaper Elevation="1">
 				<MudToolBar Class="custom-toolbar" Dense="true">
-
 					<MudText>
 						@TeamName
 					</MudText>
-
 					<MudSpacer />
 					@* @if (ownerId==currentUserId) *@
 					<MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="LaunchAddNewProjectModal">
@@ -100,8 +101,8 @@
 			</MudPaper>
 		</MudItem>
 	</MudGrid>
-
-</MudPaper>
+	</MudPaper>
+@* </MudPaper> *@
 
 <MudDialog @bind-IsVisible="visible" Options="dialogOptions">
 	<TitleContent>Are you sure you want to delete this team?</TitleContent>

@@ -36,30 +36,32 @@
 			<MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="() => MudDialog.Cancel()" />
 		</MudToolBar>
 
-		<MudGrid Spacing="0" style="height:100%;">
+		<MudGrid Spacing="0" style="height:100%;" >
 			<MudItem xs="12" sm="4">
-				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
+				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;" Class="object-fill">
 					<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
 					@* <MudAutocomplete T="string" Label="Search users by username"
 					SearchFunc="SearchUsers" Text="@searchValue2"
 					AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary"
 					AutoFocus="false" /> *@
-					<MudTextField Class="pt-1 m-1" @bind-Value="@searchValue" OnKeyUp="OnKeyUpSearchBar"
-								  Variant="Variant.Outlined" Margin="Margin.Dense"
-								  Label="Search your team mates by username"
-								  Immediate="true">
-					</MudTextField>
+					<MudPaper style="max-height:100%; overflow-y:scroll; overflow-x:hidden;" Class="object-fill">
+						<MudTextField Class="pt-1 m-1" @bind-Value="@searchValue" OnKeyUp="OnKeyUpSearchBar"
+									  Variant="Variant.Outlined" Margin="Margin.Dense"
+									  Label="Search members username"
+									  Immediate="true">
+						</MudTextField>
 
-					<MudPaper>
-						@foreach (var searchResult in UserItems) {
-							<SearchUserComponent MemberId="@searchResult.UserId"
-												 TeamOwnerId="@OwnerId"
-												 Username="@searchResult.Username"
-												 TeamId="@TeamId"
-												 MembersIdsRef="@MembersIds"
-												 UpdateMemberList="@StateHasChanged"
-												 UserItems="@UserItems" />
-						}
+						<MudPaper>
+							@foreach (var searchResult in UserItems) {
+								<SearchUserComponent MemberId="@searchResult.UserId"
+													 TeamOwnerId="@OwnerId"
+													 Username="@searchResult.Username"
+													 TeamId="@TeamId"
+													 MembersIdsRef="@MembersIds"
+													 UpdateMemberList="@StateHasChanged"
+													 UserItems="@UserItems" />
+							}
+						</MudPaper>
 					</MudPaper>
 				</MudPaper>
 			</MudItem>
