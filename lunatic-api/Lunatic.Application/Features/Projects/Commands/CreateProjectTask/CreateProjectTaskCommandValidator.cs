@@ -33,7 +33,7 @@ namespace Lunatic.Application.Features.Projects.Commands.CreateProjectTask {
             RuleFor(request => request.Description)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
+                .MaximumLength(3000).WithMessage("{PropertyName} must not exceed 3000 characters.");
 
             RuleFor(request => request.Priority)
                 .NotEmpty().WithMessage("{PropertyName} is required.")

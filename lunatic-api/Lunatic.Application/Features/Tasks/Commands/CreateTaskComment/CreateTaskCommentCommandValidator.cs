@@ -28,7 +28,7 @@ namespace Lunatic.Application.Features.Tasks.Commands.CreateTaskComment {
             RuleFor(request => request.Content)
                 .NotEmpty().WithMessage("{PropertyName} is required.")
                 .NotNull().WithMessage("{PropertyName} is required.")
-                .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
+                .MaximumLength(3000).WithMessage("{PropertyName} must not exceed 3000 characters.");
         }
     }
 }
