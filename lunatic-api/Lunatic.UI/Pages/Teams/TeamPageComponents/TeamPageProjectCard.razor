@@ -10,16 +10,12 @@
 
 <MudCard Class="mud-card-hover" @onclick="CardClicked">
 	<MudCardContent>
-		@* @if (!string.IsNullOrEmpty(ProjectTitle)) {  *@
 		<MudText>
 			@ProjectTitle
 		</MudText>
-		@* } *@
-		@* @if (!string.IsNullOrEmpty(ProjectDescription)) { *@
 		<MudText Typo="Typo.body2">
 			@ProjectDescription
 		</MudText>
-		@* } *@
 	</MudCardContent>
 </MudCard>
 
@@ -27,7 +23,7 @@
 	[Parameter] public string CardId { get; set; }
 	[Parameter] public EventCallback<string> OnCardClick { get; set; }
 	public string ProjectTitle { get; set; } = "";
-	public string ProjectDescription { get; set; } = "";
+	public string ProjectDescription { get; set; } = ""; //inform of max length!
 
 	[Inject] public IProjectDataService ProjectDataService { get; set; } = null!;
 }

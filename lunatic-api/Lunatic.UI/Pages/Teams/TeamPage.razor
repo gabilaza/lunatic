@@ -13,23 +13,36 @@
 		background-color: #3498db;
 		color: #ffffff;
 	}
+
 	.my-custom-class {
 		backdrop-filter: blur(10px);
 	}
 </style>
 
-<MudPaper Height="100%" Class="p-2 mr-n2" Elevation="0">
-	 @* <MudPaper > *@
+<MudPaper Height="100%" Class="p-2 mr-n2 d-flex flex-column flex-grow-1 " Elevation="0">
+	@* <MudPaper > *@
+	<MudGrid Spacing="1" Class="flex-grow-1">
 
-	
-	<MudGrid Spacing="1" style="height:100%;" >
-
-		<MudItem xs="12" md="9">
-			<MudPaper Elevation="1">
+		<MudItem xs="12" md="9" Class="d-flex flex-column flex-grow-1 overflow-y-scroll">
+			<MudPaper Elevation="1" Class="d-flex flex-column flex-grow-1 overflow-y-scroll">
 				<MudToolBar Class="custom-toolbar" Dense="true">
 					<MudText>
 						@TeamName
 					</MudText>
+					<MudIconButton Icon="@Icons.Material.Filled.ExpandCircleDown" aria-label="delete" OnClick="()=>{_isOpen=!_isOpen;}"></MudIconButton>
+					<MudPopover Open="_isOpen"
+								OverflowBehavior="OverflowBehavior.FlipAlways"
+								AnchorOrigin="Origin.BottomLeft"
+								TransformOrigin="Origin.TopLeft"
+								Paper="false">
+						<MudPaper Outlined="true" Class="px-4 py-8 overflow-auto mud-background-gray" MaxHeight="60vh" MaxWidth="80vw" MinWidth="50vw" MinHeight="20vh">
+							<MudText>
+								@foreach (var sub in @TeamDescription.Split('\n')) {
+									@sub <br />
+								}
+							</MudText>
+						</MudPaper>
+					</MudPopover>
 					<MudSpacer />
 					@* @if (ownerId==currentUserId) *@
 					<MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="LaunchAddNewProjectModal">
@@ -39,14 +52,20 @@
 						<MudMenuItem OnClick="LaunchEditTeamInfoModal">
 							Edit team info
 						</MudMenuItem>
+						@* if(isOwner){ *@
 						<MudMenuItem OnClick="LaunchDeleteTeamModal">
 							Delete team  @* leave team if non owner *@
 						</MudMenuItem>
+						@* else {
+						<MudMenuItem OnClick="LaunchDeleteTeamModal">
+						Leave team
+						</MudMenuItem>
+						} *@
 					</MudMenu>
 
 				</MudToolBar>
 
-				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1">
+				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1 overflow-y-scroll mud-background-gray">
 					@if (ProjectIds != null) {
 						@if (ProjectIds.Any()) {
 							@foreach (var projectId in ProjectIds) {
@@ -73,35 +92,36 @@
 				</MudPaper>
 			</MudPaper>
 		</MudItem>
-		<MudItem xs="12" md="3" style="flex: 1; display: flex; flex-direction: column;">
-			<MudPaper Height="100%">
-				<MudPaper>
-					<MudToolBar Class="custom-toolbar" Dense="true">
-						<MudText>Members</MudText>
-						<MudSpacer />
-						<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" OnClick="LaunchAddMemberModal" />
-					</MudToolBar>
+		<MudItem xs="12" md="3" Class="d-flex flex-column flex-grow-1" >
+			@* <MudPaper Height="100%"> *@
+			<MudPaper Class="d-flex flex-column flex-grow-1 mud-background-gray" MaxHeight="100%">
+				<MudToolBar Class="custom-toolbar" Dense="true">
+					<MudText>Members</MudText>
+					<MudSpacer />
+					<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" OnClick="LaunchAddMemberModal" />
+				</MudToolBar>
+				@* <MudPaper Class="d-flex flex-column flex-grow-1 overflow-y-scroll" > *@
+				<MudList Clickable="true" Class="flex-grow-1 overflow-y-scroll" >
+					@if (MembersIds != null) {
+						@foreach (var memberId in MembersIds) {
+							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" />
+						}
+					}
+					else {
+						<MudListItem>
+							<MudPaper Elevation="0" Class="d-flex flex-row">
+								<MudSkeleton SkeletonType="SkeletonType.Circle" Width="40px" Height="40px" />
+								<MudSkeleton Width="150px" Height="40px" />
+							</MudPaper>
+						</MudListItem>
+					}
+				</MudList>
 
-					<MudList Clickable="true">
-						@if (MembersIds != null) {
-							@foreach (var memberId in MembersIds) {
-								<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" />
-							}
-						}
-						else {
-							<MudListItem>
-								<MudPaper Elevation="0" Class="d-flex flex-row">
-									<MudSkeleton SkeletonType="SkeletonType.Circle" Width="50px" Height="50px" />
-									<MudSkeleton Width="150px" Height="40px" />
-								</MudPaper>
-							</MudListItem>
-						}
-					</MudList>
-				</MudPaper>
+			@* </MudPaper> *@
 			</MudPaper>
 		</MudItem>
 	</MudGrid>
-	</MudPaper>
+</MudPaper>
 @* </MudPaper> *@
 
 <MudDialog @bind-IsVisible="visible" Options="dialogOptions">
@@ -121,12 +141,14 @@
 	public string TeamName { get; set; } = "";
 	public string TeamDescription { get; set; } = "";
 	public string OwnerId { get; set; } = "";
+	public string CurrentUserId { get; set; } = "";
 	public List<Guid>? MembersIds { get; set; } = null;
 	private List<Guid>? ProjectIds { get; set; } = null;
 
 	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
 
 	private bool visible;
+	private bool _isOpen = false;
 	private DialogOptions dialogOptions = new();
 
 }
@@ -136,7 +158,21 @@
 	private void LaunchDeleteTeamModal() {
 		visible = true;
 	}
+
+	private bool IsOwner() {
+		if (!string.IsNullOrEmpty(CurrentUserId) && CurrentUserId == OwnerId) {
+			return true;
+		}
+
+		Snackbar.Add($"You are not the owner of this team. (You shouldn't have had access to this function!)", Severity.Error);
+		return false;
+	}
+
 	private async Task SubmitDeleteTeam() {
+		if (!IsOwner()) {
+			return;
+		}
+
 		var result = await TeamDataService.DeleteTeamAsync(TeamId);
 		if (result.Success) {
 			Snackbar.Add($"Team {TeamName} deleted successfuly", Severity.Success);

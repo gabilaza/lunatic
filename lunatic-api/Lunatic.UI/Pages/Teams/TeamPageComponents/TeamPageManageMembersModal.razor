@@ -28,65 +28,67 @@
 
 @* <MudDialog DefaultFocus="DefaultFocus.LastChild">
 	<DialogContent> *@
-<MudPaper Width="80vw" Height="80vh" Class="m-0">
-	<MudPaper class="d-flex flex-column" style="height:100%">
-		<MudToolBar Class="member-management-toolbar" Dense="true">
-			<MudText Typo="Typo.subtitle1">Manage members</MudText>
-			<MudSpacer />
-			<MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="() => MudDialog.Cancel()" />
-		</MudToolBar>
+<MudPaper Width="80vw" Height="80vh" Class="m-0 overflow-x-hidden d-flex flex-column flex-grow-1">
+	@* <MudPaper Class="d-flex flex-column flex-grow-1" sytle="min-height:0;"> *@
+	<MudToolBar Class="member-management-toolbar z-10" Dense="true">
+		<MudText Typo="Typo.subtitle1">Manage members</MudText>
+		<MudSpacer />
+		<MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="() => MudDialog.Cancel()" />
+	</MudToolBar>
 
-		<MudGrid Spacing="0" style="height:100%;" >
-			<MudItem xs="12" sm="4">
-				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;" Class="object-fill">
-					<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
-					@* <MudAutocomplete T="string" Label="Search users by username"
-					SearchFunc="SearchUsers" Text="@searchValue2"
-					AdornmentIcon="@Icons.Material.Filled.Search" AdornmentColor="Color.Primary"
-					AutoFocus="false" /> *@
-					<MudPaper style="max-height:100%; overflow-y:scroll; overflow-x:hidden;" Class="object-fill">
-						<MudTextField Class="pt-1 m-1" @bind-Value="@searchValue" OnKeyUp="OnKeyUpSearchBar"
-									  Variant="Variant.Outlined" Margin="Margin.Dense"
-									  Label="Search members username"
-									  Immediate="true">
-						</MudTextField>
+	@* <MudPaper Class="d-flex flex-row  flex-grow-1 align-stretch"> *@
+	<MudGrid Spacing="0" Class="flex-grow-1 p-0" >
+		<MudItem xs="12" sm="4" Class="d-flex flex-column flex-grow-1">
+			@* <MudPaper> *@
+			<MudToolBar Class="member-management-toolbar1" Dense>Add Members</MudToolBar>
+			<MudPaper Class="d-flex flex-column flex-grow-1 ">
+				<MudTextField Class="flex-grow-0 pt-1 m-2" @bind-Value="@searchValue" OnKeyUp="OnKeyUpSearchBar"
+							  Variant="Variant.Outlined" Margin="Margin.Dense"
+							  Label="Search by username"
+							  Immediate="true">
+				</MudTextField>
 
-						<MudPaper>
-							@foreach (var searchResult in UserItems) {
-								<SearchUserComponent MemberId="@searchResult.UserId"
-													 TeamOwnerId="@OwnerId"
-													 Username="@searchResult.Username"
-													 TeamId="@TeamId"
-													 MembersIdsRef="@MembersIds"
-													 UpdateMemberList="@StateHasChanged"
-													 UserItems="@UserItems" />
-							}
-						</MudPaper>
-					</MudPaper>
+				<MudPaper Class="d-flex flex-column flex-grow-1 overflow-y-scroll" Elevation="0">
+					@foreach (var searchResult in UserItems) {
+						<SearchUserComponent MemberId="@searchResult.UserId"
+											 TeamOwnerId="@OwnerId"
+											 Username="@searchResult.Username"
+											 TeamId="@TeamId"
+											 MembersIdsRef="@MembersIds"
+											 UpdateMemberList="@StateHasChanged"
+											 UserItems="@UserItems" />
+					}
 				</MudPaper>
-			</MudItem>
+			</MudPaper>
+			@* </MudPaper> *@
+		</MudItem>
 
-			<MudItem xs="12" sm="8">
-				<MudPaper style="height:100%; max-height:100%; overflow-y:scroll; overflow-x:hidden;">
-					<MudToolBar Class="member-management-toolbar2" Dense>Manage members</MudToolBar>
-					<MudPaper style="max-height:100%; overflow-y:scroll; overflow-x:hidden;">
-						@* TODO: scroll issues *@
+		<MudItem xs="12" sm="8" Class=" d-flex flex-column flex-grow-1 m-0 ">
+			@* <MudPaper Class="flex-grow-1 d-flex flex-column "> *@
+			@* align-items-stretch *@
+			@* style=" overflow-y:scroll; overflow-x:hidden;" *@
+			<MudToolBar Class="member-management-toolbar2" Dense>Manage members</MudToolBar>
+			@* <MudPaper> *@
+			@* style="height:100%; overflow-y:scroll; overflow-x:hidden;" *@
+			@* TODO: scroll issues *@
 
-						<MudPaper>
-							@foreach (var memberId in MembersIds) {
-								<TeamMemberComponent MemberId="@memberId.ToString()"
-													 TeamOwnerId="@OwnerId"
-													 TeamId="@TeamId"
-													 MembersIdsRef="@MembersIds"
-													 UpdateMemberList="@StateHasChanged" />
-							}
-						</MudPaper>
-					</MudPaper>
-				</MudPaper>
-			</MudItem>
+			<MudPaper Class="d-flex flex-column flex-grow-1 overflow-y-scroll" >
+				@foreach (var memberId in MembersIds) {
+					<TeamMemberComponent MemberId="@memberId.ToString()"
+										 TeamOwnerId="@OwnerId"
+										 TeamId="@TeamId"
+										 MembersIdsRef="@MembersIds"
+										 UpdateMemberList="@StateHasChanged" />
+				}
+				@* <MudPaper Class="flex-grow-1 mud-theme-primary" Elevation="0" /> *@
+			</MudPaper>
+			@* </MudPaper> *@
+			@* </MudPaper> *@
+		</MudItem>
 
-		</MudGrid>
-	</MudPaper>
+	</MudGrid>
+	@* </MudPaper> *@
+	@* </MudPaper> *@
 
 </MudPaper>
 
