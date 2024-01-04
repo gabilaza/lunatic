@@ -1,11 +1,13 @@
 ﻿using Lunatic.UI.Contracts;
+using Lunatic.UI.Dtos;
 using Lunatic.UI.Services.Responses;
 using Lunatic.UI.ViewModels;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Lunatic.UI.Services {
-	public class ProjectDataService : IProjectDataService {
+namespace Lunatic.UI.Services
+{
+    public class ProjectDataService : IProjectDataService {
 		private const string RequestUri = "api/v1/projects";
 		private readonly HttpClient httpClient;
 		private readonly ITokenService tokenService;
