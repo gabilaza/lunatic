@@ -194,23 +194,62 @@
 		</MudText>
 	</TitleContent>
 	<DialogContent>
-		<MudPaper Width="25em" Class="m-0 d-flex flex-column justify-items-center" Elevation="0" >
+		<MudPaper Width="40em" Class="m-0 d-flex flex-column" Elevation="0">
 			<MudTextField T="string"
-						  Label="Section name"
+						  Label="Task name"
 						  HelperText="You can edit it later"
 						  Required="true"
 						  Immediate="true"
-						  @bind-Value="addSectionName" />
-			<MudPaper Class="d-flex flex-row " Elevation="0" >
-				<MudText>Place Task in</MudText>
-				<MudSelect @bind-Value="addTaskModalFirstSelectOption" Dense="true">
-					@foreach (var item in Sections) {
-						<MudSelectItem T="string" Value="@item.Name">@item.Name</MudSelectItem>
-					}
-				</MudSelect>
+						  @bind-Value="addTaskModalTaskName" />
 
+
+
+			<MudTextField T="string"
+						  Label="Task description"
+						  @bind-Value="addTaskModalTaskDescription"
+						  Lines="4" />
+			<MudDateRangePicker Label="Pick the start and end date"
+								DisableToolbar="true"
+								AutoClose="true" />
+
+			<MudPaper Class="d-flex flex-row align-end gap-3" Elevation="0">
+				<MudText>Place Task in</MudText>
+				<MudPaper Elevation="0" Width="15em">
+					<MudSelect @bind-Value="addTaskModalFirstSelectOption" Dense="true">
+						@foreach (var item in Sections) {
+							<MudSelectItem T="string" Value="@item.Name">@item.Name</MudSelectItem>
+						}
+					</MudSelect>
+				</MudPaper>
 			</MudPaper>
+
+			<MudPaper Class="d-flex flex-row align-end gap-3" Elevation="0">
+				<MudText>Priority</MudText>
+				@* 				<MudPaper Elevation="0" Width="10em">
+				<MudSelect @bind-Value="addTaskModalFirstSelectOption" Dense="true">
+				@foreach (var item in Sections) {
+				<MudSelectItem T="string" Value="@item.Name">@item.Name</MudSelectItem>
+				}
+				</MudSelect>
+				</MudPaper> *@
+			</MudPaper>
+
+				<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
+						   MultiSelection="true"
+						   @bind-Value="value"
+						   @bind-SelectedValues="options"
+						   T="string"
+						   Label="Asignees"
+						   AdornmentIcon="@Icons.Material.Filled.Search"
+						   AnchorOrigin="Origin.BottomCenter">
+
+				@foreach (var name in ProjectMembersNames) {
+					 	<MudSelectItem T="string" Value="@name">@name</MudSelectItem>
+					 }
+				</MudSelect>
+	
 		</MudPaper>
+
 	</DialogContent>
 	<DialogActions>
 		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNewTask" Class="px-10">Add</MudButton>
@@ -223,6 +262,7 @@
 	[Parameter] public string? ProjectId { get; set; }
 	public string ProjectName { get; set; } = "";
 	public string ProjectDescription { get; set; } = "";
+	public List<string> ProjectMembersNames { get; set; } = new() { "luigi", "maria", "cornel"};
 
 	//for project description popover
 	private bool isOpenDescriptionPopover = false;
@@ -235,6 +275,11 @@
 
 	private bool isAddTaskModalVisible = false;
 	private string addTaskModalFirstSelectOption = "";
+	private string addTaskModalTaskName = "";
+	private string addTaskModalTaskDescription = "";
+	private bool multiselectionTextChoice;
+	private string value { get; set; } = "Nothing selected";
+	private IEnumerable<string> options { get; set; } = new HashSet<string>() { "luigi" };
 
 	//vars for drag and drop
 	private MudDropContainer<TaskItem> _dropContainer;
@@ -294,6 +339,15 @@
 		// }
 	}
 
+	private string GetMultiSelectionText(List<string> selectedValues) {
+		// if (multiselectionTextChoice) {
+			return $"Asignee{(selectedValues.Count > 1 ? "s" : "")}: {string.Join(", ", selectedValues.Select(x => x))}";
+		// }
+		// else {
+		// 	return $"{selectedValues.Count} state{(selectedValues.Count > 1 ? "s have" : " has")} been selected";
+		// }
+	}
+
 	private void DisplayAddTaskModal() {
 		if (Sections.Count == 0) {
 			Snackbar.Add($"You need to add at least one section first", Severity.Error);
@@ -320,17 +374,12 @@
 
 	private void AddNewTask() {
 
+		//compose the request somehow
+
+
+
 	}
 
-	// private void OnValidSectionSubmit(EditContext context) {
-	// 	_sections.Add(new KanBanSections(newSectionModel.Name, false, String.Empty));
-	// 	newSectionModel.Name = string.Empty;
-	// 	_addSectionOpen = false;
-	// }
-
-	// private void OpenAddNewSection() {
-	// 	_addSectionOpen = true;
-	// }
 
 	// private void AddTask(KanBanSection section) {
 	// 	Tasks.Add(new KanbanTaskItem(section.NewTaskName, section.Name));
