@@ -8,21 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\TaskPage\TaskPage.razor.css" />
     <None Remove="Pages\Teams\TeamPageComponents\TeamPageManageMembersModal.razor.css" />
     <None Remove="Pages\Teams\TeamPageComponents\TeamPageProjectCard.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Pages\TaskPage\TaskPage.razor.css" />
     <Content Include="Pages\Teams\TeamPageComponents\TeamPageManageMembersModal.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
+    <PackageReference Include="Markdig" Version="0.34.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
     <PackageReference Include="MudBlazor" Version="6.11.1" />
+
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\TaskPage\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

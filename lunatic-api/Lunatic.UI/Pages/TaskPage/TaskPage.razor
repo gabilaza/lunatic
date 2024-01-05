@@ -1,0 +1,180 @@
+﻿@page "/task/{taskId}"
+@using MudBlazor
+@using Lunatic.UI.Contracts
+@using Lunatic.UI.ViewModels
+@using Markdig
+@inject ISnackbar Snackbar
+
+<style>
+	.task-toolbar {
+		background-color: #EFAA57;
+		color: #ffffff;
+	}
+
+	.background {
+		background-color: #e4e6eb;
+	}
+
+	.custom-grid {
+		display: grid;
+		grid-template:
+			[row1-start] "description-discussion dashboard" [row1-end]
+			/ auto 30em;
+		grid-gap: 0.5em;
+	}
+
+	.description-discussion-div {
+		grid-area: description-discussion;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+
+	.description-div, .comments-div {
+		grid-area: description-discussion;
+	}
+
+	.dashboard-div {
+		grid-area: dashboard;
+	}
+
+	@@media screen and (max-width: 700px) {
+		.custom-grid {
+			grid-template:
+				[row1-start] "dashboard" [row1-end]
+				[row2-start] "description-discussion" [row2-end]
+				/ auto;
+		}
+	}
+</style>
+
+<MudPaper Height="100%" Class="p-2 d-flex flex-column flex-grow-1 " Elevation="0">
+	<MudToolBar Class="task-toolbar" Dense="true">
+		<MudText Typo="Typo.subtitle1">
+			@CurrentTask.Title
+		</MudText>
+		<MudSpacer />
+
+		<MudMenu Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+			@* <MudMenuItem OnClick="LaunchEditProjectInfoModal">
+			Edit project info
+			</MudMenuItem>
+			@*  if owner
+			<MudMenuItem OnClick="LaunchDeleteProjectModal">
+			Delete project
+			</MudMenuItem> *@
+		</MudMenu>
+
+
+	</MudToolBar>
+	<MudPaper Elevation="0" Class="custom-grid mt-1 flex-grow-1">
+		<MudPaper Elevation="0" Class=" description-discussion-div">
+
+			<MudPaper Class="description-div">
+				<MudToolBar Class="task-toolbar" Dense="true">
+					Task Description
+				</MudToolBar>
+				<MudPaper Class="pt-2 pl-3" Elevation="0">
+					@StringToHtml(markdownValue)
+				</MudPaper>
+				<MudPaper Class="d-flex flex-row align-baseline p-2 pl-3" Elevation="0">
+					<MudText Class="mr-1">Tags</MudText>
+					@foreach (var tag in CurrentTask.Tags) {
+						<MudChip>@tag</MudChip>
+					}
+				</MudPaper>
+			</MudPaper>
+			<MudPaper Class="comments-div">
+				<MudToolBar Class="task-toolbar" Dense="true">
+					<MudText Typo="Typo.subtitle1" Class="mr-3">
+						Conversation
+					</MudText>
+
+					<MudChip Size="Size.Small">
+						@CurrentTask.CommentIds.Count
+					</MudChip>
+				</MudToolBar>
+				<MudPaper Class="d-flex flex-column">
+					@* @foreach (var commentId in CurrentTask.CommentIds) {
+					<MudPaper Class="m-2 p-2">
+					<MudText Typo="Typo.body1">
+					@commentId
+					</MudText>
+					</MudPaper>
+					} *@
+					<MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start">
+						<MudTimelineItem Color="Color.Primary" Size="Size.Small" Variant="Variant.Outlined" Elevation="0">
+
+							<MudPaper Elevation="0" Class="p-2 pl-0 ml-n8 d-flex flex-column mud-background-gray" Width="100%" >
+								<MudPaper Elevation="0" Class="d-flex flex-row align-center">
+									@* chip with avatar *@
+									<MudChip>
+										<MudAvatar Color="Color.Primary">
+											<MudIcon Icon="@Icons.Material.Filled.Person" />
+										</MudAvatar>
+										<MudText>
+											@@username
+										</MudText>
+									</MudChip>
+									<MudText>
+										commented on @@commentdate
+									</MudText>
+								</MudPaper>
+								<MudText>
+									@@comment
+								</MudText>
+							</MudPaper>
+
+						</MudTimelineItem>
+
+					</MudTimeline>
+				</MudPaper>
+			</MudPaper>
+		</MudPaper>
+
+		<MudPaper Class="dashboard-div d-flex flex-column" MaxHeight="40em">
+			<MudToolBar Class="task-toolbar" Dense="true">
+				Task Dashboard
+			</MudToolBar>
+		</MudPaper>
+	</MudPaper>
+</MudPaper>
+
+
+@code {
+
+	[Parameter] public string? TaskId { get; set; }
+
+	public TaskViewModel CurrentTask { get; set; }
+
+	// [Inject] public ITaskService TaskService { get; set; } = default!;
+}
+
+@functions {
+	public MarkupString StringToHtml(string markdown) {
+		var html = Markdown.ToHtml(markdown);
+		return new MarkupString(html) ;
+	}
+	string markdownValue = "# Markdown Editor for Blazor\nThis component is using [EasyMDE](https://easy-markdown-editor.tk/) " +
+								"to display a nice editor and all functionalities are mapped. See the documentation for more details.\n\n" +
+								"Go ahead, play around with the editor! Be sure to check out **bold**, *italic*, " +
+								"[links](https://www.puresourcecode.com) and all the other features. " +
+								"You can type the Markdown syntax, use the toolbar, or use shortcuts like `ctrl-b` or `cmd-b`.\n\n" +
+								"Please check [PureSourceCode.com](https://www.puresourcecode.com) for more updates.\n\n" +
+								"## Add code\nMarkdown Editor supports [highlight.js](https://highlightjs.org/) to colorize your code.\n\n" +
+								"```code\npublic async Task<string> GetValueAsync() {\n    return false;\n}\n```\n\n" +
+								"## Add a mermaid graph\nFrom now on, the Markdown Editor can render mermaid graph. " +
+								"See the [documentation](https://mermaid.js.org/intro/).\n\n" +
+								"```mermaid\nstateDiagram\n    [*] --> Still\n    Still --> [*]\n\n    Still --> Moving\n    " +
+								"Moving --> Still\n    Moving --> Crash\n    Crash --> [*]\n```\n";
+	protected override async Task OnInitializedAsync() {
+		// if (TaskId != null) {
+		CurrentTask = new TaskViewModel() {
+				Title = "task1",
+				Description = "taskdesc",
+				Tags = new List<string>() { "tag1", "tag2" },
+				CommentIds = new()
+			};
+		// }
+	}
+	}
