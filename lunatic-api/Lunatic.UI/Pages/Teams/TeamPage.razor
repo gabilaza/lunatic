@@ -35,7 +35,7 @@
 								AnchorOrigin="Origin.BottomLeft"
 								TransformOrigin="Origin.TopLeft"
 								Paper="false">
-						<MudPaper Outlined="true" Class="px-4 py-8 overflow-auto mud-background-gray" MaxHeight="60vh" MaxWidth="80vw" MinWidth="50vw" MinHeight="20vh">
+						<MudPaper Outlined="true" Class="px-4 py-8 overflow-y-auto mud-background-gray" MaxHeight="60vh" MaxWidth="80vw" MinWidth="50vw" MinHeight="20vh">
 							<MudText>
 								@foreach (var sub in @TeamDescription.Split('\n')) {
 									@sub <br />
@@ -65,7 +65,7 @@
 
 				</MudToolBar>
 
-				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1 overflow-y-scroll mud-background-gray">
+				<MudPaper Height="100%" Class="pa-1 d-flex flex-column gap-1 overflow-y-auto mud-background-gray">
 					@if (ProjectIds != null) {
 						@if (ProjectIds.Any()) {
 							@foreach (var projectId in ProjectIds) {
@@ -101,7 +101,7 @@
 					<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" OnClick="LaunchAddMemberModal" />
 				</MudToolBar>
 				@* <MudPaper Class="d-flex flex-column flex-grow-1 overflow-y-scroll" > *@
-				<MudList Clickable="true" Class="flex-grow-1 overflow-y-scroll" >
+				<MudList Clickable="true" Class="flex-grow-1 overflow-y-auto" >
 					@if (MembersIds != null) {
 						@foreach (var memberId in MembersIds) {
 							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" />
