@@ -131,7 +131,7 @@
 	</DialogContent>
 	<DialogActions>
 		<MudButton OnClick="SubmitDeleteTeam" Color="Color.Primary">Yes</MudButton>
-		<MudButton OnClick="CancelDeleteTeam" Color="Color.Secondary">No</MudButton>
+		<MudButton OnClick="@(()=>visible = false)" Color="Color.Secondary">No</MudButton>
 	</DialogActions>
 </MudDialog>
 
@@ -184,7 +184,7 @@
 		}
 
 	}
-	private void CancelDeleteTeam() => visible = false;
+
 
 	protected override async Task OnParametersSetAsync() {
 

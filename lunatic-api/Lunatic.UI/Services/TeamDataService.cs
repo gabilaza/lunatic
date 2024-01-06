@@ -5,9 +5,8 @@ using Lunatic.UI.ViewModels;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Lunatic.UI.Services
-{
-    public class TeamDataService : ITeamDataService {
+namespace Lunatic.UI.Services {
+	public class TeamDataService : ITeamDataService {
 		private const string RequestUri = "api/v1/teams";
 		private readonly HttpClient httpClient;
 		private readonly ITokenService tokenService;
@@ -82,6 +81,13 @@ namespace Lunatic.UI.Services
 				= new AuthenticationHeaderValue("Bearer", await tokenService.GetTokenAsync());
 			var result = await httpClient.PutAsJsonAsync($"{RequestUri}/{viewModel.TeamId}", viewModel);
 			var response = await result.Content.ReadFromJsonAsync<ApiResponse<TeamDto>>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
+		}
+
+		public async Task<ApiResponse<List<UserDto>>> GetTeamMembersAsync(Guid teamId) {
+			var result = await httpClient.GetAsync($"{RequestUri}/{teamId}/members", HttpCompletionOption.ResponseHeadersRead);
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse<List<UserDto>>>();
 			response!.Success = result.IsSuccessStatusCode;
 			return response!;
 		}

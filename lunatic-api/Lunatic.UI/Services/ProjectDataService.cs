@@ -5,9 +5,8 @@ using Lunatic.UI.ViewModels;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Lunatic.UI.Services
-{
-    public class ProjectDataService : IProjectDataService {
+namespace Lunatic.UI.Services {
+	public class ProjectDataService : IProjectDataService {
 		private const string RequestUri = "api/v1/projects";
 		private readonly HttpClient httpClient;
 		private readonly ITokenService tokenService;
@@ -34,6 +33,13 @@ namespace Lunatic.UI.Services
 		public async Task<ApiResponse<ProjectDto>> GetProjectByIdAsync(string teamId) {
 			var result = await httpClient.GetAsync($"api/v1/teams/projects/{teamId}", HttpCompletionOption.ResponseHeadersRead);
 			var response = await result.Content.ReadFromJsonAsync<ApiResponse<ProjectDto>>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
+		}
+
+		public async Task<ApiResponse<List<TaskDto>>> GetProjectTasksAsync(Guid projectId) {
+			var result = await httpClient.GetAsync($"api/v1/projects/{projectId}/tasks", HttpCompletionOption.ResponseHeadersRead);
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse<List<TaskDto>>>();
 			response!.Success = result.IsSuccessStatusCode;
 			return response!;
 		}

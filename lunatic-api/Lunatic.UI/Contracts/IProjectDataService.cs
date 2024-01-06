@@ -9,6 +9,7 @@ namespace Lunatic.UI.Contracts
 		Task<ApiResponse<ProjectDto>> UpdateProjectAsync(ProjectViewModel Project);
 		Task<ApiResponse<ProjectDto>> DeleteProjectAsync(Guid id);
 		Task<ApiResponse<ProjectDto>> GetProjectByIdAsync(string teamId);
+		Task<ApiResponse<List<TaskDto>>> GetProjectTasksAsync(Guid projectId);
 	}
 }
 
