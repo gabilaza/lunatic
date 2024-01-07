@@ -1,12 +1,13 @@
 ﻿using Lunatic.UI.Contracts;
-using Lunatic.UI.Dtos;
+using Lunatic.UI.Models.Dtos;
+using Lunatic.UI.Models.ViewModels;
 using Lunatic.UI.Services.Responses;
-using Lunatic.UI.ViewModels;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Lunatic.UI.Services {
-	public class TeamDataService : ITeamDataService {
+namespace Lunatic.UI.Services
+{
+    public class TeamDataService : ITeamDataService {
 		private const string RequestUri = "api/v1/teams";
 		private readonly HttpClient httpClient;
 		private readonly ITokenService tokenService;

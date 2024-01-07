@@ -1,13 +1,13 @@
 ﻿@using MudBlazor
-@inject ISnackbar Snackbar
-@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @using Microsoft.AspNetCore.Components
 @using Lunatic.UI.Contracts
 @using System.Text.Json
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.Shared
 @using Lunatic.UI.Pages.Teams.TeamPageComponents.ManageMembersModalComponents
-@using Lunatic.UI.ViewModels
-@using Lunatic.UI.Dtos
+@using Lunatic.UI.Models.ViewModels
+@using Lunatic.UI.Models.Dtos
+@inject ISnackbar Snackbar
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 @inject NavigationManager NavigationManager
 <style>
 	.edit-info-toolbar {

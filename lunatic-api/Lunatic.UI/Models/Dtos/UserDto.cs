@@ -1,7 +1,7 @@
-﻿using Lunatic.UI.ViewModels;
+﻿using Lunatic.UI.Models.Shared;
 using System.ComponentModel.DataAnnotations;
 
-namespace Lunatic.UI.Dtos {
+namespace Lunatic.UI.Models.Dtos {
 	public class UserDto {
 		public Guid UserId { get; set; } = default!;
 

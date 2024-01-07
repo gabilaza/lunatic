@@ -1,4 +1,4 @@
-﻿using Lunatic.UI.ViewModels;
+﻿using Lunatic.UI.Models.ViewModels;
 
 namespace Lunatic.UI.Contracts
 {

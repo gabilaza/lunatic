@@ -1,6 +1,6 @@
-﻿using Lunatic.UI.Dtos;
+﻿using Lunatic.UI.Models.Dtos;
+using Lunatic.UI.Models.ViewModels;
 using Lunatic.UI.Services.Responses;
-using Lunatic.UI.ViewModels;
 
 namespace Lunatic.UI.Contracts
 {
@@ -10,6 +10,8 @@ namespace Lunatic.UI.Contracts
 		Task<ApiResponse<ProjectDto>> DeleteProjectAsync(Guid id);
 		Task<ApiResponse<ProjectDto>> GetProjectByIdAsync(string teamId);
 		Task<ApiResponse<List<TaskDto>>> GetProjectTasksAsync(Guid projectId);
+
+		Task<ApiResponse> AddSectionAsync(string projectId, string sectionTitle);
 	}
 }
 

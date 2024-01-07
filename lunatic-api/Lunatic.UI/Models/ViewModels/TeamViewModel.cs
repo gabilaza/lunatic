@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Lunatic.UI.ViewModels {
+namespace Lunatic.UI.Models.ViewModels {
 	public class TeamViewModel {
 		public Guid UserId { get; set; }
 

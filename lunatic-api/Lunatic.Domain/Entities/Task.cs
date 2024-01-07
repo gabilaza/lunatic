@@ -20,7 +20,7 @@ namespace Lunatic.Domain.Entities {
 		public string Description { get; private set; }
 		public TaskPriority Priority { get; private set; }
 		public TaskStatus Status { get; private set; }
-		public int ProgressPercent { get; private set; }
+		//public int ProgressPercent { get; private set; }
 		public List<string> Tags { get; private set; } = new();
 		public List<Guid> CommentIds { get; private set; } = new();
 		public List<Guid> AssigneeIds { get; private set; } = new();

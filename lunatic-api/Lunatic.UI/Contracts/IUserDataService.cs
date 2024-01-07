@@ -1,6 +1,6 @@
-﻿using Lunatic.UI.Dtos;
+﻿using Lunatic.UI.Models.Dtos;
+using Lunatic.UI.Models.ViewModels;
 using Lunatic.UI.Services.Responses;
-using Lunatic.UI.ViewModels;
 
 namespace Lunatic.UI.Contracts
 {

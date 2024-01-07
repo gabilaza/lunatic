@@ -1,7 +1,9 @@
 ﻿@page "/task/{taskId}"
 @using MudBlazor
 @using Lunatic.UI.Contracts
-@using Lunatic.UI.ViewModels
+@using Lunatic.UI.Models.ViewModels
+@using Lunatic.UI.Models.Dtos
+@using Lunatic.UI.Models.Shared
 @using Markdig
 @inject ISnackbar Snackbar
 
@@ -145,7 +147,7 @@
 
 	[Parameter] public string? TaskId { get; set; }
 
-	public TaskViewModel CurrentTask { get; set; }
+	public TaskDto CurrentTask { get; set; }
 
 	// [Inject] public ITaskService TaskService { get; set; } = default!;
 }
@@ -169,11 +171,10 @@
 								"Moving --> Still\n    Moving --> Crash\n    Crash --> [*]\n```\n";
 	protected override async Task OnInitializedAsync() {
 		// if (TaskId != null) {
-		CurrentTask = new TaskViewModel() {
+		CurrentTask = new TaskDto() {
 				Title = "task1",
 				Description = "taskdesc",
-				Tags = new List<string>() { "tag1", "tag2" },
-				CommentIds = new()
+				Tags = new List<string>() { "tag1", "tag2" }
 			};
 		// }
 	}

@@ -18,7 +18,9 @@ namespace Lunatic.UI.Services.Responses {
 
 			return Data[propertyName].Deserialize<T>(options)!;
 		}
-
+		public string GetErrorsString() {
+			return Message + " " + (ValidationErrors != null ? string.Join(", ", ValidationErrors) : "");
+		}
 		public override string ToString() {
 			return $"ApiResponse(Message: {Message}, Success: {Success}, ValidationErrors: {string.Join(Environment.NewLine, ValidationErrors)}, Data: {string.Join(Environment.NewLine, Data)})";
 		}
@@ -27,5 +29,9 @@ namespace Lunatic.UI.Services.Responses {
 		public string Message { get; set; } = string.Empty;
 		public bool Success { get; set; }
 		public List<string>? ValidationErrors { get; set; }
+
+		public string GetErrorsString() {
+			return Message + " " + (ValidationErrors != null ? string.Join(", ", ValidationErrors) : "");
+		}
 	}
 }

@@ -1,8 +1,9 @@
 ﻿@page "/project/{projectId}"
 @using MudBlazor
 @using Lunatic.UI.Contracts
-@using Lunatic.UI.Dtos
-
+@using Lunatic.UI.Models.Dtos
+@using Lunatic.UI.Models.ViewModels
+@using Lunatic.UI.Models.Shared
 @using Microsoft.AspNetCore.Components
 @using System.ComponentModel.DataAnnotations
 @inject ISnackbar Snackbar
@@ -74,86 +75,66 @@
 					  ItemDropped="TaskUpdated"
 					  Class="flex-grow-1 d-flex flex-row background">
 		<ChildContent>
-			<MudPaper Class="d-flex flex-row background overflow-x-auto" Width="100%" Height="100%">
-				@foreach (var item in TaskSections) {
-					<MudPaper Elevation="0"
-							  Width="20em" MinWidth="20em"
-							  MinHeight="30em" MaxHeight="calc(100vh - 10em)"
-							  Class="pa-2 ma-4 d-flex flex-column mud-background-gray rounded-lg">
-						<MudToolBar DisableGutters="true" Dense Style="height:2.5em">
-								@if (!@item.isEditingCategory) {
-								<MudText Typo="Typo.subtitle1" Class="pl-2"><b>@item.Name</b></MudText>
-								<MudSpacer />
-								<MudMenu Icon="@Icons.Material.Rounded.MoreHoriz"
-										 AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
-										 ListClass="pa-2 d-flex flex-column"
-										 PopoverClass="mud-elevation-25">
-									<MudButton Size="Size.Small"
-											   Color="Color.Error"
-											   StartIcon="@Icons.Material.Outlined.Delete"
-											   OnClick="@(() => DeleteSection(item))">Delete Section	</MudButton>
-									@* var globala -> modal/popover cu warning! *@
-									<MudButton Size="Size.Small"
-											   Color="Color.Default"
-											   StartIcon="@Icons.Material.Rounded.Edit"
-											   OnClick="@(()=>item.isEditingCategory=true)">	Rename Section</MudButton>
-								</MudMenu>
-							}
-							else {
-								if (editCategoryNameStr == null) {
-									editCategoryNameStr = item.Name;
-								}
-								Console.WriteLine("editCategoryNameStr: " + editCategoryNameStr);
-								<MudTextField T="string"
-											  Margin="Margin.Dense"
-											  Text="@item.TempName"
-											  Style="padding:0; margin:0"
-											  @bind-Value="@item.TempName"
-											  Adornment="Adornment.End"
-											  AdornmentIcon="@Icons.Material.Filled.Check"
-											  OnAdornmentClick="@(() => {
-												  item.Name = item.TempName;
-												  item.isEditingCategory=false;
-												})" />
-							}
-						</MudToolBar>
-						<MudDropZone T="TaskItem" Identifier="@item.Name" Class="mud-height-full overflow-scroll" />
-						@* 						@if (item.NewTaskOpen) {
-					<MudPaper Elevation="25" Class="pa-2 rounded-lg">
-					<MudTextField @bind-Value="item.NewTaskName"
-					Placeholder="New Task"
-					DisableUnderLine="true"
-					Margin="Margin.Dense"
-					Class="mx-2 mt-n2" />
-					<MudButton Size="Size.Small"
-					Color="Color.Primary"
-					FullWidth="true"
-					OnClick="@(() => AddTask(item))">Add Task</MudButton>
-					</MudPaper>
-					}
-					else {
-					<MudButton OnClick="@(() => item.NewTaskOpen = !item.NewTaskOpen)"
-					StartIcon="@Icons.Material.Filled.Add"
-					FullWidth="true"
-					Class="rounded-lg py-2">Add Task</MudButton>
-					} *@
-					</MudPaper>
-				}
-				@* 				<MudPaper Class="pa-4" Elevation="0" Width="20em">
-				@if (_addSectionOpen) {
-				<MudPaper Elevation="0" Width="224px" Class="pa-4 d-flex flex-column mud-background-gray rounded-lg">
-				<EditForm Model="@newSectionModel" OnValidSubmit="OnValidSectionSubmit">
-				<DataAnnotationsValidator />
-				<MudTextField @bind-Value="newSectionModel.Name" For="@(() => newSectionModel.Name)" Placeholder="New Section" DisableUnderLine="true"></MudTextField>
-				<MudButton ButtonType="ButtonType.Submit" Size="Size.Small" Color="Color.Primary" FullWidth="true">Add Section</MudButton>
-				</EditForm>
+			@if (TaskSections.Count == 0) {
+				<MudPaper Class="d-flex flex-column background" Width="100%" Height="100%">
+					<MudText Align="Align.Center" Typo="Typo.h6" Class="pt-2">
+						No Sections have been added yet.<br />Create one by clicking on the <b>Add Section</b> button above.
+					</MudText>
 				</MudPaper>
-				}
-				else {
-				<MudButton OnClick="OpenAddNewSection" Variant="Variant.Outlined" StartIcon="@Icons.Material.Filled.Add" Color="Color.Primary" Class="rounded-lg py-2" FullWidth="true">Add Section</MudButton>
-				}
-				</MudPaper> *@
-			</MudPaper>
+			}
+			else {
+				<MudPaper Class="d-flex flex-row background overflow-x-auto" Width="100%" Height="100%">
+
+					@foreach (var item in TaskSections) {
+						<MudPaper Elevation="0"
+								  Width="20em" MinWidth="20em"
+								  MinHeight="30em" MaxHeight="calc(100vh - 10em)"
+								  Class="pa-2 ma-4 d-flex flex-column mud-background-gray rounded-lg">
+							<MudToolBar DisableGutters="true" Dense Style="height:2.5em">
+									@if (!@item.isEditingCategory) {
+									<MudText Typo="Typo.subtitle1" Class="pl-2"><b>@item.Name</b></MudText>
+									<MudSpacer />
+									<MudMenu Icon="@Icons.Material.Rounded.MoreHoriz"
+											 AnchorOrigin="Origin.BottomRight" TransformOrigin="Origin.TopRight"
+											 ListClass="pa-2 d-flex flex-column"
+											 PopoverClass="mud-elevation-25">
+										<MudButton Size="Size.Small"
+												   Color="Color.Error"
+												   StartIcon="@Icons.Material.Outlined.Delete"
+												   OnClick="@(() => LaunchDeleteSectionModal(item))">Delete Section	</MudButton>
+										@* var globala -> modal/popover cu warning! *@
+										<MudButton Size="Size.Small"
+												   Color="Color.Default"
+												   StartIcon="@Icons.Material.Rounded.Edit"
+												   OnClick="@(()=>item.isEditingCategory=true)">	Rename Section</MudButton>
+									</MudMenu>
+								}
+								else {
+									if (editCategoryNameStr == null) {
+										editCategoryNameStr = item.Name;
+									}
+									<MudTextField T="string"
+												  Margin="Margin.Dense"
+												  Text="@item.TempName"
+												  Style="padding:0; margin:0"
+												  @bind-Value="@item.TempName"
+												  Adornment="Adornment.End"
+												  AdornmentIcon="@Icons.Material.Filled.Check"
+												  OnAdornmentClick="@(() => {
+														item.Name = item.TempName;
+														item.isEditingCategory=false;
+														})" />
+								}
+							</MudToolBar>
+
+							<MudDropZone T="TaskItem" Identifier="@item.Name" Class="mud-height-full overflow-scroll" />
+
+						</MudPaper>
+					}
+
+
+				</MudPaper>
+			}
 		</ChildContent>
 		<ItemRenderer>
 			<MudPaper Elevation="25" Class="pa-2 rounded-lg my-2 d-flex flex-row justify-space-between">
@@ -175,7 +156,7 @@
 		</MudText>
 	</TitleContent>
 	<DialogContent>
-		<MudPaper Width="25em" Class="m-0" Elevation="0">
+		<MudPaper Width="25em" Class="m-0 mt-n5" Elevation="0">
 			<MudTextField T="string"
 						  Label="Section name"
 						  HelperText="You can edit it later"
@@ -187,7 +168,6 @@
 	<DialogActions>
 		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNewSection" Class="px-10">Add</MudButton>
 		<MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="()=>isAddSectionModalVisible=false">Cancel</MudButton>
-
 	</DialogActions>
 </MudDialog>
 
@@ -199,61 +179,66 @@
 		</MudText>
 	</TitleContent>
 	<DialogContent>
-		<MudPaper Width="40em" Class="m-0 d-flex flex-column" Elevation="0">
+		<MudPaper Width="40em" Class="m-0 mt-n4 d-flex flex-column" Elevation="0">
 			<MudTextField T="string"
 						  Label="Task name"
 						  HelperText="You can edit it later"
 						  Required="true"
 						  Immediate="true"
-						  @bind-Value="addTaskModalTaskName" />
-
+						  @bind-Value="TaskViewModel.Title" />
 
 			<MudTextField T="string"
 						  Label="Task description"
-						  @bind-Value="addTaskModalTaskDescription"
+						  @bind-Value="TaskViewModel.Description"
 						  Lines="5"
 						  HelperText="Accepts Markdown" />
-			<MudDateRangePicker Label="Pick the planned start and end date"
+
+
+			<MudDateRangePicker @bind-DateRange="AddTaskModalDateRange"
+								Label="Pick the planned start and end date"
 								DisableToolbar="true"
 								AutoClose="true" />
 
-			@* <MudPaper Class="m-0 d-flex flex-column align-center" Elevation="0"> *@
-
-
-				<MudPaper Class="d-flex flex-row align-end gap-3 mb-2" Elevation="0">
-					<MudText>Priority</MudText>
-					<MudPaper Elevation="0" Width="6em">
-						<MudSelect T="string" Dense="true">
-							@foreach (var priority in priorityOptions) {
-								<MudSelectItem T="string" Value="@priority">@priority</MudSelectItem>
-							}
-						</MudSelect>
-					</MudPaper>
+			<MudPaper Class="d-flex flex-row align-end gap-3" Elevation="0">
+				<MudText>Priority</MudText>
+				<MudPaper Elevation="0" Width="6em">
+					<MudSelect T="string" Dense="true" @bind-Value="addTaskModalPriorityOption">
+						@foreach (var priority in priorityOptions) {
+							<MudSelectItem T="string" Value="@priority">@priority</MudSelectItem>
+						}
+					</MudSelect>
 				</MudPaper>
-				<MudPaper Class="d-flex flex-row align-end gap-3" Elevation="0">
-					<MudText>Place Task in</MudText>
-					<MudPaper Elevation="0" Width="15em">
-						<MudSelect @bind-Value="addTaskModalFirstSelectOption" Dense="true">
-							@foreach (var item in TaskSections) {
-								<MudSelectItem T="string" Value="@item.Name">@item.Name</MudSelectItem>
-							}
-						</MudSelect>
-					</MudPaper>
+			</MudPaper>
+
+			<MudPaper Class="d-flex flex-row align-end gap-3 mb-2 lex-grow-1" Elevation="0">
+				<MudText>Place Task in</MudText>
+				<MudPaper Elevation="0" Class="flex-grow-1">
+					<MudSelect @bind-Value="addTaskModalFirstSelectOption" Dense="true">
+						@foreach (var item in TaskSections) {
+							<MudSelectItem T="string" Value="@item.Name">@item.Name</MudSelectItem>
+						}
+					</MudSelect>
 				</MudPaper>
-			@* </MudPaper> *@
+			</MudPaper>
+
 			<MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
 					   MultiSelection="true"
-					   @bind-Value="value"
-					   @bind-SelectedValues="addTaskModalAsigneeOptions"
+					   @bind-SelectedValues="AddTaskModalAssigneeOptions"
 					   T="string"
 					   Label="Asignees"
-					   AdornmentIcon="@Icons.Material.Filled.Search"
+					   AdornmentIcon="@Icons.Material.Filled.PersonAddAlt1"
+					   AdornmentColor="Color.Primary"
 					   AnchorOrigin="Origin.BottomCenter">
 
-				@foreach (var name in ProjectMembersNames) {
-					<MudSelectItem T="string" Value="@name">@name</MudSelectItem>
+				@foreach (var member in TeamMembers) {
+					<MudSelectItem T="string" Value="@member.Item2">@member.Item3 (@member.Item2)</MudSelectItem>
 				}
 			</MudSelect>
+
+			<MudTextField T="string"
+						  Label="Tags"
+						  @bind-Value="AddTaskModalTagsString"
+						  HelperText="Separate the tags using commas" />
 
 			<MudText Typo="Typo.caption" Class="mt-4">
 				Note: The task's status will be marked as <b>Created</b>. Later it can be changed to <b>In Progress</b> or <b>Done</b>.
@@ -262,15 +247,51 @@
 
 	</DialogContent>
 	<DialogActions>
-		<MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddNewTask" Class="px-10">Add</MudButton>
-		<MudButton Variant="Variant.Outlined" Color="Color.Default" OnClick="()=>isAddTaskModalVisible=false">Cancel</MudButton>
+		<MudButton Variant="Variant.Filled"
+				   Color="Color.Primary"
+				   OnClick="AddNewTaskAsync" Class="px-10">Add</MudButton>
+
+		<MudButton Variant="Variant.Outlined"
+				   Color="Color.Default"
+				   OnClick="()=>{isAddTaskModalVisible=false;
+								AddTaskModalAssigneeOptions = new HashSet<string>();}">Cancel</MudButton>
+	</DialogActions>
+</MudDialog>
+
+
+@* DELETE SECTION MODAL *@
+<MudDialog @bind-IsVisible="isOpenDeleteSectionModal" Options="noEscapeModalOpts">
+	@* dialog for deletion of section *@
+	<TitleContent>
+		<MudText Typo="Typo.body1">
+			<MudIcon Icon="@Icons.Material.Filled.AddCard" Class="mr-3" /> Delete Section
+		</MudText>
+	</TitleContent>
+	<DialogContent>
+		<MudPaper Width="30em" Class="m-0 mt-n2" Elevation="0">
+			<MudText Typo="Typo.body1">
+				Are you sure you want to delete the section <b>@TempSectionToDeleteFromModal.Name</b>?<br />
+			</MudText>
+			@* <MudText Typo="Typo.body2">All tasks in this section will be deleted.</MudText> *@
+			<MudAlert Severity="Severity.Warning" Class="pl-0">
+				All tasks in this section will be deleted!
+			</MudAlert>
+		</MudPaper>
+	</DialogContent>
+	<DialogActions>
+		<MudButton Variant="Variant.Filled"
+				   Color="Color.Primary"
+				   OnClick="()=>DeleteSection()">Delete</MudButton>
+		<MudButton Variant="Variant.Outlined"
+				   Color="Color.Default"
+				   OnClick="()=>{TempSectionToDeleteFromModal=null; isOpenDeleteSectionModal=false;}">Cancel</MudButton>
 	</DialogActions>
 </MudDialog>
 
 @code {
-	[Parameter] public string? ProjectId { get; set; }
+	[Parameter] public string ProjectId { get; set; } = null!;
 	public ProjectDto CurrentProject { get; set; } = new();
-	public List<string> ProjectMembersNames { get; set; } = new() { "luigi", "maria", "cornel" };
+	public List<Tuple<Guid, string, string>> TeamMembers { get; set; } = new();
 
 	//for project description popover
 	private bool isOpenDescriptionPopover = false;
@@ -282,14 +303,14 @@
 	private bool isAddSectionModalVisible = false;
 	private string addSectionName = "";
 
+	private TaskViewModel TaskViewModel { get; set; } = new();
+	private string AddTaskModalTagsString { get; set; } = "";
+	private DateRange AddTaskModalDateRange { get; set; } = new();
 	private bool isAddTaskModalVisible = false;
 	private string addTaskModalFirstSelectOption = "";
-	private string addTaskModalTaskName = "";
-	private string addTaskModalTaskDescription = "";
-
-	private string value { get; set; } = "Nothing selected";
-	private IEnumerable<string> addTaskModalAsigneeOptions { get; set; } = new HashSet<string>();
+	private IEnumerable<string> AddTaskModalAssigneeOptions { get; set; } = new HashSet<string>();
 	private static readonly string[] priorityOptions = { "Low", "Medium", "High" };
+	private string addTaskModalPriorityOption = "";
 
 	//vars for drag and drop
 	private MudDropContainer<TaskItem> _dropContainer;
@@ -305,7 +326,6 @@
 			TempName = name;
 		}
 	}
-
 	public class TaskItem {
 		public string Name { get; set; }
 		public string SectionLocation { get; set; }
@@ -319,6 +339,8 @@
 	private List<TaskSection> TaskSections { get; init; } = new();
 	private List<TaskItem> Tasks { get; init; } = new(); //todo check if init is needed
 
+	private bool isOpenDeleteSectionModal = false;
+	private TaskSection? TempSectionToDeleteFromModal { get; set; } = null;
 
 	[Inject] public IProjectDataService ProjectDataService { get; set; } = null!;
 	[Inject] public ITeamDataService TeamDataService { get; set; } = null!;
@@ -344,13 +366,12 @@
 			return;
 		}
 		var users = usersResponse.GetValue("members");
-		ProjectMembersNames = users.Select(x => x.Username).ToList();
-
+		TeamMembers = users.Select(x => new Tuple<Guid, string, string>(x.UserId, x.Username, x.FirstName + " " + x.LastName)).ToList();
 	}
 
 	private string GetMultiSelectionText(List<string> selectedValues) {
 		if (selectedValues.Count == 0) {
-			return "No assignees selected.";
+			return "No assignees selected";
 		}
 		return $"Assignee{(selectedValues.Count > 1 ? "s" : "")}: {string.Join(", ", selectedValues.Select(x => x))}";
 	}
@@ -370,21 +391,66 @@
 			return;
 		}
 
-		TaskSections.Add(new TaskSection(addSectionName));
 		addSectionName = string.Empty;
 		isAddSectionModalVisible = false;
+
+		var response = await ProjectDataService.AddSectionAsync(ProjectId, addSectionName);
+		if (!response.Success) {
+			Snackbar.Add($"Failed to create section: {response.GetErrorsString()}", Severity.Error);
+			return;
+		}
+		TaskSections.Add(new TaskSection(addSectionName));
 	}
 
 	private void TaskUpdated(MudItemDropInfo<TaskItem> info) {
 		info.Item.SectionLocation = info.DropzoneIdentifier;
 	}
 
-	private void AddNewTask() {
+	private async Task AddNewTaskAsync() {
+		if (string.IsNullOrWhiteSpace(TaskViewModel.Title)) {
+			Snackbar.Add($"Task name cannot be empty", Severity.Error);
+			return;
+		}
+		if (string.IsNullOrWhiteSpace(TaskViewModel.Description)) {
+			Snackbar.Add($"Task description cannot be empty", Severity.Error);
+			return;
+		}
+		if (AddTaskModalDateRange.Start == null || AddTaskModalDateRange.End == null) {
+			Snackbar.Add($"Task planned start and end date cannot be empty", Severity.Error);
+			return;
+		}
+		if (string.IsNullOrWhiteSpace(addTaskModalPriorityOption)) {
+			Snackbar.Add($"Task priority cannot be empty", Severity.Error);
+			return;
+		}
+		if (AddTaskModalAssigneeOptions.Count() == 0) {
+			Snackbar.Add($"Task must have at least one assignee", Severity.Error);
+			return;
+		}
 
-		//compose the request somehow
-		// Tasks.Add(new TaskItem(section.NewTaskName, section.Name));
+		TaskViewModel.ProjectId = ProjectId;
+		TaskViewModel.Tags = AddTaskModalTagsString.Split(',').Select(x => x.Trim()).ToList();
+		TaskViewModel.Priority = addTaskModalPriorityOption switch {
+			"Low" => TaskPriority.LOW,
+			"Medium" => TaskPriority.MEDIUM,
+			"High" => TaskPriority.HIGH,
+			_ => TaskPriority.LOW
+		};
 
+		TaskViewModel.Status = Models.Shared.TaskStatus.CREATED;
+		TaskViewModel.PlannedStartDate = AddTaskModalDateRange.Start ?? default;
+		TaskViewModel.PlannedEndDate = AddTaskModalDateRange.End ?? default;
+		TaskViewModel.AssigneeIds = new(AddTaskModalAssigneeOptions);
 
+		// var response = await ProjectDataService.CreateTaskAsync(TaskViewModel);
+		// if (!response.Success) {
+		// 	Snackbar.Add($"Failed to create task: {response.GetErrorsString()}", Severity.Error);
+		// 	return;
+		// }
+
+		// Tasks.Add(new TaskItem(TaskViewModel.Title, addTaskModalFirstSelectOption));
+		// isAddTaskModalVisible = false;
+		// AddTaskModalAssigneeOptions = new HashSet<string>();
 	}
 
 
@@ -395,24 +461,32 @@
 	// 	_dropContainer.Refresh();
 	// }
 
-	private void DeleteSection(TaskSection section) {
-		if (TaskSections.Count == 1) {
-			Tasks.Clear();
-			TaskSections.Clear();
-		}
-		else {
-			int newIndex = TaskSections.IndexOf(section) - 1;
-			if (newIndex < 0) {
-				newIndex = 0;
-			}
+	private void LaunchDeleteSectionModal(TaskSection section) {
+		TempSectionToDeleteFromModal = section;
+		isOpenDeleteSectionModal = true;
+	}
 
-			TaskSections.Remove(section);
+	private void DeleteSection() {
 
-			// var tasks = Tasks.Where(x => x.Status == section.Name);
-			// foreach (var item in tasks) {
-			// 	item.Status = Sections[newIndex].Name;
-			// }
-		}
+		var result = ProjectDataService.DeleteSectionAsync(ProjectId, TempSectionToDeleteFromModal!.Name).Result;
+
+		// if (TaskSections.Count == 1) {
+		// 	Tasks.Clear();
+		// 	TaskSections.Clear();
+		// }
+		// else {
+		// 	int newIndex = TaskSections.IndexOf(section) - 1;
+		// 	if (newIndex < 0) {
+		// 		newIndex = 0;
+		// 	}
+
+		// 	TaskSections.Remove(section);
+
+		// 	var tasks = Tasks.Where(x => x.Status == section.Name);
+		// 	foreach (var item in tasks) {
+		// 		item.Status = Sections[newIndex].Name;
+		// 	}
+		// }
 	}
 
 	private void LaunchEditProjectInfoModal() {

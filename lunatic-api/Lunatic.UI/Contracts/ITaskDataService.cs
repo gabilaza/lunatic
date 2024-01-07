@@ -1,8 +1,9 @@
-﻿using Lunatic.UI.Dtos;
+﻿using Lunatic.UI.Models.Dtos;
 using Lunatic.UI.Services.Responses;
 
 namespace Lunatic.UI.Contracts {
-	public interface ITaskDataService {	
-		ApiResponse<TaskDto> GetTaskById(string taskId);
+	public interface ITaskDataService {
+		Task<ApiResponse<TaskDto>> GetTaskById(string taskId);
+		//Task<ApiResponse> AddTaskSectionAsync(string taskId, string taskSection);
 	}
 }

@@ -1,5 +1,5 @@
 ﻿using Lunatic.UI.Contracts;
-using Lunatic.UI.ViewModels;
+using Lunatic.UI.Models.ViewModels;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 

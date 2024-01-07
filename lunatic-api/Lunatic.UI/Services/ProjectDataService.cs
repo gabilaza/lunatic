@@ -1,12 +1,13 @@
 ﻿using Lunatic.UI.Contracts;
-using Lunatic.UI.Dtos;
+using Lunatic.UI.Models.Dtos;
+using Lunatic.UI.Models.ViewModels;
 using Lunatic.UI.Services.Responses;
-using Lunatic.UI.ViewModels;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Lunatic.UI.Services {
-	public class ProjectDataService : IProjectDataService {
+namespace Lunatic.UI.Services
+{
+    public class ProjectDataService : IProjectDataService {
 		private const string RequestUri = "api/v1/projects";
 		private readonly HttpClient httpClient;
 		private readonly ITokenService tokenService;
@@ -14,6 +15,13 @@ namespace Lunatic.UI.Services {
 		public ProjectDataService(HttpClient httpClient, ITokenService tokenService) {
 			this.httpClient = httpClient;
 			this.tokenService = tokenService;
+		}
+
+		public async Task<ApiResponse> AddSectionAsync(string projectId, string sectionTitle) {
+			var result = await httpClient.PostAsJsonAsync($"api/v1/projects/{projectId}/sections", sectionTitle);
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
 		}
 
 		public async Task<ApiResponse<ProjectDto>> CreateProjectAsync(ProjectViewModel projectViewModel) {

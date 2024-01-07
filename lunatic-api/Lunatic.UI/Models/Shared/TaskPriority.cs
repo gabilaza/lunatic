@@ -1,4 +1,4 @@
-﻿namespace Lunatic.UI.ViewModels {
+﻿namespace Lunatic.UI.Models.Shared {
 	public enum TaskPriority {
 		LOW = 1,
 		MEDIUM = 2,
