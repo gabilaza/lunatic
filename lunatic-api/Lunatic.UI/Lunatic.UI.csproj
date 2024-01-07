@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\NewFolder\**" />
+    <Content Remove="Services\NewFolder\**" />
+    <EmbeddedResource Remove="Services\NewFolder\**" />
+    <None Remove="Services\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Pages\TaskPage\TaskPage.razor.css" />
     <None Remove="Pages\Teams\TeamPageComponents\TeamPageManageMembersModal.razor.css" />
     <None Remove="Pages\Teams\TeamPageComponents\TeamPageProjectCard.razor.css" />
@@ -34,7 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\NewFolder\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

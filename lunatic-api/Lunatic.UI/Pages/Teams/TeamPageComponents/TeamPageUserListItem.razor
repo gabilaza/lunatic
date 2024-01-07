@@ -2,13 +2,18 @@
 @using Lunatic.UI.Contracts
 @inject NavigationManager navigationManager
 
-<MudListItem Class="p-0 m-0">
-	<MudPaper Elevation="0" Class="d-flex flex-row p-1 align-items-center">
+<MudListItem Class="p-0 m-0 mt-1 mb-1 rounded" OnClick="ItemClicked">
+	<MudPaper Elevation="0" Class="d-flex flex-row p-1 pt-2 pb-2 gap-2 mt-n2 mb-n2 align-center">
 		<MudSkeleton SkeletonType="SkeletonType.Circle" Width="40px" Height="40px" />
-		<MudText Class="d-flex">
-			@Username
-		</MudText>
-	</MudPaper>
+		<MudPaper Class="d-flex flex-column" Elevation="0">
+			<MudText Typo="Typo.body1" Color="Color.Info">
+				@Name
+			</MudText>
+			<MudText Typo="Typo.caption" Color="Color.Default">
+				@Username
+			</MudText>
+		</MudPaper>
+		</MudPaper>
 </MudListItem>
 @* <MudListItem Avatar="@Icons.Material.Filled.VerifiedUser" OnClick="ItemClicked">@UserId</MudListItem> *@
 
@@ -16,19 +21,21 @@
 	[Parameter] public string UserId { get; set; }
 	[Parameter] public EventCallback<string> OnCardClick { get; set; }
 	[Parameter] public string Username { get; set; }
+	[Parameter] public string Name { get; set; }
 	//user image, maybe cached! TODO
 	[Inject] public IUserDataService UserDataService { get; set; } = null!;
 }
 
-@functions{
+@functions {
 	protected override async Task OnInitializedAsync() {
 		var response = await UserDataService.GetUserByIdAsync(UserId);
 		var user = response.GetValue("user");
 		Username = user.Username;
+		Name = user.FirstName + " " + user.LastName;
 		return;
 	}
 
 	private async Task ItemClicked() {
-		await OnCardClick.InvokeAsync(UserId);
+		await OnCardClick.InvokeAsync(Username);
 	}
 }

@@ -5,9 +5,8 @@ using Lunatic.UI.Services.Responses;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-namespace Lunatic.UI.Services
-{
-    public class ProjectDataService : IProjectDataService {
+namespace Lunatic.UI.Services {
+	public class ProjectDataService : IProjectDataService {
 		private const string RequestUri = "api/v1/projects";
 		private readonly HttpClient httpClient;
 		private readonly ITokenService tokenService;
@@ -36,6 +35,13 @@ namespace Lunatic.UI.Services
 
 		public Task<ApiResponse<ProjectDto>> DeleteProjectAsync(Guid id) {
 			throw new NotImplementedException();
+		}
+
+		public async Task<ApiResponse> DeleteSectionAync(string projectId, string sectionId) {
+			var result = await httpClient.DeleteAsync($"api/v1/projects/{projectId}/sections/{sectionId}"); // TODO! check if PATCH solves this more easily
+			var response = await result.Content.ReadFromJsonAsync<ApiResponse>();
+			response!.Success = result.IsSuccessStatusCode;
+			return response!;
 		}
 
 		public async Task<ApiResponse<ProjectDto>> GetProjectByIdAsync(string teamId) {

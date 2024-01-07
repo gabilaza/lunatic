@@ -13,7 +13,7 @@
 		<MudText>
 			@ProjectTitle
 		</MudText>
-		<MudText Typo="Typo.body2">
+		<MudText Typo="Typo.body2" Color="Color.Surface">
 			@ProjectDescription
 		</MudText>
 	</MudCardContent>
@@ -37,7 +37,7 @@
 		}
 		var project = response.GetValue("project");
 		ProjectTitle = project.Title;
-		ProjectDescription = project.Description;
+		ProjectDescription = project.Description.Substring(0, project.Description.Length > 200 ? 200 : project.Description.Length);
 
 	}
 

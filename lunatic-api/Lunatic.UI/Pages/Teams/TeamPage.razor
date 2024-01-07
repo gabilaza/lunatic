@@ -23,8 +23,8 @@
 	@* <MudPaper > *@
 	<MudGrid Spacing="1" Class="flex-grow-1">
 
-		<MudItem xs="12" md="9" Class="d-flex flex-column flex-grow-1 overflow-y-scroll">
-			<MudPaper Elevation="1" Class="d-flex flex-column flex-grow-1 overflow-y-scroll">
+		<MudItem xs="12" md="9" Class="d-flex flex-column flex-grow-1 overflow-y-auto">
+			<MudPaper Elevation="1" Class="d-flex flex-column flex-grow-1 overflow-y-auto">
 				<MudToolBar Class="custom-toolbar" Dense="true">
 					<MudText>
 						@TeamName
@@ -101,7 +101,7 @@
 					<MudIconButton Icon="@Icons.Material.Filled.Add" Color="Color.Inherit" OnClick="LaunchAddMemberModal" />
 				</MudToolBar>
 				@* <MudPaper Class="d-flex flex-column flex-grow-1 overflow-y-scroll" > *@
-				<MudList Clickable="true" Class="flex-grow-1 overflow-y-auto" >
+				<MudList Clickable="true" Class="flex-grow-1 overflow-y-auto pl-1 pr-1">
 					@if (MembersIds != null) {
 						@foreach (var memberId in MembersIds) {
 							<TeamPageUserListItem UserId="@memberId.ToString()" OnCardClick="GoToUserPage" />
@@ -208,7 +208,7 @@
 		navigationManager.NavigateTo("/project/" + projectId);
 	}
 	public void GoToUserPage(string userId) {
-		navigationManager.NavigateTo("/user/" + userId);
+		navigationManager.NavigateTo("/profile/" + userId);
 	}
 
 	public void LaunchAddMemberModal() {
