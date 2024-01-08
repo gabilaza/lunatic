@@ -1,0 +1,45 @@
+﻿@using MudBlazor
+@using Lunatic.UI.Contracts
+@using Lunatic.UI.Models.ViewModels
+@using Lunatic.UI.Models.Dtos
+@using Lunatic.UI.Models.Shared
+<MudTimelineItem Color="Color.Primary" Size="Size.Small" Variant="Variant.Outlined" Elevation="0">
+	<MudPaper Elevation="0" Class="p-2 pl-0 ml-n8 d-flex flex-column mud-background-gray" Width="100%">
+		<MudPaper Elevation="0" Class="d-flex flex-row align-center">
+
+			<MudChip>
+				<MudAvatar Color="Color.Primary">
+					<MudIcon Icon="@Icons.Material.Filled.Person" />
+					@* <MudImage Src=""></MudImage> *@
+				</MudAvatar>
+				<MudText>
+					@@username
+				</MudText>
+			</MudChip>
+			<MudText>
+				commented on @@commentdate
+			</MudText>
+		</MudPaper>
+		<MudText>
+			@@comment
+		</MudText>
+	</MudPaper>
+</MudTimelineItem>
+@code {
+	[Parameter] public string CommentId { get; set; } = "";
+	[Parameter] public string TaskId { get; set; } = "";
+
+	[Inject] public ITaskDataService TaskDataService { get; set; } = null!;
+}
+
+@functions {
+
+	protected override async Task OnInitializedAsync() {
+		// var response = await TaskDataService.GetComment(TaskId);
+		// var task = response.GetValue("task");
+		// var comments = task.Comments;
+		// var comment = comments.Find(c => c.Id == CommentId);
+		// CommentId = comment.Id;
+		// TaskId = task.Id;
+	}
+}

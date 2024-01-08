@@ -5,6 +5,8 @@
 @using Lunatic.UI.Models.Dtos
 @using Lunatic.UI.Models.Shared
 @using Markdig
+@using System.Text
+@using Lunatic.UI.Pages.TaskPage.TaskPageTemplates
 @inject ISnackbar Snackbar
 
 <style>
@@ -30,6 +32,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5em;
+		margin-bottom: 10em;
 	}
 
 	.description-div, .comments-div {
@@ -48,11 +51,16 @@
 				/ auto;
 		}
 	}
+
+	.custom-header {
+		height: 2em;
+	}
 </style>
 
 <MudPaper Height="100%" Class="p-2 d-flex flex-column flex-grow-1 " Elevation="0">
 	<MudToolBar Class="task-toolbar" Dense="true">
 		<MudText Typo="Typo.subtitle1">
+			@* switch to breadcrumbs *@
 			@CurrentTask.Title
 		</MudText>
 		<MudSpacer />
@@ -97,39 +105,62 @@
 					</MudChip>
 				</MudToolBar>
 				<MudPaper Class="d-flex flex-column">
-					@* @foreach (var commentId in CurrentTask.CommentIds) {
-					<MudPaper Class="m-2 p-2">
-					<MudText Typo="Typo.body1">
-					@commentId
-					</MudText>
-					</MudPaper>
-					} *@
-					<MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start">
-						<MudTimelineItem Color="Color.Primary" Size="Size.Small" Variant="Variant.Outlined" Elevation="0">
 
-							<MudPaper Elevation="0" Class="p-2 pl-0 ml-n8 d-flex flex-column mud-background-gray" Width="100%" >
-								<MudPaper Elevation="0" Class="d-flex flex-row align-center">
-									@* chip with avatar *@
-									<MudChip>
-										<MudAvatar Color="Color.Primary">
-											<MudIcon Icon="@Icons.Material.Filled.Person" />
-										</MudAvatar>
-										<MudText>
-											@@username
-										</MudText>
-									</MudChip>
-									<MudText>
-										commented on @@commentdate
-									</MudText>
-								</MudPaper>
-								<MudText>
-									@@comment
-								</MudText>
+					<MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start">
+						@foreach (var commentId in CurrentTask.CommentIds) {
+							<TaskPageCommentTimelineItem CommentId="commentId" TaskId="TaskId"></TaskPageCommentTimelineItem>
+						}
+					</MudTimeline>
+
+					<MudDivider DividerType="DividerType.FullWidth" Class=" " Style="height:3px" />
+
+					<MudPaper Class="d-flex flex-row flex-grow-1 mt-2 ml-2" Elevation="0">
+						<MudSkeleton SkeletonType="SkeletonType.Circle" Width="45px" Height="45px" />
+
+						<MudPaper Elevation="0" Class="d-flex flex-column flex-grow-1 px-3 pb-2">
+							<MudText Typo="Typo.subtitle1"><b>Add a comment</b> </MudText>
+							<MudTextField T="string"
+										  Class="flex-grow-1"
+										  Label="Add a your comment here..."
+										  AutoGrow="true"
+										  Lines="3"
+										  Variant="Variant.Outlined"
+										  @bind-Value="NewCommentString" />
+
+							@* <MudTabs Elevation="2"
+							Rounded="true"
+							ApplyEffectsToContainer="true"
+							PanelClass="pa-4"
+							ActivePanelIndex="0"
+							Outlined="true">
+
+							<MudTabPanel Text="Write">
+							<MudTextField T="string"
+							Label="Add a your comment here..."
+							AutoGrow
+							AutoFocus
+							Lines="3"
+							Variant="Variant.Outlined"
+							HelperText="Markdown is supported"
+							@bind-Value="NewCommentString" />
+							</MudTabPanel>
+
+							<MudTabPanel Text="Preview">
+							<MudPaper MinHeight="7em" Class="p-2">
+							@StringToHtml(NewCommentString)
 							</MudPaper>
 
-						</MudTimelineItem>
+							</MudTabPanel>
 
-					</MudTimeline>
+							</MudTabs> *@
+
+							<MudPaper Class="d-flex flex-row justify-content-end" Elevation="0">
+								<MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2" OnClick="AddComment">Comment</MudButton>
+							</MudPaper>
+
+						</MudPaper>
+
+					</MudPaper>
 				</MudPaper>
 			</MudPaper>
 		</MudPaper>
@@ -147,15 +178,16 @@
 
 	[Parameter] public string? TaskId { get; set; }
 
-	public TaskDto CurrentTask { get; set; }
+	public TaskDto? CurrentTask { get; set; } = null;
+
+	public string NewCommentString { get; set; } = "";
 
 	// [Inject] public ITaskService TaskService { get; set; } = default!;
 }
 
 @functions {
 	public MarkupString StringToHtml(string markdown) {
-		var html = Markdown.ToHtml(markdown);
-		return new MarkupString(html) ;
+		return new MarkupString(Markdown.ToHtml(markdown));
 	}
 	string markdownValue = "# Markdown Editor for Blazor\nThis component is using [EasyMDE](https://easy-markdown-editor.tk/) " +
 								"to display a nice editor and all functionalities are mapped. See the documentation for more details.\n\n" +
@@ -174,8 +206,18 @@
 		CurrentTask = new TaskDto() {
 				Title = "task1",
 				Description = "taskdesc",
-				Tags = new List<string>() { "tag1", "tag2" }
+				Tags = new List<string>() { "tag1", "tag2" },
+				CommentIds = new List<string>() { "comment1", "comment2" }
 			};
 		// }
 	}
+
+	private async Task AddComment() {
+		if (NewCommentString == "") {
+			return;
+		}
+		CurrentTask.CommentIds.Add(NewCommentString);
+		NewCommentString = "";
+		Snackbar.Add("Comment added", Severity.Success);
 	}
+}

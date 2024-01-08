@@ -46,6 +46,9 @@ namespace Lunatic.UI {
 			builder.Services.AddHttpClient<IUserDataService, UserDataService>(client => {
 				client.BaseAddress = new Uri("https://localhost:7555/");
 			});
+			builder.Services.AddHttpClient<ITaskDataService, TaskDataService>(client => {
+				client.BaseAddress = new Uri("https://localhost:7555/");
+			});
 
 			builder.Services.AddMudServices(config => {
 				//config.SnackbarConfiguration.PositionClass = Defaults.Classes.Position.BottomLeft;
