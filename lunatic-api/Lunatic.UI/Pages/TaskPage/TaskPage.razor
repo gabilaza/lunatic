@@ -178,7 +178,7 @@
 
 	[Parameter] public string? TaskId { get; set; }
 
-	public TaskDto? CurrentTask { get; set; } = null;
+	public TaskDto CurrentTask { get; set; } = new();
 
 	public string NewCommentString { get; set; } = "";
 

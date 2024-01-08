@@ -69,7 +69,7 @@
 	</MudToolBar>
 
 	<MudDropContainer T="TaskItem"
-					  @ref="_dropContainer"
+					  @ref="dropContainer"
 					  Items="@Tasks"
 					  ItemsSelector="@((item,column) => item.SectionLocation == column)"
 					  ItemDropped="TaskUpdated"
@@ -317,7 +317,7 @@
 	private string addTaskModalPriorityOption = "";
 
 	//vars for drag and drop
-	private MudDropContainer<TaskItem> _dropContainer;
+	private MudDropContainer<TaskItem>? dropContainer;
 
 
 	public class TaskSection {

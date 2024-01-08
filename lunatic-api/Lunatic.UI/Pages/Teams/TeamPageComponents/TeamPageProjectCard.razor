@@ -20,7 +20,7 @@
 </MudCard>
 
 @code {
-	[Parameter] public string CardId { get; set; }
+	[Parameter] public string CardId { get; set; } = null!;
 	[Parameter] public EventCallback<string> OnCardClick { get; set; }
 	public string ProjectTitle { get; set; } = "";
 	public string ProjectDescription { get; set; } = ""; //inform of max length!
