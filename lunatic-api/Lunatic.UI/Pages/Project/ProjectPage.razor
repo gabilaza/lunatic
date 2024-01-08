@@ -400,11 +400,11 @@
 		addSectionName = string.Empty;
 		isAddSectionModalVisible = false;
 
-		var response = await ProjectDataService.AddSectionAsync(ProjectId, addSectionName);
-		if (!response.Success) {
-			Snackbar.Add($"Failed to create section: {response.GetErrorsString()}", Severity.Error);
-			return;
-		}
+		// var response = await ProjectDataService.AddSectionAsync(ProjectId, addSectionName);
+		// if (!response.Success) {
+		// 	Snackbar.Add($"Failed to create section: {response.GetErrorsString()}", Severity.Error);
+		// 	return;
+		// }
 		TaskSections.Add(new TaskSection(addSectionName));
 	}
 
